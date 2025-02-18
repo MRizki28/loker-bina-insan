@@ -12,6 +12,12 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                stnBlue: '#007bff'
+            },
+            backgroundImage: {
+                'hero-pattern': "url('/public/static/img/hero.png')",
+            }
         },
     },
     plugins: [],
