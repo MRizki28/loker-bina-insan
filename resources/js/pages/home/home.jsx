@@ -1,4 +1,6 @@
+import Content from "../../components/home/content";
 import Hero from "../../components/home/hero";
+import Footer from "../../components/shared/Footer";
 import Navbar from "../../components/shared/Navbar";
 
 export default function Home() {
@@ -7,8 +9,9 @@ export default function Home() {
             <Navbar />
             <main className="flex-grow">
                 <Hero></Hero>
+                <Content></Content>
             </main>
-            {/* <Footer /> */}
+            <Footer />
         </div>
     )
 }
