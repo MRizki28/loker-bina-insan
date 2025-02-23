@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories;
 
 use App\Http\Requests\Auth\AuthRequest;
@@ -21,12 +22,15 @@ class AuthRepositories implements AuthInterfaces
     public function login(AuthRequest $request)
     {
         try {
-            if(!Auth::attempt($request->only('email','password'))){
+            if (!Auth::attempt($request->only('email', 'password'))) {
                 return ApiResponse::unauthorized();
             } else {
                 $user = $this->userModel->where('email', $request->email)->first();
                 $token = $user->createToken('token')->plainTextToken;
-                return ApiResponse::success($token, 'Login Success', 200);
+                return ApiResponse::success([
+                    'token' => $token,
+                    'role' => $user->role
+                ], 'Login Success', 200);
             };
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
@@ -41,7 +45,8 @@ class AuthRepositories implements AuthInterfaces
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'role' => 'user',
             ]);
             $token = $user->createToken('token')->plainTextToken;
             return ApiResponse::success($token, 'Register Success', 200);
@@ -54,10 +59,6 @@ class AuthRepositories implements AuthInterfaces
     {
         try {
             $request->user()->tokens()->delete();
-            Auth::guard('web')->logout();
-
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
             return response()->json([
                 'status' => 'success',
                 'message' => 'logout success',
@@ -66,5 +67,4 @@ class AuthRepositories implements AuthInterfaces
             return ApiResponse::error($th, 500);
         }
     }
-
 }
