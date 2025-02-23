@@ -88,7 +88,7 @@
 
 {{-- logout --}}
 <script>
-    const urlLogout = 'v1/auth/logout';
+    const urlLogout = 'api/v1/auth/logout';
     $(document).ready(function() {
         $('#iconLogout').click(function(e) {
             Swal.fire({
@@ -106,7 +106,8 @@
                         method: 'POST',
                         dataType: 'json',
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Authorization': 'Bearer ' + localStorage.getItem('token')
                         },
                         success: function(response) {
                             console.log(response);
