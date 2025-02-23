@@ -7,6 +7,8 @@ const store = configureStore({
     }
 })
 
+console.log(store.getState())
+
 store.subscribe(() => {
     store.getState()
 })
