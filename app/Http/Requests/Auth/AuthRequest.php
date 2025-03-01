@@ -29,13 +29,13 @@ class AuthRequest extends FormRequest
                 'email' => 'required|email',
                 'password' => 'required|string',
             ];
-        } elseif($this->is('api/v1/auth/register')) {
+        } elseif($this->is('v1/auth/register')) {
             $rules = [
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required|string',
+                'password' => 'required|confirmed',
+                'password_confirmation' => 'required',
                 'phone' => 'required|string',
-                'address' => 'required|string',
             ];
         }
         return $rules;
