@@ -26,6 +26,7 @@ class AuthRepositories implements AuthInterfaces
                 return ApiResponse::unauthorized();
             } else {
                 $user = $this->userModel->where('email', $request->email)->first();
+                Auth::login($user);
                 $token = $user->createToken('token')->plainTextToken;
                 return ApiResponse::success([
                     'token' => $token,
@@ -44,7 +45,6 @@ class AuthRepositories implements AuthInterfaces
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'address' => $request->address,
                 'password' => Hash::make($request->password),
                 'role' => 'user',
             ]);
@@ -59,6 +59,10 @@ class AuthRepositories implements AuthInterfaces
     {
         try {
             $request->user()->tokens()->delete();
+            Auth::guard('web')->logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             return response()->json([
                 'status' => 'success',
                 'message' => 'logout success',
