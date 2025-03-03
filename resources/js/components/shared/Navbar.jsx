@@ -10,6 +10,8 @@ export default function Navbar() {
     const selector = useSelector((state) => state.checkLogin);
     const login = selector.isLoggedIn;
 
+    console.log(login);
+
     useEffect(() => {
         checkTokenValidity();
     }, []);
@@ -18,7 +20,7 @@ export default function Navbar() {
         try {
             const token = localStorage.getItem('token');
 
-            const response = await axios.post('api/v1/auth/logout', {}, {
+            const response = await axios.post('v1/auth/logout', {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -26,7 +28,7 @@ export default function Navbar() {
 
             const responseData = await response.data;
             console.log(responseData);
-            if (responseData.message === 'logout success') {
+            if (responseData.message === 'Logout successful') {
                 SweetAlertService.logoutAlert().then(() => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('role');
@@ -43,7 +45,7 @@ export default function Navbar() {
         if (!login) {
             return (
                 <li>
-                    <a href="/login" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500">Login</a>
+                    <a href="/login" className="block py-2 px-3 text-black hover:text-blue-500 ">Login</a>
                 </li>
             );
         }
@@ -53,10 +55,10 @@ export default function Navbar() {
             return (
                 <>
                     <li>
-                        <a href="/cms/admin/dashboard" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500">Ke Halaman Admin</a>
+                        <a href="/cms/admin/dashboard" className="block py-2 px-3 text-black hover:text-blue-500 ">Ke Halaman Admin</a>
                     </li>
                     <li>
-                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500">Logout</a>
+                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>
                     </li>
                 </>
             );
@@ -64,10 +66,10 @@ export default function Navbar() {
             return (
                 <>
                     <li>
-                        <a href="#" className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500">History Apply</a>
+                        <a href="#" className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
                     </li>
                     <li>
-                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-white bg-blue-700 rounded-sm md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500">Logout</a>
+                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>
                     </li>
                 </>
             );
@@ -87,7 +89,7 @@ export default function Navbar() {
                     </svg>
                 </button>
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white ">
                         {checkRole()}
                     </ul>
                 </div>
