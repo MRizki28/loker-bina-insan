@@ -22,17 +22,17 @@ class AuthRepositories implements AuthInterfaces
     public function login(AuthRequest $request)
     {
         try {
-            if (!Auth::attempt($request->only('email', 'password'))) {
+            $user = $this->userModel->where('email', $request->email)->first();
+            
+            if (!$user || !Auth::attempt($request->only('email', 'password'))) {
                 return ApiResponse::unauthorized();
-            } else {
-                $user = $this->userModel->where('email', $request->email)->first();
-                Auth::login($user);
-                $token = $user->createToken('token')->plainTextToken;
-                return ApiResponse::success([
-                    'token' => $token,
-                    'role' => $user->role
-                ], 'Login Success', 200);
-            };
+            }
+
+            $token = $user->createToken('token')->plainTextToken;
+            return ApiResponse::success([
+                'token' => $token,
+                'role' => $user->role
+            ], 'Login Success', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
         }
@@ -58,14 +58,20 @@ class AuthRepositories implements AuthInterfaces
     public function logout(Request $request)
     {
         try {
-            $request->user()->tokens()->delete();
+            $user = $request->user() ?? Auth::user();
+    
+            if ($user) {
+                $user->tokens()->delete(); 
+            }
+    
             Auth::guard('web')->logout();
-
+    
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+    
             return response()->json([
                 'status' => 'success',
-                'message' => 'logout success',
+                'message' => 'Logout successful',
             ], 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
