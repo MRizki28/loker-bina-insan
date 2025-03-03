@@ -20,11 +20,7 @@ export function Content() {
     const onSubmit = async (data) => {
         try {
             setLoading(true);
-            const response = await axios.post('v1/auth/login', data, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            const response = await axios.post('v1/auth/login', data);
             const responseData = response.data;
             console.log(response);
             console.log(responseData);
