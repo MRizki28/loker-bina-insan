@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CMS\AuthController;
+use App\Http\Controllers\CMS\JobController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
@@ -13,6 +15,15 @@ Route::fallback(function () {
 });
 
 
+Route::get('v1/check-auth', function () {
+    $user = Auth::user();
+    
+    return response()->json([
+        'authenticated' => $user ? true : false,
+        'user' => $user
+    ]);
+});
+
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::post('login', 'login');
@@ -22,8 +33,22 @@ Route::prefix('v1')->group(function () {
 
 Route::post('v1/auth/logout', [AuthController::class, 'logout']);
 
-Route::middleware(['auth', 'web', 'adminRole'])->group(function () {
+Route::middleware(['adminRole'])->group(function () {
     Route::get('cms/admin/dashboard', function () {
         return view('pages.loker');
+    });
+
+    Route::get('cms/admin/loker', function () {
+        return view('pages.loker');
+    });
+
+    Route::prefix('v1')->group(function () {
+        Route::prefix('job')->controller(JobController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/create', 'createData');
+            Route::get('/get/{id}', 'getDataById');
+            Route::post('/update/{id}', 'updateData');
+            Route::delete('/delete/{id}', 'deleteData');
+        });
     });
 });
