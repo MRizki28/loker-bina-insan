@@ -33,40 +33,10 @@
 							</a>
 						</li> 
 
-						<li class="nav-item {{ request()->is('penawaran*') ? 'active' : '' }}">
-							<a href="{{ url('/penawaran') }}">
-								<i class="fas fa-newspaper"></i>
-								<p>Penawaran</p>
-							</a>
-						</li>  
-						<li class="nav-item {{ request()->is('berita*') ? 'active' : '' }}">
-							<a href="{{ url('/berita') }}">
-								<i class="fas fa-newspaper"></i>
-								<p>Informasi & Berita</p>
-							</a>
-						</li>  
-						<li class="nav-item {{ request()->is('produk*') ? 'active' : '' }}">
-							<a href="{{ url('/produk') }}">
-								<i class="fab fa-product-hunt"></i>
-								<p>Produk</p>
-							</a>
-						</li>  
-						<li class="nav-item {{ request()->is('hero*') ? 'active' : '' }}">
-							<a href="{{ url('/hero') }}">
-								<i class="fas fa-file-image"></i>
-								<p>Banner</p>
-							</a>
-						</li>  
-						<li class="nav-item {{ request()->is('lelang*') ? 'active' : '' }}">
-							<a href="{{ url('/lelang') }}">
-								<i class="fas fa-home"></i>
-								<p>Lelang</p>
-							</a>
-						</li>  
-						<li class="nav-item {{ request()->is('karir*') ? 'active' : '' }}">
-							<a href="{{ url('/karir') }}">
-								<i class="fas fa-user-tie"></i>
-								<p>Lowongan Pekerjaan</p>
+						<li class="nav-item {{ request()->is('cms/admin/loker*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/loker') }}">
+								<i class="fas fa-book"></i>
+								<p>Lowongan kerja</p>
 							</a>
 						</li>  
 					<ul>
