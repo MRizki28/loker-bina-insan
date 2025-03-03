@@ -27,16 +27,17 @@ export default checkLogin.reducer
 export const checkTokenValidity = () => async (dispatch) => {
     try {
         const token = localStorage.getItem('token')
-        const response = await axios.get('api/v1/check-auth', {
+
+        const response = await axios.get(`v1/check-auth`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
 
-        console.log('disini', response.data.data)
-        dispatch(setLoginStatus(response.data.data || false))
+        console.log('disini', response.data)
+        dispatch(setLoginStatus(response.data.authenticated ))
     } catch (error) {
-        if(error.response.status === 401) {
+        if(error.response && error.response.status === 401) {
             localStorage.removeItem('token')
             dispatch(setLoginStatus(false))
         }
