@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'adminRole' => \App\Http\Middleware\AdminAuthMiddleware::class, // Daftarkan middleware di sini
         ]);
+        $middleware->validateCsrfTokens(except: [
+            '*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
