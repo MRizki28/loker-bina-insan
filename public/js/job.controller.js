@@ -1,6 +1,19 @@
 import JobService from "./job.service.js?v=1.0.1";
 
 $(document).ready(function () {
+
+    const startDateInput = $('#start_date');
+    const endDateInput = $('#end_date');
+
+    const today = new Date();
+
+    startDateInput.attr('min', today.toISOString().split('T')[0]);
+    endDateInput.attr('min', today.toISOString().split('T')[0]);
+
+    startDateInput.on('change', function () {
+        endDateInput.attr('min', $(this).val());
+    })
+
     const jobService = new JobService();
 
     jobService.getAllData();
