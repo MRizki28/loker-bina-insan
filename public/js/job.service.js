@@ -18,9 +18,8 @@ class JobService {
         if (responseData.message === 'Success get data job') {
             $.each(responseData.data.data, function (index, item) {
                 tableBody += "<tr>";
-                tableBody += "<td>" + item.job_opening + "</td>"
-                tableBody += "<td>" + item.experience + "</td>"
-                tableBody += "<td>" + item.department + "</td>"
+                tableBody += "<td>" + item.name + "</td>"
+                tableBody += "<td>" + item.description + "</td>"
                 tableBody +=
                     "<td style='padding: 0 10px !important;'  class='text-center '>" +
                     "<button class='btn btn-sm qualification-modal mr-1' data-toggle='modal' data-target='#qualificationModal' data-id='" +
@@ -30,9 +29,11 @@ class JobService {
                     "<button class='btn btn-sm requirement-modal mr-1' data-toggle='modal' data-target='#requirementModal' data-id='" +
                     item.id + "'><i class='fas fa-eye'></i></button>"
                 tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>"
+                tableBody += "<td>" + item.job_type + "</td>";
+                tableBody += "<td>" + item.category + "</td>";
                 tableBody +=
                     "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#jobModal' data-id='" +
+                    "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#lokerModal' data-id='" +
                     item.id + "'><i class='fas fa-edit'></i></button>" +
                     "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
                     item.id + "'><i class='fas fa-trash-alt'></i></button>" +
@@ -64,7 +65,7 @@ class JobService {
                 if (responseData.status === 'success') {
                     successUpdateAlert().then(() => {
                         resetField()
-                        $('#jobModal').modal('hide');
+                        $('#lokerModal').modal('hide');
                     })
                     this.getAllData();
                     submitButton.attr('disabled', false);
@@ -80,7 +81,7 @@ class JobService {
                 if (responseData.status === 'success') {
                     successAlert().then(() => {
                         resetField()
-                        $('#jobModal').modal('hide');
+                        $('#lokerModal').modal('hide');
                     })
                     this.getAllData();
                     submitButton.attr('disabled', false);
@@ -126,7 +127,7 @@ class JobService {
             console.log('description', responseData);
             $('#modal-title').text("Edit Data");
             $('#id').val(responseData.data.id);
-            $('#job_opening').val($('<div>').html(responseData.data.job_opening).text());
+            $('#name').val($('<div>').html(responseData.data.name).text());
             $('#experience').val(responseData.data.experience);
             $('#department').val(responseData.data.department);
 
@@ -134,6 +135,10 @@ class JobService {
             $('#requirement').val(responseData.data.requirement[0]);
             $('#start_date').val(responseData.data.start_date);
             $('#end_date').val(responseData.data.end_date);
+            $('#job_type').val(responseData.data.job_type);
+            $('#category').val(responseData.data.category);
+            $('#description').val(responseData.data.description);
+
 
             responseData.data.qualification.slice(1).forEach((qualification) => {
                 const newInputGroup = `
