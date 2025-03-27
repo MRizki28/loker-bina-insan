@@ -45,6 +45,51 @@ export default function Content() {
                 <p className="text-gray-600 max-w-2xl mx-auto">
                     Temukan posisi yang sesuai dengan keahlian dan passion Anda dalam dunia pendidikan.
                 </p>
+                <div className="max-w-3xl mx-auto p-3">
+                    {/* Search Bar (Di Atas) */}
+                    <div className="relative mb-4">
+                        <label htmlFor="default-search" className="sr-only">Search</label>
+                        <input
+                            type="search"
+                            id="default-search"
+                            className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500"
+                            placeholder="Cari Lowongan Guru..."
+                            required
+                        />
+                        <div className="absolute inset-y-0 start-3 flex items-center pointer-events-none">
+                            <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Filter & Button (Di Bawah, Sejajar) */}
+                    <div className="flex items-center gap-2">
+                        {/* Dropdown Mata Pelajaran */}
+                        <select className="w-full p-3 text-sm border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:text-gray-900 dark:focus:ring-blue-500">
+                            <option selected>Kategory</option>
+                            <option value="Matematika">Matematika</option>
+                            <option value="IPA">IPA</option>
+                            <option value="Bahasa Inggris">Bahasa Inggris</option>
+                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                            <option value="IPS">IPS</option>
+                            <option value="TIK">TIK</option>
+                        </select>
+
+                        {/* Dropdown Jenis Pekerjaan */}
+                        <select className="w-full p-3 text-sm border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:text-gray-900 dark:focus:ring-blue-500">
+                            <option selected>Jenis Pekerjaan</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Honorer">Honorer</option>
+                        </select>
+
+                        {/* Search Button */}
+                        {/* <button className="w-full px-5 py-3 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        Search
+                    </button> */}
+                    </div>
+                </div>
             </div>
 
             {/* Card */}
