@@ -31,7 +31,7 @@ class JobRequest extends FormRequest
             'qualification' => 'required',
             'qualification.*' => 'required',
             'start_date' => 'required|date',
-            'end_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
             'job_type' => 'required',
             'category' => 'required',
         ];
