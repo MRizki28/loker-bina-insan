@@ -116,6 +116,22 @@ class JobRepositories implements JobInterfaces
 
     public function getForFrontend(Request $request)
     {
-        
+        $search = $request->input('search');
+        $limit = $request->input('limit') ? $request->input('limit') : 10;
+        $page = $search ? 1 : (int) $request->input('page', 1);
+
+        $query = $this->jobModel->query();
+
+        if($search){
+            $query->where('name', 'like', '%'.$search.'%');
+        }
+
+        $data = $query->paginate($limit, ['*'], 'page', $page);
+
+        if($data->isEmpty()){
+            return ApiResponse::notFound();
+        }
+
+        return ApiResponse::success($data, 'Success get data job for frontend', 200);
     }
 }
