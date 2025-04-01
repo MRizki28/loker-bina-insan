@@ -1,6 +1,7 @@
 
 import Content from "../../components/detailLoker/content";
 import Hero from "../../components/detailLoker/hero";
+import BreadCrumb from "../../components/shared/Breadcrumb";
 import Footer from "../../components/shared/Footer";
 import Navbar from "../../components/shared/Navbar";
 
