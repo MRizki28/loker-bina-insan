@@ -38,7 +38,11 @@ export const checkTokenValidity = () => async (dispatch) => {
         });
 
         console.log('disini', response.data)
-        dispatch(setLoginStatus(response.data.authenticated, response.data.user.role)) 
+        dispatch(setLoginStatus({
+            isLoggedIn: response.data.authenticated,
+            role: response.data.user.role
+        }));
+        
     } catch (error) {
         if(error.response && error.response.status === 401) {
             localStorage.removeItem('token')
