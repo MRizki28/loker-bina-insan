@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import ModalApply from "./modal";
 import { useDispatch, useSelector } from "react-redux";
+import BreadCrumb from "../shared/Breadcrumb";
 
 
 
@@ -13,7 +14,12 @@ export default function Content() {
     const selector = useSelector((state) => state.checkLogin);
     const login = selector.isLoggedIn;
 
+    const breadCrumbItems = [
 
+        {
+            label: "Detail Lowongan"
+        }
+    ]
 
     const { id } = useParams();
     console.log(id)
@@ -43,6 +49,7 @@ export default function Content() {
     return (
         <div className="mt-10">
             <div className="max-w-screen-2xl mx-auto pb-60 p-5 lg:p-16 -mt-40 md:-mt-20">
+            <BreadCrumb items={breadCrumbItems}></BreadCrumb>
                 <h2 className="text-xl font-bold text-center mb-11">DETAIL LOWONGAN</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-md">
@@ -73,7 +80,7 @@ export default function Content() {
                             </ol>
                         </div>
                     </div>
-                    <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-md">
+                    <div className="lg:col-span-3 bg-gray-100 p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold text-blue-700 mb-4">Cara Melamar</h2>
                         <p className="text-gray-700 mb-4">Apply berkas anda dengan menekan tombol di bawah:</p>
 
