@@ -5,7 +5,7 @@ const MySwal = withReactContent(Swal);
 
 class SweetAlertService {
     static async logoutAlert() {
-        return MySwal.fire({
+        const result = await MySwal.fire({
             title: 'Logout?',
             text: 'Anda ingin keluar dari aplikasi?',
             icon: 'warning',
@@ -14,7 +14,10 @@ class SweetAlertService {
             confirmButtonText: 'Ya',
             reverseButtons: true,
         });
+    
+        return result.isConfirmed; 
     }
+    
 
     static async successRegister() {
         return MySwal.fire({
@@ -29,6 +32,15 @@ class SweetAlertService {
         return MySwal.fire({
             title: 'Login Berhasil',
             text: 'Login berhasil',
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+    }
+
+    static async successApply() {
+        return MySwal.fire({
+            title: 'Apply Berhasil',
+            text: 'Apply berhasil',
             icon: 'success',
             confirmButtonText: 'OK',
         });
