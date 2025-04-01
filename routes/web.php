@@ -36,12 +36,11 @@ Route::prefix('v1')->group(function () {
         Route::get('/get-for-frontend/get/{id}', 'getDataById');
     });
 
-
 });
 
 Route::post('v1/auth/logout', [AuthController::class, 'logout']);
 
-Route::middleware(['auth', 'web', 'adminRole'])->group(function () {
+Route::middleware(['auth', 'web'])->group(function () {
     Route::get('cms/admin/dashboard', function () {
         return view('pages.loker');
     });
@@ -58,6 +57,7 @@ Route::middleware(['auth', 'web', 'adminRole'])->group(function () {
             Route::post('/update/{id}', 'updateData');
             Route::delete('/delete/{id}', 'deleteData');
         });
+
         Route::prefix('file-apply')->controller(FileApplyController::class)->group(function () {
             Route::post('/create', 'createData');
         });
