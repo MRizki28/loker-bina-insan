@@ -19,27 +19,30 @@ export default function Navbar() {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem('token');
-
-            const response = await axios.post('v1/auth/logout', {}, {
+    
+            const confirmed = await SweetAlertService.logoutAlert();
+            if (!confirmed) {
+                return; 
+            }
+    
+            const response = await axios.post(`${appUrl}/v1/auth/logout`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             const responseData = await response.data;
-            console.log(responseData);
             if (responseData.message === 'Logout successful') {
-                SweetAlertService.logoutAlert().then(() => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('role');
-                    dispatch(setLogout());
-                    window.location.reload();
-                });
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
+                dispatch(setLogout());
+                window.location.reload();
             }
         } catch (error) {
             console.log(error);
         }
     };
+    
 
     const checkRole = () => {
         if (!login) {
