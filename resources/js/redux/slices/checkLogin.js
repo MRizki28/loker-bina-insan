@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isLoggedIn: false,
+    role: null
 }
 
 const checkLogin = createSlice({
@@ -13,10 +14,12 @@ const checkLogin = createSlice({
             state.isLoggedIn = true
         },
         setLogout: (state) => {
-            state.isLoggedIn = false
+            state.isLoggedIn = false,
+            state.role = null; 
         },
         setLoginStatus: (state, action) => {
-            state.isLoggedIn = action.payload
+            state.isLoggedIn = action.payload,
+            state.role = action.payload.role || null;
         }
     }
 })
@@ -35,7 +38,7 @@ export const checkTokenValidity = () => async (dispatch) => {
         });
 
         console.log('disini', response.data)
-        dispatch(setLoginStatus(response.data.authenticated ))
+        dispatch(setLoginStatus(response.data.authenticated, response.data.user.role)) 
     } catch (error) {
         if(error.response && error.response.status === 401) {
             localStorage.removeItem('token')
