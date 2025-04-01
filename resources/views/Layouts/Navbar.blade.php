@@ -1,10 +1,10 @@
-<nav class="navbar navbar-header navbar-expand-lg" style="background-color: #00274D">
+<nav class="navbar navbar-header navbar-expand-lg" >
     <div class="container-fluid">
         <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
             <li class="nav-item dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="" aria-expanded="false">
                     <div class=" my-auto">
-                        <i class="fa-solid fa-right-from-bracket text-light fa-xl" id="iconLogout"></i>
+                        <i class="fa-solid fa-right-from-bracket text-danger fa-xl" id="iconLogout"></i>
 
                     </div>
                 </a>
