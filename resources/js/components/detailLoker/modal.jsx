@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import SweetAlertService from "../../utils/sweetalert";
 
 export default function ModalApply({ isOpen, onClose }) {
     const {
@@ -20,10 +21,12 @@ export default function ModalApply({ isOpen, onClose }) {
 
     const onSubmit = async (data) => {
         try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const formData = new FormData();
             formData.append("file", data.file[0]);
             formData.append("reason", data.reason);
             formData.append("id_job", id);
+            formData.append("_token", csrfToken); 
 
             const response = await axios.post(`${appUrl}/v1/file-apply/create`, formData, {
                 headers: {
@@ -35,13 +38,14 @@ export default function ModalApply({ isOpen, onClose }) {
             const responseData = await response.data;
             console.log('here', responseData);
             if (responseData.status === 'success') {
-                SweetAlertService.successAlert();
+                SweetAlertService.successApply();
                 reset();
                 clearErrors();
                 onClose();
+                // window.location.href = '/history'
             }
         } catch (error) {
-            console.log('jere', error)
+            console.log('eeee', error)
 
         }
     };
