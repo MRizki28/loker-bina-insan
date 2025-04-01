@@ -12,7 +12,9 @@ export default function Content() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
     const selector = useSelector((state) => state.checkLogin);
-    const login = selector.isLoggedIn;
+
+    const isLoggedIn = useSelector((state) => state.checkLogin.isLoggedIn);
+    const role = useSelector((state) => state.checkLogin.role);
 
     const breadCrumbItems = [
 
@@ -49,7 +51,7 @@ export default function Content() {
     return (
         <div className="mt-10">
             <div className="max-w-screen-2xl mx-auto pb-60 p-5 lg:p-16 -mt-40 md:-mt-20">
-            <BreadCrumb items={breadCrumbItems}></BreadCrumb>
+                <BreadCrumb items={breadCrumbItems}></BreadCrumb>
                 <h2 className="text-xl font-bold text-center mb-11">DETAIL LOWONGAN</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-md">
@@ -84,14 +86,21 @@ export default function Content() {
                         <h2 className="text-2xl font-bold text-blue-700 mb-4">Cara Melamar</h2>
                         <p className="text-gray-700 mb-4">Apply berkas anda dengan menekan tombol di bawah:</p>
 
-                        {!login && (
-                            <Link to="/login"
+                        {!isLoggedIn ? (
+                            <Link
+                                to="/login"
                                 className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition-colors inline-block mb-4"
                             >
-                                Login untuk Apply
+                                Silahkan login untuk melamar
                             </Link>
-                        )}
-                        {login && (
+                        ) : role === "admin" ? (
+                            <button
+                                className="bg-gray-400 text-white font-bold py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
+                                disabled
+                            >
+                                Admin tidak bisa melamar
+                            </button>
+                        ) : (
                             <button
                                 className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors inline-block mb-4"
                                 onClick={() => setIsModalOpen(true)}
@@ -99,6 +108,7 @@ export default function Content() {
                                 Apply now
                             </button>
                         )}
+
                     </div>
                 </div>
             </div>
