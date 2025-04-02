@@ -49,4 +49,30 @@ class FileApplyRepositories implements FileApplyInterfaces
     public function updateData(FileApplyRequest $request, $id) {}
 
     public function deleteData($id) {}
+
+    public function getHistoryByUser(Request $request)
+    {
+        try {
+            $user = Auth::user()->id;
+            $search = $request->input('search');
+            $limit = $request->input('limit') ? $request->input('limit') : 10;
+            $page = $search ? 1 : (int) $request->input('page', 1);
+
+            $query = $this->fileApplyModel->query();
+
+            if($search){
+                $query->where('status', 'like', '%'.$search.'%');
+            }
+
+            $data = $query->with('job')->where('id_pelamar', $user)->paginate($limit, ['*'], 'page', $page);
+
+            if($data->isEmpty()){
+                return ApiResponse::notFound();
+            }
+
+            return ApiResponse::success($data, 'Success get data job', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th);
+        }
+    }
 }
