@@ -60,7 +60,9 @@ Route::middleware(['auth', 'web'])->group(function () {
 
         Route::prefix('file-apply')->controller(FileApplyController::class)->group(function () {
             Route::post('/create', 'createData');
+            Route::get('/get/{id}', 'getDataById');
             Route::get('/get-history-by-user', 'getHistoryByUser');
+            Route::get('/download/{filename}', 'downloadFile');
         });
     });
 
