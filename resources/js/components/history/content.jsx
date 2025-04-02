@@ -4,15 +4,15 @@ import logo from "../../../../public/static/img/logo.png";
 import ModalDetailLoker from "./modal";
 
 export default function Content() {
-  const [activeTab, setActiveTab] = useState("semua");
+  const [activeTab, setActiveTab] = useState("pending");
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState({ open: false, id: null });
 
   const getData = async (page = 1) => {
     try {
-      const response = await axios.get(`${appUrl}/v1/file-apply/get-history-by-user?page=${page}`);
+      const response = await axios.get(`${appUrl}/v1/file-apply/get-history-by-user?page=${page}&search=${activeTab}`);
       const responseData = response.data;
       console.log(responseData);
       setData(responseData.data.data);
@@ -77,9 +77,9 @@ export default function Content() {
         <div className="p-4 bg-gray-50 border-b">
           <div className="flex space-x-4">
             <button 
-              onClick={() => setActiveTab("semua")}
+              onClick={() => setActiveTab("pending")}
               className={`px-4 py-2 rounded-md transition-colors ${
-                activeTab === "semua" 
+                activeTab === "pending" 
                   ? "bg-blue-600 text-white" 
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
@@ -87,9 +87,9 @@ export default function Content() {
               Verifikasi berkas
             </button>
             <button 
-              onClick={() => setActiveTab("menunggu")}
+              onClick={() => setActiveTab("interview")}
               className={`px-4 py-2 rounded-md transition-colors ${
-                activeTab === "menunggu" 
+                activeTab === "interview" 
                   ? "bg-yellow-500 text-white" 
                   : "bg-white text-gray-700 hover:bg-gray-100"
               }`}
@@ -135,7 +135,7 @@ export default function Content() {
                 <div className="ml-4 flex flex-col items-end space-y-2">
                   {/* {getStatusBadge(application.status)} */}
                   {getStatusBadge(application.status)}
-                  <button   onClick={() => setIsModalOpen(true)} className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                  <button   onClick={() => setIsModalOpen({open: true, id:application.id})} className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
                     Lihat Detail
                   </button>
                 </div>
@@ -173,7 +173,7 @@ export default function Content() {
           </div>
         </div>
       </div>
-      {isModalOpen && <ModalDetailLoker isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <ModalDetailLoker isOpen={isModalOpen.open} onClose={() => setIsModalOpen(false)}     applicationId={isModalOpen.id} />}
     </div>
   );
 }
