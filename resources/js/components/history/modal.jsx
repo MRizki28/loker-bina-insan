@@ -1,8 +1,39 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import logo from "../../../../public/static/img/logo.png";
+export default function ModalDetailLoker({ isOpen, onClose, applicationId }) {
+    const [data, setData] = useState([]);
+    const getDetailLamaran = async () => {
+        try {
+            const response = await axios.get(`${appUrl}/v1/file-apply/get/${applicationId}`);
+            const responseData = response.data;
+            console.log('here', responseData);
+            setData(responseData.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-export default function ModalDetailLoker({ isOpen, onClose }) {
+    const handleDownloadFile = async (file) => {
+        try {
+            const response = await axios.get(`${appUrl}/v1/file-apply/download/${file}`, {
+                responseType: "blob",
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", file);
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
+        if (isOpen && applicationId) {
+            getDetailLamaran();
+        }
         if (isOpen) {
             document.body.style.overflow = "hidden";
         } else {
@@ -11,6 +42,7 @@ export default function ModalDetailLoker({ isOpen, onClose }) {
         return () => {
             document.body.style.overflow = "auto";
         };
+
     }, [isOpen]);
 
     return (
@@ -36,22 +68,21 @@ export default function ModalDetailLoker({ isOpen, onClose }) {
                             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                                 {/* Header Section */}
                                 <div className="p-6 border-b flex items-center">
-                                    <img src="/api/placeholder/96/96" alt="PT. Teknologi Maju" className="h-24 w-24 rounded-lg object-cover mr-6" />
+                                    <img src={logo} alt="PT. Teknologi Maju" className="h-24 w-24 rounded-lg object-contain mr-6" />
                                     <div>
-                                        <h1 className="text-2xl font-bold text-gray-800">Frontend Developer</h1>
-                                        <h2 className="text-xl text-gray-700">PT. Teknologi Maju</h2>
+                                        <h1 className="text-2xl font-bold text-gray-800">{data.job?.name}</h1>
                                         <div className="mt-2 flex flex-wrap gap-2">
-                                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                                Jakarta Selatan
-                                            </span>
                                             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                Full Time
-                                            </span>
-                                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                Rp 10.000.000 - Rp 15.000.000
+                                                {data.job?.job_type}
                                             </span>
                                         </div>
-                                        <p className="text-sm text-gray-500 mt-2">Diapply pada: 25 Maret 2025</p>
+                                        <p className="text-sm text-gray-500 mt-2">Diapply pada: {
+                                            new Date(data.created_at).toLocaleDateString("id-ID", {
+                                                day: "2-digit",
+                                                month: "long",
+                                                year: "numeric",
+                                            })
+                                        }</p>
                                     </div>
                                 </div>
 
@@ -77,25 +108,31 @@ export default function ModalDetailLoker({ isOpen, onClose }) {
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800 mb-3">Deskripsi Pekerjaan</h3>
                                             <p className="text-gray-600">
-                                                Kami mencari Frontend Developer yang berpengalaman dalam mengembangkan aplikasi web modern dengan React, Next.js, dan Tailwind CSS.
+                                                {data.job?.description}
                                             </p>
                                         </div>
 
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-800 mb-3">Persyaratan</h3>
                                             <ul className="list-disc pl-5 space-y-1 text-gray-600">
-                                                <li>Minimal 2 tahun pengalaman dalam pengembangan frontend</li>
-                                                <li>Mahir dalam JavaScript, React, dan CSS modern</li>
-                                                <li>Pengalaman dengan Next.js dan Tailwind CSS</li>
-                                                <li>Memahami prinsip-prinsip UI/UX dan responsive design</li>
-                                                <li>Mampu bekerja dalam tim dengan Git workflow</li>
+                                                {data.job?.requirement.map((item, key) => (
+                                                    <li key={key}>{item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Kualifikasi</h3>
+                                            <ul className="list-disc pl-5 space-y-1 text-gray-600">
+                                                {data.job?.qualification.map((item, key) => (
+                                                    <li key={key}>{item}</li>
+                                                ))}
                                             </ul>
                                         </div>
 
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Catatan Wawancara</h3>
+                                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Catatan </h3>
                                             <div className="bg-gray-50 p-4 rounded-lg border text-gray-600">
-                                                Kandidat menunjukkan keterampilan teknis yang kuat dalam React dan memiliki portofolio yang mengesankan. Komunikasi baik dan cocok dengan budaya perusahaan.
+                                                Informasi update lamaran akan dikirimkan melalui email yang terdaftar.
                                             </div>
                                         </div>
                                     </div>
@@ -103,27 +140,27 @@ export default function ModalDetailLoker({ isOpen, onClose }) {
                                     {/* Right Column */}
                                     <div className="space-y-6">
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-800 mb-3">File Lamaran</h3>
+                                            <h3 className="text-lg font-semibold text-gray-800 mb-3 border-b">Data Lamaran</h3>
                                             <div className="space-y-2">
+                                                <span>Deskripsikan diri anda</span>
                                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                                                     <div>
-                                                        <p className="font-medium text-gray-700">CV_AndiFirmansyah.pdf</p>
-                                                        <p className="text-xs text-gray-500">2.4 MB • Diunggah 25 Maret 2025</p>
+                                                        <p className="font-medium text-gray-700">{data.reason}</p>
                                                     </div>
                                                 </div>
-                                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
+                                                <span >File</span>
+                                                <button type="button" onClick={() => handleDownloadFile(data.file)}  className="flex items-center justify-between p-3 bg-gray-50 w-full rounded-lg border">
                                                     <div>
-                                                        <p className="font-medium text-gray-700">PortofolioProyek.zip</p>
-                                                        <p className="text-xs text-gray-500">8.7 MB • Diunggah 25 Maret 2025</p>
+                                                        <p className="font-medium text-gray-700">{data.file}</p>
                                                     </div>
-                                                </div>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="p-6 bg-gray-50 border-t flex justify-end">
-                                    <button onClick={onClose}  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                                    <button onClick={onClose} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                                         Tutup
                                     </button>
                                 </div>
