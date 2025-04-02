@@ -40,4 +40,9 @@ class FileApplyController extends Controller
     {
         return $this->fileApplyRepositories->deleteData($id);
     }
+
+    public function getHistoryByUser(Request $request)
+    {
+        return $this->fileApplyRepositories->getHistoryByUser($request);
+    }
 }
