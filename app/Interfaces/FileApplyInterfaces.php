@@ -14,4 +14,5 @@ interface FileApplyInterfaces
     public function updateData(FileApplyRequest $request, $id);
     public function deleteData($id);
     public function getHistoryByUser(Request $request);
+    public function downloadFile($filename);
 }
