@@ -44,7 +44,14 @@ class FileApplyRepositories implements FileApplyInterfaces
         }
     }
 
-    public function getDataById($id) {}
+    public function getDataById($id) {
+        $data = $this->fileApplyModel->with('job')->find($id);
+        if(!$data){
+            return ApiResponse::notFound();
+        }
+
+        return ApiResponse::success($data, 'Success get data job', 200);
+    }
 
     public function updateData(FileApplyRequest $request, $id) {}
 
@@ -74,5 +81,14 @@ class FileApplyRepositories implements FileApplyInterfaces
         } catch (\Throwable $th) {
             return ApiResponse::error($th);
         }
+    }
+
+    public function downloadFile($filename) {
+        $path = public_path('uploads/fileapply/' . $filename);
+        if(file_exists($path)){
+            return response()->download($path);
+        }
+
+        return ApiResponse::notFound();
     }
 }
