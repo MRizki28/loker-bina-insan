@@ -45,4 +45,10 @@ class FileApplyController extends Controller
     {
         return $this->fileApplyRepositories->getHistoryByUser($request);
     }
+
+    public function downloadFile($filename)
+    {
+        return $this->fileApplyRepositories->downloadFile($filename);
+    }
+    
 }
