@@ -19,4 +19,9 @@ class FileApplyModel extends Model
         'status',
         'reason_reject',
     ];
+
+    public function job()
+    {
+        return $this->belongsTo(JobModel::class, 'id_job', 'id');
+    }
 }
