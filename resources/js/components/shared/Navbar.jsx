@@ -69,7 +69,7 @@ export default function Navbar() {
             return (
                 <>
                     <li>
-                        <a href="#" className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
+                        <a href={`${appUrl}/history`} className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
                     </li>
                     <li>
                         <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>
