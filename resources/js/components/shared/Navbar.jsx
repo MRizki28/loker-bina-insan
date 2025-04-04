@@ -36,7 +36,7 @@ export default function Navbar() {
                 localStorage.removeItem('token');
                 localStorage.removeItem('role');
                 dispatch(setLogout());
-                window.location.reload();
+                window.location.href = '/'
             }
         } catch (error) {
             console.log(error);

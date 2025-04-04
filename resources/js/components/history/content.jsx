@@ -14,7 +14,6 @@ export default function Content() {
   const getData = async (page = 1, tab = activeTab) => {
     try {
       setIsLoading(true);
-      // Clear previous data while loading
       setData([]);
 
       let apiUrl = `${appUrl}/v1/file-apply/get-history-by-user?page=${page}&search=${tab}`;
@@ -37,7 +36,6 @@ export default function Content() {
       setCurrentPage(responseData.data.current_page);
     } catch (error) {
       console.log(error);
-      // Set empty data in case of error
       setData([]);
       setPagination({
         current_page: 1,
@@ -69,11 +67,9 @@ export default function Content() {
   };
 
   useEffect(() => {
-    // Call API based on activeTab whenever the tab changes
     getData(1, activeTab);
   }, [activeTab]);
 
-  //status lamaran
   const getStatusBadge = (status) => {
     switch (status) {
       case "pending":
