@@ -19,7 +19,29 @@ class FileApplyRepositories implements FileApplyInterfaces
         $this->fileApplyModel = $fileApplyModel;
     }
 
-    public function getAllData(Request $request) {}
+    public function getAllData(Request $request) {
+        try {
+            $search = $request->input('search');
+            $limit = $request->input('limit') ? $request->input('limit') : 10;
+            $page = $search ? 1 : (int) $request->input('page', 1);
+
+            $query = $this->fileApplyModel->query();
+
+            if($search){
+                $query->where('status', 'like', '%'.$search.'%');
+            }
+
+            $data = $query->with('job','pelamar')->paginate($limit, ['*'], 'page', $page);
+
+            if($data->isEmpty()){
+                return ApiResponse::notFound();
+            }
+
+            return ApiResponse::success($data, 'Success get data job', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th);
+        }
+    }
 
     public function createData(FileApplyRequest $request)
     {
@@ -45,7 +67,7 @@ class FileApplyRepositories implements FileApplyInterfaces
     }
 
     public function getDataById($id) {
-        $data = $this->fileApplyModel->with('job')->find($id);
+        $data = $this->fileApplyModel->with('job', 'pelamar')->find($id);
         if(!$data){
             return ApiResponse::notFound();
         }
