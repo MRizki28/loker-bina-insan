@@ -24,4 +24,9 @@ class FileApplyModel extends Model
     {
         return $this->belongsTo(JobModel::class, 'id_job', 'id');
     }
+
+    public function pelamar()
+    {
+        return $this->belongsTo(User::class, 'id_pelamar', 'id');
+    }
 }
