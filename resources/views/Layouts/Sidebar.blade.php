@@ -39,6 +39,12 @@
 								<p>Lowongan kerja</p>
 							</a>
 						</li>  
+						<li class="nav-item {{ request()->is('cms/admin/file-apply*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/file-apply') }}">
+								<i class="fas fa-book"></i>
+								<p>Data seleksi berkas</p>
+							</a>
+						</li> 
 					<ul>
 				</div>
 			</div>
