@@ -15,6 +15,10 @@ Route::fallback(function () {
     return view('frontend');
 });
 
+Route::get('/email', function () {
+    return view('email.loker');
+});
+
 
 Route::get('v1/check-auth', function () {
     $user = Auth::user();
@@ -49,6 +53,10 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.loker');
     });
 
+    Route::get('cms/admin/file-apply', function () {
+        return view('pages.fileapply');
+    });
+
     Route::prefix('v1')->group(function () {
         Route::prefix('job')->controller(JobController::class)->group(function () {
             Route::get('/', 'getAllData');
@@ -59,6 +67,7 @@ Route::middleware(['auth', 'web'])->group(function () {
         });
 
         Route::prefix('file-apply')->controller(FileApplyController::class)->group(function () {
+            Route::get('/', 'getAllData');
             Route::post('/create', 'createData');
             Route::get('/get/{id}', 'getDataById');
             Route::get('/get-history-by-user', 'getHistoryByUser');
