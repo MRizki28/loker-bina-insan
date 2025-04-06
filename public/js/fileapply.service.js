@@ -22,9 +22,9 @@ class FileApplyService {
 
                 if (item.status == 'pending') {
                     badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
-                }else if(item.status == 'rejected') {
+                } else if (item.status == 'rejected') {
                     badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
-                }else{
+                } else {
                     badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
                 }
 
@@ -37,14 +37,21 @@ class FileApplyService {
                 //     item.id + "'><i class='fas fa-eye'></i></button>"
                 // tableBody += "<td>" + item.reason + "</td>"
                 tableBody += "<td>" + badgeHtml + "</td>"
-                tableBody += "<td>" + item.reason_reject + "</td>";
-                tableBody +=
-                    "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    "<button class='btn btn-sm review-modal mr-1' data-toggle='modal' data-target='#reviewModal' data-id='" +
-                    item.id + "'>Review</button>" +
-                    "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
-                    item.id + "'><i class='fas fa-trash-alt'></i></button>" +
-                    "</td>";
+                tableBody += "<td>" + (item.reason_reject ?? "-") + "</td>";
+                if (item.status === 'pending') {
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<button class='btn btn-sm review-modal mr-1' data-toggle='modal' data-target='#reviewModal' data-id='" +
+                        item.id + "'>Review</button>" +
+                        "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
+                        item.id + "'><i class='fas fa-trash-alt'></i></button>" +
+                        "</td>";
+                } else {
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<span>Sudah di review</span>" +
+                        "</td>";
+                }
                 tableBody += "</tr>";
                 dataNotFound.hide()
             });
@@ -85,14 +92,77 @@ class FileApplyService {
             });
             $('#reason').text(responseData.data.reason);
 
-
             const filePath = `/uploads/fileapply/${responseData.data.file}`;
             $('#unduhFile').attr('href', filePath).attr('download', responseData.data.file);
-
+            $('#approveBtn').attr('data-id', id);
+            $('#rejectBtn').attr('data-id', id);
+            
 
         } catch (error) {
             console.log(error);
         }
+    }
+
+    async reject(id, e) {
+        console.log(id)
+        let submitButton = $(e.target).find(':submit')
+        try {
+            const response = await axios.post(`/v1/file-apply/review/${id}`, {
+                status: 'rejected',
+                reason_reject: $('#reason_reject').val(),
+            });
+
+            const responseData = await response.data;
+            if (responseData.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: responseData.message,
+                }).then(() => {
+                    window.location.reload();
+                })
+                submitButton.attr('disabled', false);
+            } else {
+                errorAlert();
+                submitButton.attr('disabled', false);
+            }
+        } catch (error) {
+            submitButton.attr('disabled', false);
+            errorAlert();
+            console.log(error);
+        }
+    }
+
+    async approve(id, e) {
+        console.log(id)
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Anda akan menyetujui lamaran ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, setujui!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const response = await axios.post(`/v1/file-apply/review/${id}`, {
+                    status: 'approved',
+                });
+
+                const responseData = await response.data;
+                if (responseData.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Sukses approve lamaran, silahkan check pada menu wawancara',
+                    }).then(() => {
+                        window.location.reload();
+                    })
+                } else {
+                    errorAlert();
+                }
+            }
+        })
     }
 }
 
