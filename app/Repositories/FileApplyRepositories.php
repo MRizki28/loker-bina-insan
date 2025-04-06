@@ -5,9 +5,14 @@ namespace App\Repositories;
 
 use App\Http\Requests\FileApply\FileApplyRequest;
 use App\Interfaces\FileApplyInterfaces;
+use App\Jobs\EmailHandlerJob;
+use App\Mail\LokerMail;
 use App\Models\FileApplyModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use MRizki28\ApiResponse\ApiResponse;
 
 class FileApplyRepositories implements FileApplyInterfaces
@@ -31,7 +36,7 @@ class FileApplyRepositories implements FileApplyInterfaces
                 $query->where('status', 'like', '%'.$search.'%');
             }
 
-            $data = $query->with('job','pelamar')->paginate($limit, ['*'], 'page', $page);
+            $data = $query->with('job','pelamar')->where('status', '!=' , 'approved')->paginate($limit, ['*'], 'page', $page);
 
             if($data->isEmpty()){
                 return ApiResponse::notFound();
@@ -112,5 +117,46 @@ class FileApplyRepositories implements FileApplyInterfaces
         }
 
         return ApiResponse::notFound();
+    }
+
+    public function reviewFile(Request $request, $id)
+    {
+        try {
+            $validation = Validator::make($request->all(), [
+                'status' => 'required',
+                'reason_reject' => 'required_if:status,rejected',
+            ]);
+
+            if($validation->fails()){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Validation Error',
+                    'errors' => $validation->errors()
+                ], 422);
+            }
+
+            $data = $this->fileApplyModel->find($id);
+            if(!$data){
+                return ApiResponse::notFound();
+            }
+
+            $data->status = $request->input('status');
+
+            if($request->input('status') == 'rejected'){
+                $data->reason_reject = $request->input('reason_reject');
+            }
+
+            $data->save();
+            if($data->status == 'approved'){
+                EmailHandlerJob::dispatch('Selamat anda lolos seleksi berkas, silahkan lanjut ke tahap selanjutnya', $data->pelamar->email);
+            }else{
+                EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi berkas, dengan alasan ' . $data->reason_reject , $data->pelamar->email);
+            }
+
+            return ApiResponse::success($data, 'Success review data job', 200);
+        
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
     }
 }
