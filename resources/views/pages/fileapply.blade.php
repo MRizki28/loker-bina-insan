@@ -19,45 +19,36 @@
             </x-base-table>
         </x-base-body>
     </div>
-    <div class="modal fade" id="qualificationModal" tabindex="-1" role="dialog" aria-labelledby="qualificationLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document" style="max-width: 800px;">
+    <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="jobLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 800px; ">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title">Kualifikasi</h5>
+                    <h5 class="modal-title" id="modal-title">Form reject</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <ol id="qualificationList" style="color: #000;"></ol>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+                <form id="formReject">
+                    <div class="modal-body">
+                        @csrf
+                        <div class="row py-2">
+                            <div class="col-md-12">
+                                <input type="hidden" name="id" id="id" value="">
+                                <div class="form-group form-ckeditor fill form-show-validation">
+                                    <label class="form-ckeditor">Alasan Penolakan</label>
+                                    <textarea class="form-control" id="reason_reject" name="reason_reject"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Tutup</button>
+                            <button type="submit" class="btn btn-outline-primary">Simpan Data</button>
+                        </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="requirementModal" tabindex="-1" role="dialog" aria-labelledby="requirementLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document" style="max-width: 800px;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal-title">Pesyaratan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <ol id="requirementList" style="color: #000;"></ol>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
     <x-review.review-modal></x-review.review-modal>
 @endsection
