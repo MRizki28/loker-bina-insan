@@ -39,7 +39,6 @@ Route::prefix('v1')->group(function () {
         Route::get('/get-for-frontend', 'getForFrontend');
         Route::get('/get-for-frontend/get/{id}', 'getDataById');
     });
-
 });
 
 Route::post('v1/auth/logout', [AuthController::class, 'logout']);
@@ -72,6 +71,7 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get/{id}', 'getDataById');
             Route::get('/get-history-by-user', 'getHistoryByUser');
             Route::get('/download/{filename}', 'downloadFile');
+            Route::post('/review/{id}', 'reviewFile');
         });
     });
 
