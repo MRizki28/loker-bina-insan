@@ -31,7 +31,7 @@ class LokerMail extends Mailable
         return $this->view('email.loker')
             ->subject('Loker')
             ->with([
-                'message' => $this->message,
+                'bodyMessage' => $this->message,
             ]);
     }
 }
