@@ -60,8 +60,8 @@
             
             <!-- Footer -->
             <div class="modal-footer">
-                <button type="submit" class="btn btn-outline-primary">Approve ke tahap wawancara</button>
-                <button class="btn btn-danger">Tolak</button>
+                <button type="button" class="btn btn-outline-primary approveBtn" id="approveBtn">Approve ke tahap wawancara</button>
+                <button class="btn btn-danger" id="rejectBtn">Tolak</button>
                 <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Tutup</button>
             </div>
         </div>
