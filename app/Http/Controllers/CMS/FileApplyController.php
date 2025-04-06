@@ -50,5 +50,10 @@ class FileApplyController extends Controller
     {
         return $this->fileApplyRepositories->downloadFile($filename);
     }
+
+    public function reviewFile(Request $request, $id)
+    {
+        return $this->fileApplyRepositories->reviewFile($request, $id);
+    }
     
 }
