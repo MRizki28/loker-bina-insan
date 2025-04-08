@@ -19,27 +19,30 @@ export default function Navbar() {
     const handleLogout = async () => {
         try {
             const token = localStorage.getItem('token');
-
-            const response = await axios.post('v1/auth/logout', {}, {
+    
+            const confirmed = await SweetAlertService.logoutAlert();
+            if (!confirmed) {
+                return; 
+            }
+    
+            const response = await axios.post(`${appUrl}/v1/auth/logout`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+    
             const responseData = await response.data;
-            console.log(responseData);
             if (responseData.message === 'Logout successful') {
-                SweetAlertService.logoutAlert().then(() => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('role');
-                    dispatch(setLogout());
-                    window.location.reload();
-                });
+                localStorage.removeItem('token');
+                localStorage.removeItem('role');
+                dispatch(setLogout());
+                window.location.href = '/'
             }
         } catch (error) {
             console.log(error);
         }
     };
+    
 
     const checkRole = () => {
         if (!login) {
@@ -66,7 +69,7 @@ export default function Navbar() {
             return (
                 <>
                     <li>
-                        <a href="#" className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
+                        <a href={`${appUrl}/history`} className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
                     </li>
                     <li>
                         <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>

@@ -40,5 +40,8 @@ class JobController extends Controller
     {
         return $this->jobRepositories->deleteData($id);
     }
-    
+
+    public function getForFrontend(Request $request) {
+        return $this->jobRepositories->getForFrontend($request);
+    }
 }

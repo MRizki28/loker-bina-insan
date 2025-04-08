@@ -4,7 +4,7 @@
 				<div class="sidebar-content">
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
-							<img src="{{asset('img/profilepeople.png')}}" alt="" class="avatar-img rounded-circle">
+							<img src="{{asset('static/img/profile.png')}}" alt="" class="avatar-img rounded-circle">
 						</div>
 						<div class="info">
 							<a href="{{ url('/setting') }}" >
@@ -39,6 +39,12 @@
 								<p>Lowongan kerja</p>
 							</a>
 						</li>  
+						<li class="nav-item {{ request()->is('cms/admin/file-apply*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/file-apply') }}">
+								<i class="fas fa-book"></i>
+								<p>Data seleksi berkas</p>
+							</a>
+						</li> 
 					<ul>
 				</div>
 			</div>

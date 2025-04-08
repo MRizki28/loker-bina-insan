@@ -4,6 +4,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Content() {
     const [data, setData] = useState([]);
@@ -11,7 +12,7 @@ export default function Content() {
 
     const getData = async () => {
         try {
-            const response = await axios.get('/v1/job?limit=100');
+            const response = await axios.get('/v1/job/get-for-frontend?limit=100');
             const responseData = response.data;
             const rentanWaktu = responseData.data.data.map((item) => {
                 return {
@@ -19,6 +20,7 @@ export default function Content() {
                     rentanWaktu: `${item.start_date} s/d ${item.end_date}`
                 };
             })
+
             setData(rentanWaktu);
             setLoading(false);
         } catch (error) {
@@ -127,9 +129,9 @@ export default function Content() {
                                     </div>
                                 </div>
                                 <div className="mt-6">
-                                    <button className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
+                                    <Link to={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
                                         Read More
-                                    </button>
+                                    </Link>
                                 </div>
                             </motion.div>
                         ))}

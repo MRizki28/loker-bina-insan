@@ -24,9 +24,9 @@
 <body>
     <div class="wrapper">
         <div class="main-header">
-            <div class="logo-header" style="background-color: #00274D">
+            <div class="logo-header">
                 <a href="#" class="logo" >
-                    <img src="{{ asset('img/logobprwhite.png') }}" width="150" height="20" class="navbar-brand"
+                    <img src="{{ asset('static/img/logo.png') }}" width="150" height="50" class="navbar-brand"
                         alt="logo"></img>
                 </a>
                 <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse"
