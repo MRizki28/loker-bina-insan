@@ -16,14 +16,17 @@ export default function Content() {
       setIsLoading(true);
       setData([]);
 
-      let apiUrl = `${appUrl}/v1/file-apply/get-history-by-user?page=${page}&search=${tab}`;
+      let apiUrl
 
       if (tab === 'interview') {
         apiUrl = `${appUrl}/v1/file-apply/get-interview-history?page=${page}`;
+      } else if (tab === 'pending') {
+        apiUrl = `${appUrl}/v1/archive/get-history-by-user?page=${page}`;
       }
 
       const response = await axios.get(apiUrl);
       const responseData = response.data;
+      console.log('disinisss', responseData)
 
       setData(responseData.data.data);
       setPagination({
@@ -84,6 +87,12 @@ export default function Content() {
             Ditolak
           </span>
         );
+      case "approved":
+        return (
+          <span className="text-sm text-green-600 bg-green-100 rounded-full px-2">
+            Lanjut tahap interview
+          </span>
+        )
       default:
         return null;
     }
@@ -102,8 +111,8 @@ export default function Content() {
             <button
               onClick={() => handleTabChange("pending")}
               className={`px-4 py-2 rounded-md transition-colors ${activeTab === "pending"
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                ? "bg-blue-600 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
             >
               Verifikasi berkas
@@ -111,8 +120,8 @@ export default function Content() {
             <button
               onClick={() => handleTabChange("interview")}
               className={`px-4 py-2 rounded-md transition-colors ${activeTab === "interview"
-                  ? "bg-yellow-500 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                ? "bg-yellow-500 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
             >
               Interview
@@ -120,8 +129,8 @@ export default function Content() {
             <button
               onClick={() => handleTabChange("diterima")}
               className={`px-4 py-2 rounded-md transition-colors ${activeTab === "diterima"
-                  ? "bg-green-600 text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                ? "bg-green-600 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100"
                 }`}
             >
               Diterima
@@ -147,7 +156,7 @@ export default function Content() {
                   />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800">{application.job.name}</h3>
+                  <h3 className="text-lg font-semibold text-gray-800">{application.name}</h3>
                   <p className="text-gray-600">{application.company}</p>
                   <p className="text-sm text-gray-500 mt-1">
                     Diapply pada: {new Date(application.created_at).toLocaleDateString("id-ID", {
@@ -159,7 +168,18 @@ export default function Content() {
                 </div>
                 <div className="ml-4 flex flex-col items-end space-y-2">
                   {getStatusBadge(application.status)}
-                  <button onClick={() => setIsModalOpen({ open: true, id: application.id })} className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+                  <button onClick={() => setIsModalOpen({ open: true, data: {
+                      id: application.id,
+                      name: application.name,
+                      description: application.description,
+                      file: application.file,
+                      created_at: application.created_at,
+                      job_type: application.job_type,
+                      description: application.description,
+                      requirement: application.requirement,
+                      qualification: application.qualification,
+                      company_logo: logo
+                  } })} className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
                     Lihat Detail
                   </button>
                 </div>
@@ -203,7 +223,19 @@ export default function Content() {
           </div>
         )}
       </div>
-      {isModalOpen.open && <ModalDetailLoker isOpen={isModalOpen.open} onClose={() => setIsModalOpen({ open: false, id: null })} applicationId={isModalOpen.id} />}
+      {isModalOpen.open && <ModalDetailLoker isOpen={isModalOpen.open} onClose={() => setIsModalOpen({ open: false, data:null })} applicationData={[
+        isModalOpen.data.id,
+        isModalOpen.data.name,
+        isModalOpen.data.description,
+        isModalOpen.data.file,
+        isModalOpen.data.created_at,
+        isModalOpen.data.job_type,
+        isModalOpen.data.description,
+        isModalOpen.data.requirement,
+        isModalOpen.data.qualification,
+
+        logo
+      ]} />}
     </div>
   );
 }
