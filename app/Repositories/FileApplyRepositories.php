@@ -7,9 +7,11 @@ use App\Http\Requests\FileApply\FileApplyRequest;
 use App\Interfaces\FileApplyInterfaces;
 use App\Jobs\EmailHandlerJob;
 use App\Mail\LokerMail;
+use App\Models\ArchiveModel;
 use App\Models\FileApplyModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -18,11 +20,14 @@ use MRizki28\ApiResponse\ApiResponse;
 class FileApplyRepositories implements FileApplyInterfaces
 {
     protected $fileApplyModel;
+    protected $archiveModel;
 
-    public function __construct(FileApplyModel $fileApplyModel)
+    public function __construct(FileApplyModel $fileApplyModel, ArchiveModel $archiveModel)
     {
+        $this->archiveModel = $archiveModel;
         $this->fileApplyModel = $fileApplyModel;
     }
+    
 
     public function getAllData(Request $request) {
         try {
@@ -50,6 +55,7 @@ class FileApplyRepositories implements FileApplyInterfaces
 
     public function createData(FileApplyRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = new $this->fileApplyModel;
             $data->id_pelamar = Auth::user()->id;
@@ -65,8 +71,27 @@ class FileApplyRepositories implements FileApplyInterfaces
             $data->reason = $request->input('reason');
             $data->save();
 
+            DB::commit();
+
+            $archive = new $this->archiveModel;
+            $archive->id_pelamar = $data->id_pelamar;
+            $archive->id_file = $data->id;
+            $archive->file = $data->file;
+            $archive->reason = $data->reason;
+            $archive->id_job = $data->id_job;
+            $archive->name = $data->job->name;
+            $archive->description = $data->job->description;
+            $archive->qualification = $data->job->qualification;
+            $archive->requirement = $data->job->requirement;
+            $archive->start_date = $data->job->start_date;
+            $archive->end_date = $data->job->end_date;
+            $archive->job_type = $data->job->job_type;
+            $archive->category = $data->job->category;
+            $archive->save();
+
             return ApiResponse::success($data, 'Data berhasil disimpan');
         } catch (\Throwable $th) {
+            DB::rollBack();
             return ApiResponse::error($th, 500);
         }
     }
@@ -147,11 +172,19 @@ class FileApplyRepositories implements FileApplyInterfaces
             }
 
             $data->save();
+            
             if($data->status == 'approved'){
                 EmailHandlerJob::dispatch('Selamat anda lolos seleksi berkas, silahkan lanjut ke tahap selanjutnya', $data->pelamar->email);
             }else{
                 EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi berkas, dengan alasan ' . $data->reason_reject , $data->pelamar->email);
             }
+
+            $archive = $this->archiveModel->where('id_file', $id)->first();
+            if($archive){
+                $archive->reason_reject = $data->reason_reject;
+                $archive->save();
+            }
+            $data->load('job', 'pelamar');
 
             return ApiResponse::success($data, 'Success review data job', 200);
         
