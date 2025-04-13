@@ -24,6 +24,8 @@ class InterviewRepositories implements InterviewInterface {
             if($search){
                 $query->where('status', 'like', '%'.$search.'%');
             }
+
+            
         } catch (\Throwable $th) {
             //throw $th;
         }
