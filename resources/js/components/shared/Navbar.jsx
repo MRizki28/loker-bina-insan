@@ -9,7 +9,7 @@ export default function Navbar() {
     const dispatch = useDispatch();
     const selector = useSelector((state) => state.checkLogin);
     const login = selector.isLoggedIn;
-    console.log('here',login)
+    console.log('here', login)
 
     useEffect(() => {
         checkTokenValidity();
@@ -19,11 +19,11 @@ export default function Navbar() {
         try {
             const confirmed = await SweetAlertService.logoutAlert();
             if (!confirmed) {
-                return; 
+                return;
             }
-    
+
             const response = await axios.post(`${appUrl}/v1/auth/logout`, {});
-    
+
             const responseData = await response.data;
             if (responseData.message === 'Logout successful') {
                 dispatch(setLogout());
@@ -33,7 +33,7 @@ export default function Navbar() {
             console.log(error);
         }
     };
-    
+
 
     const checkRole = () => {
         if (login.isLoggedIn === false) {
@@ -48,6 +48,13 @@ export default function Navbar() {
             return (
                 <>
                     <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
+
+                    <li>
                         <a href="/cms/admin/dashboard" className="block py-2 px-3 text-black hover:text-blue-500 ">Ke Halaman Admin</a>
                     </li>
                     <li>
@@ -59,6 +66,13 @@ export default function Navbar() {
             return (
                 <>
                     <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
+
+                    <li>
                         <a href={`${appUrl}/history`} className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
                     </li>
                     <li>
@@ -68,6 +82,17 @@ export default function Navbar() {
             );
         }
     };
+
+    useEffect(() => {
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, []);
+
 
     return (
         <nav className="bg-white border-gray-200 dark:white">
