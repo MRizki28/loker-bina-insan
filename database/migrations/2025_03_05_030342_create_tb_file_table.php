@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tb_file', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_pelamar')->constrained('users');
-            $table->foreignUuid('id_job')->constrained('tb_job');
+            $table->foreignUuid('id_pelamar')->constrained('users')->onDelete('cascade');
+            $table->foreignUuid('id_job')->constrained('tb_job')->onDelete('cascade');
             $table->string('file');
             $table->text('reason');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

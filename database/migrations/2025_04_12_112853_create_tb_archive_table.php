@@ -27,6 +27,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->enum('job_type', ['fulltime', 'parttime', 'internship']);
             $table->enum('category', ['guru','staff','lainnya']);
+            $table->enum('status', ['pending', 'approved', 'rejected']);
             $table->timestamps();
         });
     }
