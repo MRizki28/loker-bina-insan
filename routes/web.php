@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CMS\ArchiveController;
 use App\Http\Controllers\CMS\AuthController;
 use App\Http\Controllers\CMS\FileApplyController;
 use App\Http\Controllers\CMS\JobController;
@@ -73,6 +74,13 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/download/{filename}', 'downloadFile');
             Route::post('/review/{id}', 'reviewFile');
         });
+
+        Route::prefix('archive')->controller(ArchiveController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::get('/get/{id}', 'getDataById');
+            Route::get('/get-history-by-user', 'getHistoryByUser');
+            Route::post('/review/{id}', 'review');
+        }); 
     });
 
 });

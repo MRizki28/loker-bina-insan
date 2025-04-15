@@ -30,11 +30,7 @@ export function Content() {
                 SweetAlertService.successLogin().then(() => {
                     if (responseData.data.role === 'admin') {
                         window.location.href = 'cms/admin/dashboard';
-                        localStorage.setItem('token', responseData.data.token);
-                        localStorage.setItem('role', responseData.data.role);
                     } else {
-                        localStorage.setItem('token', responseData.data.token);
-                        localStorage.setItem('role', responseData.data.role);
                         dispatch(setLogin());
                         window.location.href = '/';
                     }

@@ -9,8 +9,7 @@ export default function Navbar() {
     const dispatch = useDispatch();
     const selector = useSelector((state) => state.checkLogin);
     const login = selector.isLoggedIn;
-
-    console.log(login);
+    console.log('here',login)
 
     useEffect(() => {
         checkTokenValidity();
@@ -18,23 +17,15 @@ export default function Navbar() {
 
     const handleLogout = async () => {
         try {
-            const token = localStorage.getItem('token');
-    
             const confirmed = await SweetAlertService.logoutAlert();
             if (!confirmed) {
                 return; 
             }
     
-            const response = await axios.post(`${appUrl}/v1/auth/logout`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            const response = await axios.post(`${appUrl}/v1/auth/logout`, {});
     
             const responseData = await response.data;
             if (responseData.message === 'Logout successful') {
-                localStorage.removeItem('token');
-                localStorage.removeItem('role');
                 dispatch(setLogout());
                 window.location.href = '/'
             }
@@ -45,7 +36,7 @@ export default function Navbar() {
     
 
     const checkRole = () => {
-        if (!login) {
+        if (login.isLoggedIn === false) {
             return (
                 <li>
                     <a href="/login" className="block py-2 px-3 text-black hover:text-blue-500 ">Login</a>
@@ -53,8 +44,7 @@ export default function Navbar() {
             );
         }
 
-        const role = localStorage.getItem('role');
-        if (role === 'admin') {
+        if (login.role === 'admin') {
             return (
                 <>
                     <li>
@@ -65,7 +55,7 @@ export default function Navbar() {
                     </li>
                 </>
             );
-        } else if (role === 'user') {
+        } else if (login.role === 'user') {
             return (
                 <>
                     <li>

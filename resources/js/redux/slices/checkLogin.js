@@ -15,11 +15,11 @@ const checkLogin = createSlice({
         },
         setLogout: (state) => {
             state.isLoggedIn = false,
-            state.role = null; 
+                state.role = null;
         },
         setLoginStatus: (state, action) => {
             state.isLoggedIn = action.payload,
-            state.role = action.payload.role || null;
+                state.role = action.payload.role || null;
         }
     }
 })
@@ -29,24 +29,17 @@ export default checkLogin.reducer
 
 export const checkTokenValidity = () => async (dispatch) => {
     try {
-        const token = localStorage.getItem('token')
-
-        const response = await axios.get(`v1/check-auth`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+        const response = await axios.get(`v1/check-auth`);
 
         console.log('disini', response.data)
         dispatch(setLoginStatus({
             isLoggedIn: response.data.authenticated,
-            role: response.data.user.role
+            role: response.data.user?.role || null
         }));
-        
+
     } catch (error) {
-        if(error.response && error.response.status === 401) {
-            localStorage.removeItem('token')
-            dispatch(setLoginStatus(false))
+        if (error.response && error.response.status === 401) {
+            dispatch(setLogout())
         }
     }
 }
