@@ -95,7 +95,7 @@ export default function Content() {
             </div>
 
             {/* Card */}
-            <div className="flex justify-center mt-5 p-1">
+            <div className="flex justify-center mt-5 p-1"  id="lowongan">
                 {loading ? (
                     <p className="text-gray-600">Memuat data...</p>
                 ) : data.length === 0 ? (
