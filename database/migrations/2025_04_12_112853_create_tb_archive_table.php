@@ -28,6 +28,9 @@ return new class extends Migration
             $table->enum('job_type', ['fulltime', 'parttime', 'internship']);
             $table->enum('category', ['guru','staff','lainnya']);
             $table->enum('status', ['pending', 'approved', 'rejected']);
+            $table->timestamp('time_interview')->nullable();
+            $table->text('link')->nullable();
+            $table->boolean('status_interview')->default(false);
             $table->timestamps();
         });
     }

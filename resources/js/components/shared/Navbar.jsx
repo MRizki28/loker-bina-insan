@@ -38,9 +38,19 @@ export default function Navbar() {
     const checkRole = () => {
         if (login.isLoggedIn === false) {
             return (
-                <li>
-                    <a href="/login" className="block py-2 px-3 text-black hover:text-blue-500 ">Login</a>
-                </li>
+                <>
+                    <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
+
+                    <li>
+                        <a href="/login" className="block py-2 px-3 text-black hover:text-blue-500 ">Login</a>
+                    </li>
+                </>
+
             );
         }
 

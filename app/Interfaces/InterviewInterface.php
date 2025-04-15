@@ -11,5 +11,5 @@ interface InterviewInterface
     public function getDataById($id);
     public function getHistoryByUser($request);
     public function review(Request $request, $id);
-
+    
 }
