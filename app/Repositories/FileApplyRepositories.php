@@ -87,6 +87,7 @@ class FileApplyRepositories implements FileApplyInterfaces
             $archive->end_date = $data->job->end_date;
             $archive->job_type = $data->job->job_type;
             $archive->category = $data->job->category;
+            $archive->status = $data->status;
             $archive->save();
 
             return ApiResponse::success($data, 'Data berhasil disimpan');
@@ -173,6 +174,7 @@ class FileApplyRepositories implements FileApplyInterfaces
 
             $data->save();
             
+            
             if($data->status == 'approved'){
                 EmailHandlerJob::dispatch('Selamat anda lolos seleksi berkas, silahkan lanjut ke tahap selanjutnya', $data->pelamar->email);
             }else{
@@ -182,6 +184,7 @@ class FileApplyRepositories implements FileApplyInterfaces
             $archive = $this->archiveModel->where('id_file', $id)->first();
             if($archive){
                 $archive->reason_reject = $data->reason_reject;
+                $archive->status = $data->status;
                 $archive->save();
             }
             $data->load('job', 'pelamar');
