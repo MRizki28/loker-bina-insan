@@ -29,4 +29,9 @@ class FileApplyModel extends Model
     {
         return $this->belongsTo(User::class, 'id_pelamar', 'id');
     }
+
+    public function interview()
+    {
+        return $this->hasOne(InterviewModel::class, 'id_berkas', 'id');
+    }
 }
