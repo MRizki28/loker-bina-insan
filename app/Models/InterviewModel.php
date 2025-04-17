@@ -18,4 +18,17 @@ class InterviewModel extends Model
         'link',
         'status_interview'
     ];
+
+    public function file()
+    {
+        return $this->belongsTo(FileApplyModel::class, 'id_berkas', 'id');
+    }
+    public function pelamar()
+    {
+        return $this->belongsTo(User::class, 'id_pelamar', 'id');
+    }
+    public function job()
+    {
+        return $this->belongsTo(JobModel::class, 'id_job', 'id');
+    }
 }
