@@ -36,5 +36,8 @@ class ArchiveController extends Controller
         return $this->archiveRepositories->review($request, $id);
     }
 
-    
+    public function getDataByPelamar(Request $request, $id)
+    {
+        return $this->archiveRepositories->getDataByPelamar($request, $id);
+    }
 }
