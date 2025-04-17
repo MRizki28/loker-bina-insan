@@ -55,10 +55,5 @@ class FileApplyController extends Controller
     {
         return $this->fileApplyRepositories->reviewFile($request, $id);
     }
-
-    public function getDataInterview(Request $request)
-    {
-        return $this->fileApplyRepositories->getDataInterview($request);
-    }
     
 }
