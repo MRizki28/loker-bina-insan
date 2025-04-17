@@ -51,6 +51,12 @@
 								<p>Data interview</p>
 							</a>
 						</li> 
+						<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/archive') }}">
+								<i class="fas fa-book"></i>
+								<p>Data archive</p>
+							</a>
+						</li> 
 					<ul>
 				</div>
 			</div>
