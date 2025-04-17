@@ -86,7 +86,7 @@ export default function Content() {
                         <h2 className="text-2xl font-bold text-blue-700 mb-4">Cara Melamar</h2>
                         <p className="text-gray-700 mb-4">Apply berkas anda dengan menekan tombol di bawah:</p>
 
-                        {!isLoggedIn ? (
+                        {!isLoggedIn.isLoggedIn ? (
                             <Link
                                 to="/login"
                                 className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition-colors inline-block mb-4"

@@ -61,7 +61,7 @@ export default function ModalDetailLoker({ isOpen, onClose, applicationData }) {
                                 {/* Header */}
                                 <div className="p-6 border-b flex items-center">
                                     <img
-                                        src={applicationData[9] || logoDefault}
+                                        src={logoDefault}
                                         alt="Logo"
                                         className="h-24 w-24 rounded-lg object-contain mr-6"
                                     />
@@ -125,7 +125,7 @@ export default function ModalDetailLoker({ isOpen, onClose, applicationData }) {
                                                 <span>Deskripsikan diri anda</span>
                                                 <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border">
                                                     <div>
-                                                        <p className="font-medium text-gray-700">{applicationData[2]}</p>
+                                                        <p className="font-medium text-gray-700">{applicationData[9]}</p>
                                                     </div>
                                                 </div>
                                                 <span >File</span>

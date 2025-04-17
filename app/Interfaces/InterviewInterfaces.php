@@ -14,4 +14,5 @@ interface InterviewInterfaces
     public function updateData(InterviewRequest $request, $id);
     public function finnalization(Request $request, $id);
     public function approve(Request $request, $id);
+    public function reject(Request $request, $id);
 }

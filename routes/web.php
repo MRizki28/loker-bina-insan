@@ -91,6 +91,8 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::prefix('interview')->controller(InterviewController::class)->group(function () {
             Route::get('/', 'getAllData');
             Route::post('/update/{id}', 'updateData');
+            Route::post('approve/{id}', 'approve');
+            Route::post('reject/{id}', 'reject');
         });
     });
 

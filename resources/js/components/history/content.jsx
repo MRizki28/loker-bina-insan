@@ -178,7 +178,8 @@ export default function Content() {
                       description: application.description,
                       requirement: application.requirement,
                       qualification: application.qualification,
-                      company_logo: logo
+                      company_logo: logo,
+                      reason: application.reason,
                   } })} className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
                     Lihat Detail
                   </button>
@@ -233,6 +234,7 @@ export default function Content() {
         isModalOpen.data.description,
         isModalOpen.data.requirement,
         isModalOpen.data.qualification,
+        isModalOpen.data.reason,
 
         logo
       ]} />}

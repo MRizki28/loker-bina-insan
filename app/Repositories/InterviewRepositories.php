@@ -30,13 +30,13 @@ class InterviewRepositories implements InterviewInterfaces
             $page = $search ? 1 : (int) $request->input('page', 1);
             $query = $this->interviewModel->query();
 
-            if($search) {
+            if ($search) {
                 $query->whereHas('pelamar', function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%');
                 });
             }
 
-            $data = $query->where('status_interview', 'pending')
+            $data = $query
                 ->with('file.pelamar', 'file.job')
                 ->paginate($limit, ['*'], 'page', $page);
 
@@ -45,7 +45,6 @@ class InterviewRepositories implements InterviewInterfaces
             }
 
             return ApiResponse::success($data, 'Success get data job', 200);
-
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
         }
@@ -70,7 +69,7 @@ class InterviewRepositories implements InterviewInterfaces
             DB::commit();
 
             $archive = $this->archiveModel->where('id_file', $data->id_berkas)->first();
-            if($archive){
+            if ($archive) {
                 $archive->time_interview = $data->time_interview;
                 $archive->link = $data->link;
                 $archive->save();
@@ -97,7 +96,7 @@ class InterviewRepositories implements InterviewInterfaces
                     'message' => $validation->errors(),
                 ], 422);
             }
-            
+
             $data = $this->interviewModel->find($id);
             if (!$data) {
                 return ApiResponse::notFound();
@@ -111,9 +110,63 @@ class InterviewRepositories implements InterviewInterfaces
             return ApiResponse::error($th, 500);
         }
     }
-    
+
     public function approve(Request $request, $id)
     {
-        
+        DB::beginTransaction();
+        try {
+            $data = $this->interviewModel->find($id);
+            if (!$data) {
+                return ApiResponse::notFound();
+            }
+
+            $data->status_interview = 'lolos';
+            $data->save();
+
+            DB::commit();
+            $archive = $this->archiveModel->where('id_file', $data->id_berkas)->first();
+            if ($archive) {
+                $archive->status_interview = 'lolos';
+                $archive->save();
+            }
+            return ApiResponse::success($data, 'Success update data job', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
+    }
+
+    public function reject(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $validation = Validator::make($request->all(), [
+                'reason_reject' => 'required',
+            ]);
+            if ($validation->fails()) {
+                return response()->json([
+                    'status' => 'not validate',
+                    'message' => $validation->errors(),
+                ], 422);
+            }
+
+            $data = $this->interviewModel->find($id);
+            if (!$data) {
+                return ApiResponse::notFound();
+            }
+
+            $data->status_interview = 'gagal';
+            $data->reason_reject_interview = $request->input('reason_reject');
+            $data->save();
+
+            DB::commit();
+            $archive = $this->archiveModel->where('id_file', $data->id_berkas)->first();
+            if ($archive) {
+                $archive->status_interview = 'gagal';
+                $archive->save();
+            }
+            return ApiResponse::success($data, 'Success update data job', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
     }
 }

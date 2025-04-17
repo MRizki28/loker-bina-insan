@@ -36,4 +36,14 @@ class InterviewController extends Controller
         return $this->interviewRepositories->updateData($request, $id);
     }
 
+    public function approve(Request $request, $id)
+    {
+        return $this->interviewRepositories->approve($request, $id);
+    }
+
+    public function reject(Request $request, $id)
+    {
+        return $this->interviewRepositories->reject($request, $id);
+    }
+
 }

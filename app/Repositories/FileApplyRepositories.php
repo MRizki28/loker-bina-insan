@@ -42,7 +42,7 @@ class FileApplyRepositories implements FileApplyInterfaces
                 $query->where('status', 'like', '%'.$search.'%');
             }
 
-            $data = $query->with('job','pelamar')->where('status', '!=' , 'approved')->paginate($limit, ['*'], 'page', $page);
+            $data = $query->with('job','pelamar')->paginate($limit, ['*'], 'page', $page);
 
             if($data->isEmpty()){
                 return ApiResponse::notFound();

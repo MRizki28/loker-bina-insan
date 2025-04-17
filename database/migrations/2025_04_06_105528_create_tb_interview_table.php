@@ -17,6 +17,7 @@ return new class extends Migration
             $table->timestamp('time_interview')->nullable();
             $table->text('link')->nullable();
             $table->enum('status_interview', ['lolos', 'gagal', 'pending'])->default('pending');
+            $table->text('reason_reject_interview')->nullable();
             $table->timestamps();
         });
     }

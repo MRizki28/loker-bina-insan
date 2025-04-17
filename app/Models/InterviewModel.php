@@ -16,7 +16,8 @@ class InterviewModel extends Model
         'id_berkas',
         'time_interview',
         'link',
-        'status_interview'
+        'status_interview',
+        'reason_reject_interview'
     ];
 
     public function file()

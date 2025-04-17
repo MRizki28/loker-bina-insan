@@ -12,7 +12,7 @@ $(document).ready(function () {
     function validation() {
         $('#formTambah').validate({
             rules: {
-            
+
                 "time_interview": {
                     required: true,
                 }
@@ -45,6 +45,17 @@ $(document).ready(function () {
             interviewService.createData(e, id)
         })
     })
-   
-    
+
+    $(document).on('click', '.btn-approve', function () {
+        const id = $(this).data('id')
+        interviewService.approve(id)
+    })
+
+    $(document).on('click', '.btn-reject', function () {
+        const id = $(this).data('id')
+        $('#formReject').on('submit', function (e) {
+            e.preventDefault();
+            interviewService.reject(e, id)
+        })
+    })
 });
