@@ -16,5 +16,4 @@ interface FileApplyInterfaces
     public function getHistoryByUser(Request $request);
     public function downloadFile($filename);
     public function reviewFile(Request $request, $id);
-    public function getDataInterview(Request $request, $id_pelamar);
 }
