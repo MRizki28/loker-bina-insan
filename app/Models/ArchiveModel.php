@@ -25,7 +25,12 @@ class ArchiveModel extends Model
         'start_date',
         'end_date',
         'job_type',
-        'category'
+        'category',
+        'status',
+        'time_interview',
+        'link',
+        'status_interview',
+        'reason_reject_interview',
     ];
     
     protected $casts = [
