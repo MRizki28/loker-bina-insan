@@ -4,10 +4,12 @@ namespace App\Repositories;
 
 use App\Http\Requests\Interview\InterviewRequest;
 use App\Interfaces\InterviewInterfaces;
+use App\Jobs\EmailHandlerJob;
 use App\Models\ArchiveModel;
 use App\Models\InterviewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use MRizki28\ApiResponse\ApiResponse;
 
@@ -75,6 +77,11 @@ class InterviewRepositories implements InterviewInterfaces
                 $archive->save();
             }
 
+            if ($data->link == null) {
+                EmailHandlerJob::dispatch('Berikut jadwal interview anda ' . $data->time_interview . ' untuk lokasinya SIT BINA INSAN PALU Terimakasih', $data->file->pelamar->email);
+            } else {
+                EmailHandlerJob::dispatch('Berikut jadwal interview anda ' . $data->time_interview . '. Silahkan join pada link berikut 10 menit sebelum waktu yang di jadwalkan ' . $data->link, $data->file->pelamar->email);
+            }
             return ApiResponse::success($data, 'Success create data job', 200);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -129,6 +136,8 @@ class InterviewRepositories implements InterviewInterfaces
                 $archive->status_interview = 'lolos';
                 $archive->save();
             }
+
+            EmailHandlerJob::dispatch('Selamat anda lolos seleksi wawancara, tunggu secepatnya kami akan menghubungi anda', $data->file->pelamar->email);
             return ApiResponse::success($data, 'Success update data job', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
@@ -164,6 +173,12 @@ class InterviewRepositories implements InterviewInterfaces
                 $archive->status_interview = 'gagal';
                 $archive->save();
             }
+            Log::info('email', [
+                'email' => $data->file->pelamar->email,
+                'reason' => $data->reason_reject_interview
+            ]);
+
+            EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi wawancara ' . $data->reason_reject_interview, $data->file->pelamar->email);
             return ApiResponse::success($data, 'Success update data job', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
