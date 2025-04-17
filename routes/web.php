@@ -62,7 +62,14 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.interview');
     });
 
+    Route::get('cms/admin/archive', function() {
+        return view('pages.archive');
+    });
+
+
     Route::prefix('v1')->group(function () {
+        Route::get('user', [AuthController::class, 'getDataUser']);
+        
         Route::prefix('job')->controller(JobController::class)->group(function () {
             Route::get('/', 'getAllData');
             Route::post('/create', 'createData');
@@ -86,6 +93,7 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get/{id}', 'getDataById');
             Route::get('/get-history-by-user', 'getHistoryByUser');
             Route::post('/review/{id}', 'review');
+            Route::get('/get-data-by-pelamar/{id}', 'getDataByPelamar');
         }); 
 
         Route::prefix('interview')->controller(InterviewController::class)->group(function () {
