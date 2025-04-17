@@ -30,5 +30,10 @@ class AuthController extends Controller
     {
         return $this->authRepositories->logout($request);
     }
+
+    public function getDataUser(Request $request)
+    {
+        return $this->authRepositories->getDataUser($request);
+    }
     
 }
