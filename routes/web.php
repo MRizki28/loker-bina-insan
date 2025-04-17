@@ -3,6 +3,7 @@
 use App\Http\Controllers\CMS\ArchiveController;
 use App\Http\Controllers\CMS\AuthController;
 use App\Http\Controllers\CMS\FileApplyController;
+use App\Http\Controllers\CMS\InterviewController;
 use App\Http\Controllers\CMS\JobController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,10 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.fileapply');
     });
 
+    Route::get('cms/admin/interview', function() {
+        return view('pages.interview');
+    });
+
     Route::prefix('v1')->group(function () {
         Route::prefix('job')->controller(JobController::class)->group(function () {
             Route::get('/', 'getAllData');
@@ -73,6 +78,7 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get-history-by-user', 'getHistoryByUser');
             Route::get('/download/{filename}', 'downloadFile');
             Route::post('/review/{id}', 'reviewFile');
+            Route::get('/get-data-interview', 'getDataInterview');
         });
 
         Route::prefix('archive')->controller(ArchiveController::class)->group(function () {
@@ -81,6 +87,11 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get-history-by-user', 'getHistoryByUser');
             Route::post('/review/{id}', 'review');
         }); 
+
+        Route::prefix('interview')->controller(InterviewController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/update/{id}', 'updateData');
+        });
     });
 
 });
