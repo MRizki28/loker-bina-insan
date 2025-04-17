@@ -45,6 +45,12 @@
 								<p>Data seleksi berkas</p>
 							</a>
 						</li> 
+						<li class="nav-item {{ request()->is('cms/admin/interview*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/interview') }}">
+								<i class="fas fa-book"></i>
+								<p>Data interview</p>
+							</a>
+						</li> 
 					<ul>
 				</div>
 			</div>
