@@ -9,6 +9,7 @@ use App\Jobs\EmailHandlerJob;
 use App\Mail\LokerMail;
 use App\Models\ArchiveModel;
 use App\Models\FileApplyModel;
+use App\Models\InterviewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,7 @@ class FileApplyRepositories implements FileApplyInterfaces
             $data->status = 'pending';
             $data->reason = $request->input('reason');
             $data->save();
+            $data->refresh(); 
 
             DB::commit();
 
@@ -147,6 +149,7 @@ class FileApplyRepositories implements FileApplyInterfaces
 
     public function reviewFile(Request $request, $id)
     {
+        DB::beginTransaction();
         try {
             $validation = Validator::make($request->all(), [
                 'status' => 'required',
@@ -174,8 +177,13 @@ class FileApplyRepositories implements FileApplyInterfaces
 
             $data->save();
             
-            
+            DB::commit();
             if($data->status == 'approved'){
+                InterviewModel::create([
+                    'id_berkas' => $data->id,
+                    'time_interview' => $request->input('time_interview'),
+                    'link' => $request->input('link') ?? null,
+                ]);
                 EmailHandlerJob::dispatch('Selamat anda lolos seleksi berkas, silahkan lanjut ke tahap selanjutnya', $data->pelamar->email);
             }else{
                 EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi berkas, dengan alasan ' . $data->reason_reject , $data->pelamar->email);
@@ -192,28 +200,8 @@ class FileApplyRepositories implements FileApplyInterfaces
             return ApiResponse::success($data, 'Success review data job', 200);
         
         } catch (\Throwable $th) {
+            DB::rollBack();
             return ApiResponse::error($th, 500);
         }
-    }
-
-    public function getDataInterview(Request $request, $id_pelamar)
-    {
-        $search = $request->input('search');
-        $limit = $request->input('limit') ? $request->input('limit') : 10;
-        $page = $search ? 1 : (int) $request->input('page', 1);
-
-        $query = $this->fileApplyModel->query();
-
-        if($search){
-            $query->where('status', 'like', '%'.$search.'%');
-        }
-
-        $data = $query->with('job','pelamar')->where('status', 'approved')->paginate($limit, ['*'], 'page', $page);
-
-        if($data->isEmpty()){
-            return ApiResponse::notFound();
-        }
-
-        return ApiResponse::success($data, 'Success get data job', 200);
     }
 }
