@@ -35,5 +35,33 @@ class AuthController extends Controller
     {
         return $this->authRepositories->getDataUser($request);
     }
+
+    public function createDataUser(AuthRequest $request)
+    {
+        return $this->authRepositories->createDataUser($request);
+    }
+
+    public function getAllData(Request $request)
+    {
+        return $this->authRepositories->getAllData($request);
+    }
+
+    public function getDataById($id)
+    {
+        return $this->authRepositories->getDataById($id);
+    }
+
+    public function updateDataUser(AuthRequest $request, $id)
+    {
+        return $this->authRepositories->updateDataUser($request, $id);
+    }
     
+    public function deleteData($id){
+        return $this->authRepositories->deleteData($id);
+    }
+
+    public function setting(Request $request)
+    {
+        return $this->authRepositories->setting($request);
+    }
 }
