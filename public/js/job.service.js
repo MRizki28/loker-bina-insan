@@ -7,50 +7,60 @@ class JobService {
 
         let params = $('#form-search').val();
         let endpoint = paramsUrl(url || '/v1/job', { search: params });
-        const response = await axios.get(endpoint);
-        const responseData = await response.data;
-        console.log('ini response', responseData)
 
         table.empty();
         pagination.empty();
 
-        let tableBody
-        if (responseData.message === 'Success get data job') {
-            $.each(responseData.data.data, function (index, item) {
-                tableBody += "<tr>";
-                tableBody += "<td>" + item.name + "</td>"
-                tableBody += "<td>" + item.description + "</td>"
-                tableBody +=
-                    "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    "<button class='btn btn-sm qualification-modal mr-1' data-toggle='modal' data-target='#qualificationModal' data-id='" +
-                    item.id + "'><i class='fas fa-eye'></i></button>"
-                tableBody +=
-                    "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    "<button class='btn btn-sm requirement-modal mr-1' data-toggle='modal' data-target='#requirementModal' data-id='" +
-                    item.id + "'><i class='fas fa-eye'></i></button>"
-                tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>"
-                tableBody += "<td>" + item.job_type + "</td>";
-                tableBody += "<td>" + item.category + "</td>";
-                tableBody +=
-                    "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#lokerModal' data-id='" +
-                    item.id + "'><i class='fas fa-edit'></i></button>" +
-                    "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
-                    item.id + "'><i class='fas fa-trash-alt'></i></button>" +
-                    "</td>";
-                tableBody += "</tr>";
-                dataNotFound.hide()
-            });
+        try {
+            let tableBody
+            
+            const response = await axios.get(endpoint);
+            const responseData = await response.data;
+            console.log('ini response', responseData)
 
-            table.append(tableBody);
-            paginationLink(pagination, responseData);
-            totalData.text(responseData.data.total);
-        } else {
+            if (responseData.message === 'Success get data job') {
+                $.each(responseData.data.data, function (index, item) {
+                    tableBody += "<tr>";
+                    tableBody += "<td>" + item.name + "</td>"
+                    tableBody += "<td>" + item.description + "</td>"
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<button class='btn btn-sm qualification-modal mr-1' data-toggle='modal' data-target='#qualificationModal' data-id='" +
+                        item.id + "'><i class='fas fa-eye'></i></button>"
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<button class='btn btn-sm requirement-modal mr-1' data-toggle='modal' data-target='#requirementModal' data-id='" +
+                        item.id + "'><i class='fas fa-eye'></i></button>"
+                    tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>"
+                    tableBody += "<td>" + item.job_type + "</td>";
+                    tableBody += "<td>" + item.category + "</td>";
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#lokerModal' data-id='" +
+                        item.id + "'><i class='fas fa-edit'></i></button>" +
+                        "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
+                        item.id + "'><i class='fas fa-trash-alt'></i></button>" +
+                        "</td>";
+                    tableBody += "</tr>";
+                    dataNotFound.hide()
+                });
+
+                table.append(tableBody);
+                paginationLink(pagination, responseData);
+                totalData.text(responseData.data.total);
+            } else {
+                table.empty()
+                dataNotFound.show()
+                pagination.empty()
+                totalData.text('0')
+            }
+        } catch (error) {
             table.empty()
             dataNotFound.show()
             pagination.empty()
             totalData.text('0')
         }
+
     }
 
     async createData(e, checkingEdit, resetField) {
