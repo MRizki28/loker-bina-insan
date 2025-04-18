@@ -39,7 +39,7 @@ class ArchiveService {
 
         } catch (error) {
             console.error('Gagal ambil data pengguna:', error);
-            container.html('<div class="col-12 text-center text-danger">Gagal memuat data pengguna.</div>');
+            container.html('<div class="col-12 text-center text-danger">Data tidak ditemukan.</div>');
         }
     }
 
