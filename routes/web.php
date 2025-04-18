@@ -35,6 +35,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->controller(AuthController::class)->group(function () {
         Route::post('login', 'login');
         Route::post('register', 'register');
+        Route::post('create-data-user', 'createDataUser');
+        Route::get('get-all-data', 'getAllData');
+        Route::get('get/{id}', 'getDataById');
+        Route::post('update-data-user/{id}', 'updateDataUser');
+        Route::delete('delete/{id}', 'deleteData');
+        Route::post('setting', 'setting');
     });
 
     Route::prefix('job')->controller(JobController::class)->group(function () {
@@ -46,26 +52,34 @@ Route::prefix('v1')->group(function () {
 Route::post('v1/auth/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth', 'web'])->group(function () {
+
     Route::get('cms/admin/dashboard', function () {
-        return view('pages.loker');
-    });
+        return view('pages.dashboard');
+    })->name('dashboard')->middleware('role:admin,superadmin');
+
+    Route::get('cms/admin/setting', function () {
+        return view('pages.setting');
+    })->middleware('role:admin,superadmin');
 
     Route::get('cms/admin/loker', function () {
         return view('pages.loker');
-    });
+    })->middleware('role:admin,superadmin');
 
     Route::get('cms/admin/file-apply', function () {
         return view('pages.fileapply');
-    });
+    })->middleware('role:admin,superadmin');
 
     Route::get('cms/admin/interview', function() {
         return view('pages.interview');
-    });
+    })->middleware('role:admin,superadmin');
 
     Route::get('cms/admin/archive', function() {
         return view('pages.archive');
-    });
+    })->middleware('role:admin,superadmin');
 
+    Route::get('/cms/admin/usermanagement', function() {
+        return view('pages.userManagement');
+    })->middleware('role:superadmin');
 
     Route::prefix('v1')->group(function () {
         Route::get('user', [AuthController::class, 'getDataUser']);
