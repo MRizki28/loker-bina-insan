@@ -7,10 +7,10 @@
 							<img src="{{asset('static/img/profile.png')}}" alt="" class="avatar-img rounded-circle">
 						</div>
 						<div class="info">
-							<a href="{{ url('/setting') }}" >
+							<a href="{{ url('/cms/admin/setting') }}" >
 								<span>
-									<span class="user-name" id="userName">Rizki</span>
-									<span class="user-level" id="user-level">Super admin</span>
+									<span class="user-name" id="userName">{{ auth()->user()->name }}</span>
+									<span class="user-level" id="user-level">{{ auth()->user()->role }}</span>
 								</span>
 							</a>
 							<div class="clearfix"></div>
@@ -25,9 +25,10 @@
 							</div>
 						</div>
 					</div>
+					@if (auth()->check() && auth()->user()->role =='admin')
 					<ul class="nav nav-primary">
-						<li class="nav-item {{ request()->is('/*') ? 'active' : '' }}">
-							<a href="{{ url('/') }}">
+						<li class="nav-item {{ request()->is('cms/admin/dashboard*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/dashboard') }}">
 								<i class="fas fa-align-left"></i>
 								<p>Beranda</p>
 							</a>
@@ -57,6 +58,49 @@
 								<p>Data archive</p>
 							</a>
 						</li> 
+						<ul>
+						@else
+						<ul class="nav nav-primary">
+							<li class="nav-item {{ request()->is('cms/admin/dashboard*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/dashboard') }}">
+									<i class="fas fa-align-left"></i>
+									<p>Beranda</p>
+								</a>
+							</li> 
+	
+							<li class="nav-item {{ request()->is('cms/admin/loker*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/loker') }}">
+									<i class="fas fa-book"></i>
+									<p>Lowongan kerja</p>
+								</a>
+							</li>  
+							<li class="nav-item {{ request()->is('cms/admin/file-apply*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/file-apply') }}">
+									<i class="fas fa-book"></i>
+									<p>Data seleksi berkas</p>
+								</a>
+							</li> 
+							<li class="nav-item {{ request()->is('cms/admin/interview*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/interview') }}">
+									<i class="fas fa-book"></i>
+									<p>Data interview</p>
+								</a>
+							</li> 
+							<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/archive') }}">
+									<i class="fas fa-book"></i>
+									<p>Data archive</p>
+								</a>
+							</li> 
+							<li class="nav-item {{ request()->is('cms/admin/usermanagement*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/usermanagement') }}">
+									<i class="fas fa-user"></i>
+									<p>User management</p>
+								</a>
+							</li> 
+							<ul>
+						@endif
+						
 					<ul>
 				</div>
 			</div>
