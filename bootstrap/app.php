@@ -13,7 +13,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'adminRole' => \App\Http\Middleware\AdminAuthMiddleware::class, // Daftarkan middleware di sini
+            'adminRole' => \App\Http\Middleware\AdminAuthMiddleware::class, 
+            'role'=> \App\Http\Middleware\RoleManagement::class,
         ]);
         $middleware->validateCsrfTokens(except: [
             '*',
