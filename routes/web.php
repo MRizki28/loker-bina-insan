@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CMS\ArchiveController;
 use App\Http\Controllers\CMS\AuthController;
+use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\FileApplyController;
 use App\Http\Controllers\CMS\InterviewController;
 use App\Http\Controllers\CMS\JobController;
@@ -83,6 +84,7 @@ Route::middleware(['auth', 'web'])->group(function () {
 
     Route::prefix('v1')->group(function () {
         Route::get('user', [AuthController::class, 'getDataUser']);
+        Route::get('dashboard', [DashboardController::class, 'dashboard']);
         
         Route::prefix('job')->controller(JobController::class)->group(function () {
             Route::get('/', 'getAllData');

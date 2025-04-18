@@ -1,6 +1,6 @@
 @extends('Layouts.Base')
 @section('content')
-    <div class="panel-header bg-primary-gradient mb-3">
+    <div class="panel-header  mb-3" style="background: rgb(6, 182, 212);">
         <div class="page-inner py-5">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                 <div>
@@ -12,26 +12,7 @@
     </div>
     <div class="p-2 mt--5">
         <div class="row">
-            <div class="col-sm-6 col-md-3">
-                <div class="card card-stats card-round">
-                    <div class="card-body ">
-                        <div class="row align-items-center">
-                            <div class="col-icon">
-                                <div class="icon-big text-center icon-primary bubble-shadow-small">
-                                    <i class="flaticon-interface-6"></i>
-                                </div>
-                            </div>
-                            <div class="col col-stats ml-3 ml-sm-0">
-                                <div class="numbers">
-                                    <p class="card-category">Jenis Dokumen</p>
-                                    <h4 class="card-title" id="jenisDokumen"></h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -42,7 +23,7 @@
                             </div>
                             <div class="col col-stats ml-3 ml-sm-0">
                                 <div class="numbers">
-                                    <p class="card-category">Total Personal Arsip</p>
+                                    <p class="card-category">Total lamaran</p>
                                     <h4 class="card-title" id="personalArsip"></h4>
                                 </div>
                             </div>
@@ -50,7 +31,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -69,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-6 col-md-4">
                 <div class="card card-stats card-round">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -80,7 +61,7 @@
                             </div>
                             <div class="col col-stats ml-3 ml-sm-0">
                                 <div class="numbers">
-                                    <p class="card-category">Total seluruh arsip</p>
+                                    <p class="card-category">Total loker</p>
                                     <h4 class="card-title" id="totalSeluruhArsip"></h4>
                                 </div>
                             </div>
@@ -95,7 +76,7 @@
                     <div class="d-flex align-items-end row">
                         <div class="col-sm-7">
                             <div class="card-body">
-                                <h5 class="card-title text-primary">Selamat datang di sistem management arsip kelurahan kawatuna <b>{{ auth()->user()->name }}</b> 🎉</h5>
+                                <h5 class="card-title text-primary">Selamat datang di sistem loker SIT BINA INSAN PALU <b>{{ auth()->user()->name }}</b> 🎉</h5>
                                 <p class="mb-4"></b></p>
                                 <i class="fa-sharp fa-solid fa-face-smile text-warning"></i>
                                 <a href="javascript:;" class="">Enjoy your work !!!</a>
@@ -103,8 +84,7 @@
                         </div>
                         <div class="col-sm-5 text-center text-sm-left">
                             <div class="card-body pb-0 px-0 px-md-4">
-                                <img class="mb-4" src="{{ asset('img/logo/favicon_palukota.png') }}"
-                                    height="350">        
+                                <img class="mb-4 w-100" src="{{ asset('static/img/logo.png') }}" >        
                             </div>
                         </div>
                     </div>
@@ -117,14 +97,13 @@
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
-                url: "{{ url('v1/dashboard') }}",
+                url: "{{ url('v1/dashboard/') }}",
                 dataType: "json",
                 success: function (response) {
                     console.log(response)
-                    $('#jenisDokumen').text(response.data.typeDocument)
-                    $('#personalArsip').text(response.data.personalArsip)
-                    $('#totalUser').text(response.data.totalUser)
-                    $('#totalSeluruhArsip').text(response.data.totalSeluruhArsip)
+                    $('#personalArsip').text(response.totalFileApply)
+                    $('#totalUser').text(response.totalUser)
+                    $('#totalSeluruhArsip').text(response.totalLoker)
                 }
             });
         });
