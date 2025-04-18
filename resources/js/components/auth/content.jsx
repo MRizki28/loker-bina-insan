@@ -28,7 +28,7 @@ export function Content() {
             if (responseData.message === 'Login Success') {
                 setLoading(false);
                 SweetAlertService.successLogin().then(() => {
-                    if (responseData.data.role === 'admin') {
+                    if (responseData.data.role === 'admin' || responseData.data.role === 'superadmin') {
                         window.location.href = 'cms/admin/dashboard';
                     } else {
                         dispatch(setLogin());
