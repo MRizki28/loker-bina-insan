@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class AuthRequest extends FormRequest
 {
@@ -37,6 +38,24 @@ class AuthRequest extends FormRequest
                 'password_confirmation' => 'required',
                 'phone' => 'required|string',
             ];
+        }elseif ($this->is('v1/auth/create-data-user')) {
+            $rules = [
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'required|string',
+                'role' => 'required|in:superadmin,admin,user',
+            ];
+        }elseif($this->is('v1/auth/update-data-user/*')) {
+            $rules = [
+                'name' => 'required|string',
+                'email' => [
+                    'required',
+                    Rule::unique('users', 'email')->ignore($this->route('id')),
+                ],
+                'phone' => 'required|string',
+                'role' => 'required|in:superadmin,admin,user',
+            ];
+
         }
         return $rules;
     }
