@@ -54,7 +54,7 @@ export default function Navbar() {
             );
         }
 
-        if (login.role === 'admin') {
+        if (login.role === 'admin' || login.role === 'superadmin') {
             return (
                 <>
                     <li>
