@@ -63,8 +63,8 @@ class InterviewService {
                     }else if(item.status_interview == 'lolos' ){
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                            "<button class='btn btn-sm btn-approve mr-1' data-id='" +
-                            item.id + "'><i class='icon-envelope-open'></i></button>" +
+                            "<button class='btn btn-sm btn-wa mr-1' data-phone='" +
+                            item.file.pelamar.phone + "'><i class='icon-phone'></i></button>" +
                             "<button class='btn btn-sm btn-reject mr-1' data-toggle='modal' data-target='#rejectModal' data-id='" +
                             item.id + "'>Tidak Lolos</button>"
                     }else if(item.status_interview == 'pending' ) {
