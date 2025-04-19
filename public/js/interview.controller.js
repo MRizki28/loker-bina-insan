@@ -58,4 +58,11 @@ $(document).ready(function () {
             interviewService.reject(e, id)
         })
     })
+
+    $(document).on('click', '.btn-wa', function () {
+        const phone = $(this).data('phone')
+        const message = "Halo"
+        const link = "https://wa.me/" + phone + "?text=" + encodeURIComponent(message)
+        window.open(link, '_blank')
+    })
 });
