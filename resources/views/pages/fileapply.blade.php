@@ -13,6 +13,7 @@
                         <th>Job yang dilamar</th>
                         <th>Status review</th>
                         <th>Alasan Penolakan</th>
+                        <th>Nomor handphone</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
