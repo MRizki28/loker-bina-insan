@@ -39,6 +39,7 @@ class FileApplyService {
                     // tableBody += "<td>" + item.reason + "</td>"
                     tableBody += "<td>" + badgeHtml + "</td>"
                     tableBody += "<td>" + (item.reason_reject ?? "-") + "</td>";
+                    tableBody += "<td>" + item.pelamar.phone + "</td>";
                     if (item.status === 'pending') {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
@@ -103,6 +104,7 @@ class FileApplyService {
 
             const filePath = `/uploads/fileapply/${responseData.data.file}`;
             $('#unduhFile').attr('href', filePath).attr('download', responseData.data.file);
+            $('#fileLabel').text(responseData.data.file);
             $('#approveBtn').attr('data-id', id);
             $('#rejectBtn').attr('data-id', id);
 
