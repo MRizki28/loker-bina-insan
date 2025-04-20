@@ -58,6 +58,12 @@
 								<p>Data archive</p>
 							</a>
 						</li> 
+						<li class="nav-item {{ request()->is('/cms/admin/ahp*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/ahp') }}">
+								<i class="fas fa-book"></i>
+								<p>Bobot kriteria & alternatif</p>
+							</a>
+						</li> 
 						<ul>
 						@else
 						<ul class="nav nav-primary">
@@ -90,6 +96,12 @@
 								<a href="{{ url('/cms/admin/archive') }}">
 									<i class="fas fa-book"></i>
 									<p>Data archive</p>
+								</a>
+							</li> 
+							<li class="nav-item {{ request()->is('/cms/admin/ahp*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/ahp') }}">
+									<i class="fas fa-book"></i>
+									<p>Bobot kriteria & alternatif</p>
 								</a>
 							</li> 
 							<li class="nav-item {{ request()->is('cms/admin/usermanagement*') ? 'active' : '' }}">
