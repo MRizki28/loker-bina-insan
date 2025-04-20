@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CMS\ArchiveController;
 use App\Http\Controllers\CMS\AuthController;
+use App\Http\Controllers\CMS\BobotKriteriaController;
 use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\FileApplyController;
 use App\Http\Controllers\CMS\InterviewController;
@@ -70,22 +71,26 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.fileapply');
     })->middleware('role:admin,superadmin');
 
-    Route::get('cms/admin/interview', function() {
+    Route::get('cms/admin/interview', function () {
         return view('pages.interview');
     })->middleware('role:admin,superadmin');
 
-    Route::get('cms/admin/archive', function() {
+    Route::get('cms/admin/archive', function () {
         return view('pages.archive');
     })->middleware('role:admin,superadmin');
 
-    Route::get('/cms/admin/usermanagement', function() {
+    Route::get('/cms/admin/usermanagement', function () {
         return view('pages.userManagement');
     })->middleware('role:superadmin');
+
+    Route::get('/cms/admin/ahp', function () {
+        return view('pages.settingAhp');
+    })->middleware('role:admin,superadmin');
 
     Route::prefix('v1')->group(function () {
         Route::get('user', [AuthController::class, 'getDataUser']);
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        
+
         Route::prefix('job')->controller(JobController::class)->group(function () {
             Route::get('/', 'getAllData');
             Route::post('/create', 'createData');
@@ -110,7 +115,7 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get-history-by-user', 'getHistoryByUser');
             Route::post('/review/{id}', 'review');
             Route::get('/get-data-by-pelamar/{id}', 'getDataByPelamar');
-        }); 
+        });
 
         Route::prefix('interview')->controller(InterviewController::class)->group(function () {
             Route::get('/', 'getAllData');
@@ -118,6 +123,13 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::post('approve/{id}', 'approve');
             Route::post('reject/{id}', 'reject');
         });
-    });
 
+        Route::prefix('bobot-kriteria')->controller(BobotKriteriaController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/create', 'createData');
+            Route::get('/get/{id}', 'getDataById');
+            Route::post('/update/{id}', 'updateData');
+            Route::delete('/delete/{id}', 'deleteData');
+        });
+    });
 });
