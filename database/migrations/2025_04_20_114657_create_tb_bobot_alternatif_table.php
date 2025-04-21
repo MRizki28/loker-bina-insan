@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_bobot_alternatif', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_kriteria')->constrained('tb_kriteria')->onDelete('cascade');
+            $table->foreignUuid('id_kriteria')->constrained('tb_bobot_kriteria')->onDelete('cascade');
             $table->string('name_alternatif');
             $table->double('bobot_prioriti_alternatif');
             $table->timestamps();
