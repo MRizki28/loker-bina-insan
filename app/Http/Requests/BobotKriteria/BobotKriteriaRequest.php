@@ -24,7 +24,6 @@ class BobotKriteriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name_kriteria' => 'required',
             'bobot_prioriti_kriteria' => 'required',
         ];
     }
