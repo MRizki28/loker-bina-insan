@@ -11,15 +11,8 @@
                 <div class="modal-body">
                     @csrf
                     <div class="row py-2">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <input type="hidden" name="id" id="id" value="">
-                            <div class="form-group fill form-show-validation">
-                                <label>Nama kriteria</label>
-                                <input type="text" name="name_kriteria" id="name_kriteria" class="form-control"
-                                    placeholder="Nama kriteria">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group fill form-show-validation">
                                 <label>Bobot prioriti kriteria</label>
                                 <input type="number" name="bobot_prioriti_kriteria" id="bobot_prioriti_kriteria"
