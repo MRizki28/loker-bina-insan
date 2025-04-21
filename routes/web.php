@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CMS\ArchiveController;
 use App\Http\Controllers\CMS\AuthController;
+use App\Http\Controllers\CMS\BobotAlternatifController;
 use App\Http\Controllers\CMS\BobotKriteriaController;
 use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\FileApplyController;
@@ -130,6 +131,12 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get/{id}', 'getDataById');
             Route::post('/update/{id}', 'updateData');
             Route::delete('/delete/{id}', 'deleteData');
+        });
+
+        Route::prefix('bobot-alternatif')->controller(BobotAlternatifController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::get('/get/{id}', 'getDataById');
+            Route::post('/update/{id}', 'updateData');
         });
     });
 });
