@@ -39,7 +39,7 @@ class BobotKriteriaRepositories implements BobotKriteriaInterfaces
     {
         try {
             $data = new $this->bobotKriteriaModel();
-            $data->name_kriteria = $request->input('name_kriteria');
+            // $data->name_kriteria = $request->input('name_kriteria');
             $data->bobot_prioriti_kriteria = $request->input('bobot_prioriti_kriteria');
             $data->save();
             return ApiResponse::success($data, 'Success create data bobot kriteria', 200);
@@ -66,7 +66,7 @@ class BobotKriteriaRepositories implements BobotKriteriaInterfaces
             return ApiResponse::notFound();
         }
         try {
-            $data->name_kriteria = $request->input('name_kriteria');
+            // $data->name_kriteria = $request->input('name_kriteria');
             $data->bobot_prioriti_kriteria = $request->input('bobot_prioriti_kriteria');
             $data->save();
             return ApiResponse::success($data, 'Success update data bobot kriteria', 200);
