@@ -23,5 +23,10 @@ class DatabaseSeeder extends Seeder
             'role' => 'superadmin',
             'password' => Hash::make('123456'),
         ]);
+
+        $this->call([
+            KriteriaSeeder::class,
+            AlternatifSeeder::class,
+        ]);
     }
 }
