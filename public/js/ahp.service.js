@@ -13,7 +13,7 @@ class AhpService {
 
         try {
             let tableBody
-            
+
             const response = await axios.get(endpoint);
             const responseData = await response.data;
             console.log('ini response', responseData)
@@ -26,10 +26,7 @@ class AhpService {
                     tableBody +=
                         "<td style='padding: 0 10px !important;'  class='text-center '>" +
                         "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#bobotKriteriaModal' data-id='" +
-                        item.id + "'><i class='fas fa-edit'></i></button>" +
-                        "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
-                        item.id + "'><i class='fas fa-trash-alt'></i></button>" +
-                        "</td>";
+                        item.id + "'><i class='fas fa-edit'></i></button>"
                     tableBody += "</tr>";
                     dataNotFound.hide()
                 });
@@ -100,7 +97,7 @@ class AhpService {
         }
     }
 
-  
+
     async getDataByIdKriteria(id, checkingEdit) {
         try {
             const response = await axios.get(`/v1/bobot-kriteria/get/${id}`);
@@ -108,7 +105,6 @@ class AhpService {
             console.log('description', responseData);
             $('#modal-title').text("Edit Data");
             $('#id').val(responseData.data.id);
-            $('#name_kriteria').val($('<div>').html(responseData.data.name_kriteria).text());
             $('#bobot_prioriti_kriteria').val(responseData.data.bobot_prioriti_kriteria);
 
             checkingEdit();
@@ -135,6 +131,96 @@ class AhpService {
             })
         } catch (error) {
             errorAlert()
+        }
+    }
+
+    async getDataAlternatif(url) {
+        const table = $('#table-alternatif tbody')
+        const dataNotFound = $('#dataNotFoundAlternatif')
+        const totalData = $('#data-total-alternatif')
+
+        let params = $('#form-search-alternatif').val();
+        let endpoint = paramsUrl(url || '/v1/bobot-alternatif', { search: params });
+
+        table.empty();
+
+        try {
+            let tableBody
+
+            const response = await axios.get(endpoint);
+            const responseData = await response.data;
+            console.log('ini response', responseData)
+
+            if (responseData.message === 'Success get data bobot alternatif') {
+                $.each(responseData.data.data, function (index, item) {
+                    tableBody += "<tr>";
+                    tableBody += "<td>" + item.name_alternatif + "</td>"
+                    tableBody += "<td>" + item.kriteria.name_kriteria + "</td>"
+                    tableBody += "<td>" + item.bobot_prioriti_alternatif + "</td>"
+                    tableBody +=
+                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<button class='btn btn-sm edit-modal-alternatif mr-1' data-toggle='modal' data-target='#bobotAlternatif' data-id='" +
+                        item.id + "'><i class='fas fa-edit'></i></button>"
+                    tableBody += "</tr>";
+                    dataNotFound.hide()
+                });
+
+                table.append(tableBody);
+                totalData.text(responseData.data.total);
+            } else {
+                table.empty()
+                dataNotFound.show()
+                totalData.text('0')
+            }
+        } catch (error) {
+            table.empty()
+            dataNotFound.show()
+            totalData.text('0')
+        }
+
+    }
+
+    async getDataByIdAlternatif(id) {
+        try {
+            const response = await axios.get(`/v1/bobot-alternatif/get/${id}`);
+            const responseData = response.data;
+            console.log('description', responseData);
+            $('#modal-title').text("Edit Data");
+            $('#id').val(responseData.data.id);
+            $('#bobot_prioriti_alternatif').val(responseData.data.bobot_prioriti_alternatif);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async updateDataAlternatif(e, resetFieldAlternatif) {
+        let submitButton = $(e.target).find(':submit')
+        try {
+            const formData = new FormData(e.target);
+
+            const id = $('#id').val()
+            const response = await axios.post(`/v1/bobot-alternatif/update/${id}`, formData);
+            const responseData = await response.data;
+            if (responseData.status === 'success') {
+                successUpdateAlert().then(() => {
+                    resetFieldAlternatif()
+                    $('#bobotAlternatif').modal('hide');
+                })
+                this.getDataAlternatif();
+                submitButton.attr('disabled', false);
+            } else {
+                errorAlert();
+                submitButton.attr('disabled', false);
+            }
+        } catch (error) {
+            submitButton.attr('disabled', false);
+            console.log(error);
+            if (error.response.status == 422) {
+                warningAlert();
+            } else {
+                errorAlert();
+            }
         }
     }
 }
