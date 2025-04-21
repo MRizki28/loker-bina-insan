@@ -38,6 +38,7 @@ function paginationLink(element, params) {
     })
 }
 
+
 function successAlert() {
     return Swal.fire({
         title: 'Success',
