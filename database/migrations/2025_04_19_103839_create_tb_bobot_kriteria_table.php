@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tb_bobot_kriteria', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name_kriteria');
-            $table->double('bobot_prioriti_kriteria');
+            $table->text('bobot_prioriti_kriteria');
             $table->timestamps();
         });
     }
