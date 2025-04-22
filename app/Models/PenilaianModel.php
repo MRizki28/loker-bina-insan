@@ -13,6 +13,6 @@ class PenilaianModel extends Model
     protected $table = 'tb_penilaian';
     protected $fillable = [
         'id',
-        'id_pelamar',
+        'id_file',
     ];
 }

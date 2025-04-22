@@ -175,6 +175,70 @@ class FileApplyService {
             }
         })
     }
+
+    async penilaianModal() {
+        const response = await axios.get('/v1/penilaian/get-kriteria-for-berkas-review');
+        const responseData = await response.data;
+        console.log('ini response', responseData)
+        if (responseData.status === 'success') {
+            const container = $('#form-penilaian-dinamis');
+            container.empty();
+    
+            $.each(responseData.data, function (index, kriteria) {
+                let selectAlternatif = `<select class="form-control" name="id_bobot_alternatif[${kriteria.id}]">`;
+                selectAlternatif += `<option value="" selected disabled hidden>Choose here</option>`;  // Opsi default
+    
+                $.each(kriteria.alternatif, function (i, alt) {
+                    selectAlternatif += `<option value="${alt.id}">${alt.name_alternatif}</option>`;
+                });
+    
+                selectAlternatif += `</select>`;
+    
+                const html = `
+                    <div class="form-group mb-3">
+                        <label class="font-weight-bold">${kriteria.name_kriteria}</label>
+                        <input type="hidden" name="id_bobot_kriteria[${kriteria.id}]" value="${kriteria.id}">
+                        ${selectAlternatif}
+                    </div>
+                `;
+                container.append(html);
+            });
+        } else {
+            console.log('Error in response:', responseData.message);
+        }
+    }
+
+    async submitPenilaian(e){
+        e.preventDefault();
+        let submitButton = $(e.target).find(':submit')
+        const originalContent = submitButton.html()
+        const setButtonLoading = (isLoading) => {
+            if (isLoading) {
+                submitButton.prop('disabled', true).html(`
+                    <span class="spinner-border spinner-border-sm text-light" role="status" aria-hidden="true"></span>
+                    Sedang Diproses...
+                `);
+            } else {
+                submitButton.prop('disabled', false).html(originalContent);
+            }
+        }
+
+        setButtonLoading(true);
+        try {
+            const formData = new FormData(e.target);
+            formData.append('approve')
+            const response = await axios.post(`${appUrl}v1/penilaian/create`, formData)
+            const responseData = await response.data;
+            console.log('ini response', responseData)
+        } catch (error) {
+            console.log(error)
+            warningAlert();
+
+        } finally{
+            setButtonLoading(false);
+        }
+    }
+    
 }
 
 export default FileApplyService;

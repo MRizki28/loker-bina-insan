@@ -8,6 +8,7 @@ use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\FileApplyController;
 use App\Http\Controllers\CMS\InterviewController;
 use App\Http\Controllers\CMS\JobController;
+use App\Http\Controllers\CMS\PenilaianController;
 use App\Http\Controllers\CMS\PenilaianDetailController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -139,9 +140,10 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get/{id}', 'getDataById');
             Route::post('/update/{id}', 'updateData');
         });
+
+        Route::prefix('penilaian')->controller(PenilaianController::class)->group(function () {
+            Route::post('/create', 'createPenilaianBerkas');
+            Route::get('/get-kriteria-for-berkas-review', 'getKriteriaForBerkasReview');
+        });
     });
 });
-
-
-Route::post('v1/ahp/create', [PenilaianDetailController::class, 'createData']);
-Route::get('v1/ahp/get', [PenilaianDetailController::class, 'countTotal']);

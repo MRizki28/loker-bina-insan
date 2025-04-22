@@ -38,11 +38,19 @@ $(document).ready(function () {
 
     $(document).on('click', '.approveBtn', function (e) {
         e.preventDefault();
-        const id = $(this).data('id');
-        fileApplyService.approve(id, e);
+        const id_berkas = $(this).data('id');
+        console.log(id_berkas)
+        $('#reviewModal').modal('hide');
+        $('#penilaianBerkasModal').modal('show');
+        $('#formTambahPenilaianBerkas #id_file').val(id_berkas);
+        fileApplyService.penilaianModal();
     });
 
-
+    $('#formTambahPenilaianBerkas').on('submit', function (e) {
+        e.preventDefault();
+        fileApplyService.submitPenilaian(e);
+    })
+    
     function resetField() {
         $('#reviewModal').on('hidden.bs.modal', function () {
             $('#description').text('');

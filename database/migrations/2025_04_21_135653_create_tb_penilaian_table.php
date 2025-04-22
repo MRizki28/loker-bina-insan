@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_penilaian', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_pelamar')->constrained('users')->onDelete('cascade');
+            $table->foreignUuid('id_file')->constrained('tb_file')->onDelete('cascade');
             $table->timestamps();
         });
     }

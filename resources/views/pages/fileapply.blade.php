@@ -50,7 +50,9 @@
         </div>
     </div>
 
+
     </div>
+    <x-penilaian.penilaianberkas-modal></x-penilaian.penilaianberkas-modal>
     <x-review.review-modal></x-review.review-modal>
 @endsection
 

@@ -19,6 +19,6 @@ class BobotKriteriaModel extends Model
 
     public function alternatif()
     {
-        return $this->hasMany(BobotAlternatifModel::class, 'id_kreteria', 'id');
+        return $this->hasMany(BobotAlternatifModel::class, 'id_kriteria', 'id');
     }
 }
