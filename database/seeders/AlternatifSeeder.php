@@ -17,7 +17,7 @@ class AlternatifSeeder extends Seeder
     {
         // Data alternatif dengan name_alternatif dan bobot
         $alternatif = [
-            ['name_alternatif' => '<= 25 tahun', 'bobot' => '0.45', 'kriteria' => 'USIA'],
+            ['name_alternatif' => '<= 25 tahun', 'bobot' => '0.454545454545455', 'kriteria' => 'USIA'],
             ['name_alternatif' => '24-29 tahun', 'bobot' => '0.9', 'kriteria' => 'USIA'],
             ['name_alternatif' => '>= 30 tahun', 'bobot' => '0.45', 'kriteria' => 'USIA'],
             ['name_alternatif' => '<= 5 tahun', 'bobot' => '0.20', 'kriteria' => 'PENGALAMAN KERJA'],
