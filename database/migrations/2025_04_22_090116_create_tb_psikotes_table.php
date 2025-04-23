@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('id_interview')->constrained('tb_interview')->onDelete('cascade');
             $table->enum('status_psikotes', ['lolos', 'gagal', 'pending'])->default('pending');
-            $table->timestamp('time_test')->nullable();
+            $table->timestamp('time_psikotes')->nullable();
+            $table->text('reason_reject_psikotes')->nullable();
             $table->timestamps();
         });
     }
