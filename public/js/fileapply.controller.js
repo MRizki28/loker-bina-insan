@@ -48,7 +48,8 @@ $(document).ready(function () {
 
     $('#formTambahPenilaianBerkas').on('submit', function (e) {
         e.preventDefault();
-        fileApplyService.submitPenilaian(e);
+        const id_file = $('#formTambahPenilaianBerkas #id_file').val();
+        fileApplyService.submitPenilaian(e, id_file);
     })
     
     function resetField() {
