@@ -15,4 +15,9 @@ class PenilaianModel extends Model
         'id',
         'id_file',
     ];
+
+    public function file()
+    {
+        return $this->belongsTo(FileApplyModel::class, 'id_file', 'id');
+    }
 }
