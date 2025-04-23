@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('id_psikotes')->constrained('tb_psikotes')->onDelete('cascade');
             $table->enum('status_ngaji', ['lolos', 'gagal', 'pending'])->default('pending');
-            $table->timestamp('time_test')->nullable();
+            $table->timestamp('time_ngaji')->nullable();
+            $table->text('reason_reject_ngaji')->nullable();
             $table->timestamps();
         });
     }
