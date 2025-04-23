@@ -10,7 +10,7 @@ class InterviewService {
 
         table.empty();
         pagination.empty();
-        
+
         try {
             let tableBody
 
@@ -21,7 +21,7 @@ class InterviewService {
             if (responseData.message === 'Success get data job') {
                 $.each(responseData.data.data, function (index, item) {
                     let badgeHtml = '';
-    
+
                     if (item.status == 'pending') {
                         badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
                     } else if (item.status == 'rejected') {
@@ -29,45 +29,43 @@ class InterviewService {
                     } else {
                         badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
                     }
-    
+
                     tableBody += "<tr>";
                     tableBody += "<td>" + item.file.pelamar.name + "</td>"
                     tableBody += "<td>" + item.file.job.name + "</td>"
-    
+
                     tableBody += "<td>" + badgeHtml + "</td>"
                     if (item.time_interview == null) {
                         tableBody += "<td>" + "-" + "</td>";
                     } else {
                         tableBody += "<td>" + item.time_interview + "</td>";
                     }
-    
+
                     if (item.link == null) {
                         tableBody += "<td>" + "Interview offline" + "</td>";
                     } else {
                         tableBody += "<td>" + item.link + "</td>";
                     }
-    
+
                     if (item.status_interview == 'pending') {
                         tableBody += "<td>" + "<span class='badge badge-warning'>Siap interview</span>" + "</td>"
-                    }else if(item.status_interview == 'lolos') {
+                    } else if (item.status_interview == 'lolos') {
                         tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
-                    }else{
+                    } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
-    
+
                     if (item.time_interview == null) {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-interview mr-1' data-toggle='modal' data-target='#jadwalInterviewModal' data-id='" +
                             item.id + "'>Buat jadwal interview</button>"
-                    }else if(item.status_interview == 'lolos' ){
+                    } else if (item.status_interview == 'lolos') {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-wa mr-1' data-phone='" +
-                            item.file.pelamar.phone + "'><i class='icon-phone'></i></button>" +
-                            "<button class='btn btn-sm btn-reject mr-1' data-toggle='modal' data-target='#rejectModal' data-id='" +
-                            item.id + "'>Tidak Lolos</button>"
-                    }else if(item.status_interview == 'pending' ) {
+                            item.file.pelamar.phone + "'><i class='icon-phone'></i></button>"
+                    } else if (item.status_interview == 'pending') {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-approve mr-1'  data-id='" +
@@ -77,11 +75,11 @@ class InterviewService {
                     } else {
                         tableBody += "<td>" + "-" + "</td>";
                     }
-    
+
                     tableBody += "</tr>";
                     dataNotFound.hide()
                 });
-    
+
                 table.append(tableBody);
                 paginationLink(pagination, responseData);
                 totalData.text(responseData.data.total);
@@ -92,12 +90,12 @@ class InterviewService {
                 totalData.text('0')
             }
         } catch (error) {
-              table.empty()
-                dataNotFound.show()
-                pagination.empty()
-                totalData.text('0')
+            table.empty()
+            dataNotFound.show()
+            pagination.empty()
+            totalData.text('0')
         }
-       
+
     }
 
     async createData(e, id) {
@@ -114,7 +112,7 @@ class InterviewService {
                 successAlert().then(() => {
                     window.location.reload();
                 })
-                
+
                 submitButton.attr('disabled', false);
             } else {
                 errorAlert();
@@ -148,7 +146,7 @@ class InterviewService {
                 if (responseData.status === 'success') {
                     Swal.fire(
                         'Berhasil!',
-                        'Data berhasil di approve silahkan kunjungi halaman archive untuk melihat hasil interview', 
+                        'Data berhasil di approve silahkan kunjungi halaman archive untuk melihat hasil interview',
                         'success'
                     ).then(() => {
                         this.getAllData();
@@ -160,7 +158,7 @@ class InterviewService {
         })
     }
 
-    async reject(e, id){
+    async reject(e, id) {
         let submitButton = $(e.target).find(':submit')
         try {
             const formData = new FormData(e.target);
@@ -178,7 +176,7 @@ class InterviewService {
                 }).then(() => {
                     window.location.reload();
                 })
-                
+
                 submitButton.attr('disabled', false);
             } else {
                 errorAlert();
@@ -202,17 +200,17 @@ class InterviewService {
         if (responseData.status === 'success') {
             const container = $('#form-penilaian-dinamis');
             container.empty();
-    
+
             $.each(responseData.data, function (index, kriteria) {
                 let selectAlternatif = `<select class="form-control" name="id_bobot_alternatif[${kriteria.id}]">`;
                 selectAlternatif += `<option value="" selected disabled hidden>Choose here</option>`;  // Opsi default
-    
+
                 $.each(kriteria.alternatif, function (i, alt) {
                     selectAlternatif += `<option value="${alt.id}">${alt.name_alternatif}</option>`;
                 });
-    
+
                 selectAlternatif += `</select>`;
-    
+
                 const html = `
                     <div class="form-group mb-3">
                         <label class="font-weight-bold">${kriteria.name_kriteria}</label>
@@ -231,7 +229,7 @@ class InterviewService {
         e.preventDefault();
         let submitButton = $(e.target).find(':submit');
         const originalContent = submitButton.html();
-    
+
         const setButtonLoading = (isLoading) => {
             if (isLoading) {
                 submitButton.prop('disabled', true).html(`
@@ -242,27 +240,27 @@ class InterviewService {
                 submitButton.prop('disabled', false).html(originalContent);
             }
         };
-    
+
         setButtonLoading(true);
-    
+
         try {
             const formData = new FormData(e.target);
-            const penilaianResponse = await axios.post(`${appUrl}/v1/penilaian/create`, formData);
+            const penilaianResponse = await axios.post(`${appUrl}/v1/penilaian/create-penilaian-interview`, formData);
             const penilaianData = penilaianResponse.data;
             console.log('penilaianData', penilaianResponse)
-    
+
             if (penilaianData.status !== 'success') {
                 throw new Error('Gagal menyimpan penilaian.');
             }
-    
+
             const reviewResponse = await axios.post(`${appUrl}/v1/interview/approve/${id}`);
 
             console.log('reviewResponse', reviewResponse)
-    
+
             if (reviewResponse.status !== 200) {
                 throw new Error('Gagal menyimpan review.');
             }
-    
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -270,7 +268,7 @@ class InterviewService {
             }).then(() => {
                 window.location.reload();
             });
-    
+
         } catch (error) {
             console.log(error);
             warningAlert('Terjadi kesalahan saat menyimpan data.');
