@@ -64,6 +64,12 @@
 								<p>Data ngaji</p>
 							</a>
 						</li> 
+						<li class="nav-item {{ request()->is('cms/admin/ranking*') ? 'active' : '' }}">
+							<a href="{{ url('/cms/admin/ranking') }}">
+								<i class="fas fa-book"></i>
+								<p>Ranking</p>
+							</a>
+						</li> 
 						<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
 							<a href="{{ url('/cms/admin/archive') }}">
 								<i class="fas fa-book"></i>
@@ -114,6 +120,12 @@
 								<a href="{{ url('/cms/admin/ngaji') }}">
 									<i class="fas fa-book"></i>
 									<p>Data ngaji</p>
+								</a>
+							</li> 
+							<li class="nav-item {{ request()->is('cms/admin/ranking*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/ranking') }}">
+									<i class="fas fa-book"></i>
+									<p>Ranking</p>
 								</a>
 							</li> 
 							<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
