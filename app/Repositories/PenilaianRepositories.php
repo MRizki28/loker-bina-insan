@@ -79,7 +79,9 @@ class PenilaianRepositories implements PenilaianInterfaces
     public function getKriteriaForBerkasReview()
     {
         $data = $this->bobotKriteriaModel::with('alternatif')->whereIn('name_kriteria', [
-            'USIA', 'PENGALAMAN KERJA', 'PENDIDIKAN TERAKHIR'
+            'USIA',
+            'PENGALAMAN KERJA',
+            'PENDIDIKAN TERAKHIR'
         ])->get();
 
         if ($data->isEmpty()) {
@@ -120,9 +122,13 @@ class PenilaianRepositories implements PenilaianInterfaces
                 ], 422);
             }
 
-            $dataPenilaian = new $this->penilaianModel();
-            $dataPenilaian->id_file = $request->input('id_file');
-            $dataPenilaian->save();
+            $dataPenilaian = $this->penilaianModel::where('id_file', $request->input('id_file'))->first();
+
+            if (!$dataPenilaian) {
+                $dataPenilaian = new $this->penilaianModel();
+                $dataPenilaian->id_file = $request->input('id_file');
+                $dataPenilaian->save();
+            }
 
             foreach ($request->input('id_bobot_kriteria') as $key => $value) {
                 $bobotPrioritiKriteria = $this->bobotKriteriaModel::find($value);
@@ -139,10 +145,71 @@ class PenilaianRepositories implements PenilaianInterfaces
 
             DB::commit();
 
-            return ApiResponse::success($dataDetailPenilaian, 'Success create penilaian review', 200);
+            return ApiResponse::success($dataDetailPenilaian, 'Success create penilaian interview', 200);
         } catch (\Throwable $th) {
             DB::rollBack();
-            return ApiResponse::error($th,  500);
+            return ApiResponse::error($th, 500);
+        }
+    }
+
+    public function getKriteriaForPsikotes()
+    {
+        $data = $this->bobotKriteriaModel::with('alternatif')->where('name_kriteria', 'TES PSIKOLOGI')->get();
+
+        if ($data->isEmpty()) {
+            return ApiResponse::notFound();
+        }
+
+        return ApiResponse::success($data, 'Success get kriteria for psikotes review', 200);
+    }
+
+    public function createPenilaianPsikotes(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $validation = Validator::make($request->all(), [
+                'id_file' => 'required|uuid',
+                'id_bobot_kriteria' => 'required|array',
+                'id_bobot_kriteria.*' => 'required|uuid',
+                'id_bobot_alternatif' => 'required|array',
+                'id_bobot_alternatif.*' => 'required|uuid',
+            ]);
+
+            if ($validation->fails()) {
+                return response()->json([
+                    'status' => 'not validate',
+                    'message' => 'check your validation',
+                    'errors' => $validation->errors()
+                ], 422);
+            }
+
+            $dataPenilaian = $this->penilaianModel::where('id_file', $request->input('id_file'))->first();
+
+            if (!$dataPenilaian) {
+                $dataPenilaian = new $this->penilaianModel();
+                $dataPenilaian->id_file = $request->input('id_file');
+                $dataPenilaian->save();
+            }
+
+            foreach ($request->input('id_bobot_kriteria') as $key => $value) {
+                $bobotPrioritiKriteria = $this->bobotKriteriaModel::find($value);
+                $bobotPrioritiAlternatif = $this->bobotAlternatifModel::find($request->input('id_bobot_alternatif')[$key]);
+
+                $dataDetailPenilaian = new $this->detailPenilaianModel();
+                $dataDetailPenilaian->id_penilaian = $dataPenilaian->id;
+                $dataDetailPenilaian->id_bobot_kriteria = $value;
+                $dataDetailPenilaian->id_bobot_alternatif = $request->input('id_bobot_alternatif')[$key];
+                $dataDetailPenilaian->bobot_prioriti_kriteria = $bobotPrioritiKriteria->bobot_prioriti_kriteria;
+                $dataDetailPenilaian->bobot_prioriti_alternatif = $bobotPrioritiAlternatif->bobot_prioriti_alternatif;
+                $dataDetailPenilaian->save();
+            }
+
+            DB::commit();
+
+            return ApiResponse::success($dataDetailPenilaian, 'Success create penilaian psikotes', 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return ApiResponse::error($th, 500);
         }
     }
 
@@ -157,8 +224,7 @@ class PenilaianRepositories implements PenilaianInterfaces
         return ApiResponse::success($data, 'Success get kriteria for interview review', 200);
     }
 
-    public function createPenilaianNgaji(Request $request)
-    {
-        
+    public function createPenilaianNgaji(Request $request) {
+
     }
 }
