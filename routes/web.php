@@ -100,6 +100,10 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.settingAhp');
     })->middleware('role:admin,superadmin');
 
+    Route::get('/cms/admin/ranking', function () {
+        return view('pages.ranking');
+    })->middleware('role:admin,superadmin');
+
     Route::prefix('v1')->group(function () {
         Route::get('user', [AuthController::class, 'getDataUser']);
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
@@ -159,6 +163,8 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::post('/create-penilaian-psikotes', 'createPenilaianPsikotes');
             Route::get('/get-kriteria-for-psikotes', 'getKriteriaForPsikotes');
             Route::post('/create-penilaian-psikotes', 'createPenilaianPsikotes');
+            Route::get('/get-kriteria-for-ngaji', 'getKriteriaForNgaji');
+            Route::post('/create-penilaian-ngaji', 'createPenilaianNgaji');
         });
 
         Route::prefix('ngaji')->controller(NgajiController::class)->group(function () {
@@ -178,3 +184,5 @@ Route::middleware(['auth', 'web'])->group(function () {
         });
     });
 });
+
+Route::get('v1/ahp/get', [PenilaianDetailController::class, 'ranking']);
