@@ -13,13 +13,13 @@ class NgajiModel extends Model
     protected $table = 'tb_ngaji';
     protected $fillable = [
         'id',
-        'id_interview',
+        'id_psikotes',
         'status_ngaji',
         'time_test',
     ];
 
-    public function interview()
+    public function psikotes()
     {
-        return $this->belongsTo(InterviewModel::class, 'id_interview', 'id');
+        return $this->belongsTo(PsikotesModel::class, 'id_psikotes', 'id');
     }
 }
