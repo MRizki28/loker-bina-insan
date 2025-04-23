@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('id_kriteria')->constrained('tb_bobot_kriteria')->onDelete('cascade');
             $table->string('name_alternatif');
-            $table->double('bobot_prioriti_alternatif');
+            $table->text('bobot_prioriti_alternatif');
             $table->timestamps();
         });
     }
