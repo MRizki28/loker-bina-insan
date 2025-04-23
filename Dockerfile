@@ -28,9 +28,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql sockets mysqli zip \
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_mysql sockets mysqli zip bcmath \
     && pecl install imagick \
     && docker-php-ext-enable imagick
+
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
