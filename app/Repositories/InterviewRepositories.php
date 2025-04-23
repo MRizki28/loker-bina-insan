@@ -7,7 +7,7 @@ use App\Interfaces\InterviewInterfaces;
 use App\Jobs\EmailHandlerJob;
 use App\Models\ArchiveModel;
 use App\Models\InterviewModel;
-use App\Models\NgajiModel;
+use App\Models\PsikotesModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,13 +18,13 @@ class InterviewRepositories implements InterviewInterfaces
 {
     protected $interviewModel;
     protected $archiveModel;
-    protected $ngajiModel;
+    protected $psikotesModal;
 
-    public function __construct(InterviewModel $interviewModel, ArchiveModel $archiveModel, NgajiModel $ngajiModel)
+    public function __construct(InterviewModel $interviewModel, ArchiveModel $archiveModel, PsikotesModel $psikotesModal)
     {
         $this->archiveModel = $archiveModel;
         $this->interviewModel = $interviewModel;
-        $this->ngajiModel = $ngajiModel;
+        $this->psikotesModal = $psikotesModal;
     }
 
     public function getAllData(Request $request)
@@ -143,7 +143,7 @@ class InterviewRepositories implements InterviewInterfaces
             EmailHandlerJob::dispatch('Selamat anda lolos seleksi wawancara, tunggu secepatnya kami akan menghubungi anda', $data->file->pelamar->email);
 
             if ($archive->status_interview == 'lolos') {
-                $this->ngajiModel->create([
+                $this->psikotesModal->create([
                     'id_interview' => $data->id,
                 ]);
             }
@@ -185,7 +185,7 @@ class InterviewRepositories implements InterviewInterfaces
 
             EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi wawancara ' . $data->reason_reject_interview, $data->file->pelamar->email);
             if ($archive->status_interview == 'gagal') {
-                $ngaji = $this->ngajiModel->where('id_interview', $data->id)->first();
+                $ngaji = $this->psikotesModal->where('id_interview', $data->id)->first();
                 if ($ngaji) {
                     $ngaji->delete();
                 }
