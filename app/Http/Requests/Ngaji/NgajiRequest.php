@@ -24,7 +24,7 @@ class NgajiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'time_test' => 'required',
+            'time_ngaji' => 'required',
         ];
     }
 
