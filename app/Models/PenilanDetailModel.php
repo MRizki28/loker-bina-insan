@@ -19,4 +19,14 @@ class PenilanDetailModel extends Model
         'bobot_prioriti_kriteria',
         'bobot_prioriti_alternatif',
     ];
+
+    public function bobotKriteria ()
+    {
+        return $this->belongsTo(BobotKriteriaModel::class, 'id_bobot_kriteria', 'id');
+    }
+
+    public function penilaian ()
+    {
+        return $this->belongsTo(PenilaianModel::class, 'id_penilaian', 'id');
+    }
 }
