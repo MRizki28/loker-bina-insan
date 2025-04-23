@@ -11,6 +11,7 @@ use App\Http\Controllers\CMS\JobController;
 use App\Http\Controllers\CMS\NgajiController;
 use App\Http\Controllers\CMS\PenilaianController;
 use App\Http\Controllers\CMS\PenilaianDetailController;
+use App\Http\Controllers\CMS\PsikotesController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,10 @@ Route::middleware(['auth', 'web'])->group(function () {
 
     Route::get('cms/admin/interview', function () {
         return view('pages.interview');
+    })->middleware('role:admin,superadmin');
+
+    Route::get('cms/admin/psikotes', function () {
+        return view('pages.psikotes');
     })->middleware('role:admin,superadmin');
 
     Route::get('cms/admin/ngaji', function () {
@@ -151,9 +156,20 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/get-kriteria-for-berkas-review', 'getKriteriaForBerkasReview');
             Route::get('/get-kriteria-for-interview-review', 'getKriteriaForInterviewReview');
             Route::post('/create-penilaian-interview', 'createPenilaianInterview');
+            Route::post('/create-penilaian-psikotes', 'createPenilaianPsikotes');
+            Route::get('/get-kriteria-for-psikotes', 'getKriteriaForPsikotes');
+            Route::post('/create-penilaian-psikotes', 'createPenilaianPsikotes');
         });
 
         Route::prefix('ngaji')->controller(NgajiController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/update/{id}', 'updateData');
+            Route::post('approve/{id}', 'approve');
+            Route::post('reject/{id}', 'reject');
+            Route::get('/get-history-by-user', 'getHistoryByUser');
+        });
+
+        Route::prefix('psikotes')->controller(PsikotesController::class)->group(function () {
             Route::get('/', 'getAllData');
             Route::post('/update/{id}', 'updateData');
             Route::post('approve/{id}', 'approve');
