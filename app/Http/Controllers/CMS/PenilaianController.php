@@ -34,4 +34,14 @@ class PenilaianController extends Controller
     {
         return $this->penilaianRepositories->createPenilaianInterview($request);
     }
+
+    public function getKriteriaForPsikotes()
+    {
+        return $this->penilaianRepositories->getKriteriaForPsikotes();
+    }   
+
+    public function createPenilaianPsikotes(Request $request)
+    {
+        return $this->penilaianRepositories->createPenilaianPsikotes($request);
+    }
 }
