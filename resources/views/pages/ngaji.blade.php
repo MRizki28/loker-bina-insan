@@ -13,6 +13,7 @@
                         <th>Job yang dilamar</th>
                         <th>Status review berkas</th>
                         <th>Status interview</th>
+                        <th>Status psikotes</th>
                         <th>Waktu test</th>
                         <th>Status tes ngaji</th>
                         <th>Aksi</th>
