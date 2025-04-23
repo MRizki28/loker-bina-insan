@@ -121,13 +121,7 @@ class PsikotesRepositories implements PsikotesInterfaces
                 $archive->save();
             }
 
-            EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi wawancara ' . $data->reason_reject_psikotes, $data->interview->file->pelamar->email);
-            if ($archive->status_psikotes == 'gagal') {
-                $psikotes = $this->psikotesModal->where('id', $data->id)->first();
-                if ($psikotes) {
-                    $psikotes->delete();
-                }
-            }
+            EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi psikotes ' . $data->reason_reject_psikotes, $data->interview->file->pelamar->email);
             return ApiResponse::success($data, 'Success update data job', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
@@ -147,10 +141,9 @@ class PsikotesRepositories implements PsikotesInterfaces
             $data->save();
             DB::commit();
 
-            $archive = $this->archiveModel->where('id_file', $data->id_berkas)->first();
+            $archive = $this->archiveModel->where('id_file', $data->interview->id_berkas)->first();
             if ($archive) {
                 $archive->time_interview = $data->time_interview;
-                $archive->link = $data->link;
                 $archive->save();
             }
 
