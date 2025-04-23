@@ -24,4 +24,14 @@ class PenilaianController extends Controller
     {
         return $this->penilaianRepositories->getKriteriaForBerkasReview();
     }
+
+    public function getKriteriaForInterviewReview()
+    {
+        return $this->penilaianRepositories->getKriteriaForInterviewReview();
+    }   
+
+    public function createPenilaianInterview(Request $request)
+    {
+        return $this->penilaianRepositories->createPenilaianInterview($request);
+    }
 }
