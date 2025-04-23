@@ -1,7 +1,7 @@
 @extends('Layouts.Base')
 @section('content')
     <div class="page-inner">
-        <x-base-header headerName="Data interview" headerIcon="fas fa-file-image"></x-base-header>
+        <x-base-header headerName="Data ngaji" headerIcon="fas fa-file-image"></x-base-header>
         <x-base-body>
             <x-base-sorting addSearching="true" addNotificationAll="false" addUpdateStatus="false"
                 modalUpdateStatus="#updateStatusModal" buttonAdd="false" headerAddButton="Tambah Data"
@@ -12,9 +12,9 @@
                         <th>Nama pelamar</th>
                         <th>Job yang dilamar</th>
                         <th>Status review berkas</th>
-                        <th>Waktu interview</th>
-                        <th>Link</th>
                         <th>Status interview</th>
+                        <th>Waktu test</th>
+                        <th>Status tes ngaji</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
@@ -53,9 +53,9 @@
 
     </div>
     <x-penilaian.penilaianinterview-modal></x-penilaian.penilaianinterview-modal>
-    <x-interview.interview-modal></x-interview.interview-modal>
+    <x-ngaji.ngaji-modal></x-ngaji.ngaji-modal>
 @endsection
 
 @section('js-service')
-    <script type="module" src="{{ asset('js/interview.controller.js') }}?v={{ time() }}"></script>
+    <script type="module" src="{{ asset('js/ngaji.controller.js') }}?v={{ time() }}"></script>
 @endsection

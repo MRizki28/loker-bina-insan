@@ -8,6 +8,7 @@ use App\Http\Controllers\CMS\DashboardController;
 use App\Http\Controllers\CMS\FileApplyController;
 use App\Http\Controllers\CMS\InterviewController;
 use App\Http\Controllers\CMS\JobController;
+use App\Http\Controllers\CMS\NgajiController;
 use App\Http\Controllers\CMS\PenilaianController;
 use App\Http\Controllers\CMS\PenilaianDetailController;
 use Illuminate\Support\Facades\Auth;
@@ -78,6 +79,10 @@ Route::middleware(['auth', 'web'])->group(function () {
         return view('pages.interview');
     })->middleware('role:admin,superadmin');
 
+    Route::get('cms/admin/ngaji', function () {
+        return view('pages.ngaji');
+    })->middleware('role:admin,superadmin');
+
     Route::get('cms/admin/archive', function () {
         return view('pages.archive');
     })->middleware('role:admin,superadmin');
@@ -144,6 +149,16 @@ Route::middleware(['auth', 'web'])->group(function () {
         Route::prefix('penilaian')->controller(PenilaianController::class)->group(function () {
             Route::post('/create', 'createPenilaianBerkas');
             Route::get('/get-kriteria-for-berkas-review', 'getKriteriaForBerkasReview');
+            Route::get('/get-kriteria-for-interview-review', 'getKriteriaForInterviewReview');
+            Route::post('/create-penilaian-interview', 'createPenilaianInterview');
+        });
+
+        Route::prefix('ngaji')->controller(NgajiController::class)->group(function () {
+            Route::get('/', 'getAllData');
+            Route::post('/update/{id}', 'updateData');
+            Route::post('approve/{id}', 'approve');
+            Route::post('reject/{id}', 'reject');
+            Route::get('/get-history-by-user', 'getHistoryByUser');
         });
     });
 });

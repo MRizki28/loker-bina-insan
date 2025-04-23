@@ -92,6 +92,12 @@
 									<p>Data interview</p>
 								</a>
 							</li> 
+							<li class="nav-item {{ request()->is('cms/admin/ngaji*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/ngaji') }}">
+									<i class="fas fa-book"></i>
+									<p>Data ngaji</p>
+								</a>
+							</li> 
 							<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
 								<a href="{{ url('/cms/admin/archive') }}">
 									<i class="fas fa-book"></i>

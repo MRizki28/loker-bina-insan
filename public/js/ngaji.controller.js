@@ -1,25 +1,25 @@
-import InterviewService from "./interview.service.js?v=1.0.0";
+import NgajiService from "./ngaji.service.js?v=1.0.0";
 
 $(document).ready(function () {
-    const interviewService = new InterviewService()
-    interviewService.getAllData()
+    const ngajiService = new NgajiService()
+    ngajiService.getAllData()
 
     $(document).on('click', '.review-modal', function () {
         const id = $(this).data('id')
-        interviewService.getReview(id)
+        ngajiService.getReview(id)
     })
 
     function validation() {
         $('#formTambah').validate({
             rules: {
 
-                "time_interview": {
+                "time_test": {
                     required: true,
                 }
             },
             messages: {
-                "time_interview": {
-                    required: 'Waktu interview wajib diisi',
+                "time_test": {
+                    required: 'Waktu test wajib diisi',
                 }
             },
             highlight: function (element) {
@@ -37,12 +37,12 @@ $(document).ready(function () {
     validation();
 
 
-    $(document).on('click', '.btn-interview', function () {
+    $(document).on('click', '.btn-ngaji', function () {
         const id = $(this).data('id')
         console.log(id);
         $('#formTambah').on('submit', function (e) {
             e.preventDefault();
-            interviewService.createData(e, id)
+            ngajiService.createData(e, id)
         })
     })
 
@@ -52,21 +52,21 @@ $(document).ready(function () {
         $('#penilaianInterviewModal').modal('show');
         $('#formTambahPenilaianInterview #id_file').val(id_file);;
         $('#formTambahPenilaianInterview #id').val(id);
-        interviewService.penilaianModal();
+        ngajiService.penilaianModal();
     })
 
     $('#formTambahPenilaianInterview').on('submit', function (e) {
         e.preventDefault();
         const id_file = $('#formTambahPenilaianInterview #id_file').val();
         const id = $('#formTambahPenilaianInterview #id').val();
-        interviewService.submitPenilaian(e, id_file, id);
+        ngajiService.submitPenilaian(e, id_file, id);
     })
 
     $(document).on('click', '.btn-reject', function () {
         const id = $(this).data('id')
         $('#formReject').on('submit', function (e) {
             e.preventDefault();
-            interviewService.reject(e, id)
+            ngajiService.reject(e, id)
         })
     })
 
