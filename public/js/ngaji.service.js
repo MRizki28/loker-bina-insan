@@ -22,39 +22,45 @@ class NgajiService {
                 $.each(responseData.data.data, function (index, item) {
                     let badgeHtml = '';
 
-                    if (item.interview.file.status == 'pending') {
+                    if (item.psikotes.interview.file.status == 'pending') {
                         badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
-                    } else if (item.interview.file.status == 'rejected') {
+                    } else if (item.psikotes.interview.file.status == 'rejected') {
                         badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
                     } else {
                         badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
                     }
 
                     tableBody += "<tr>";
-                    tableBody += "<td>" + item.interview.file.pelamar.name + "</td>"
-                    tableBody += "<td>" + item.interview.file.job.name + "</td>"
+                    tableBody += "<td>" + item.psikotes.interview.file.pelamar.name + "</td>"
+                    tableBody += "<td>" + item.psikotes.interview.file.job.name + "</td>"
 
                     tableBody += "<td>" + badgeHtml + "</td>"
-                    if (item.interview.status_interview == 'lolos') {
+                    if (item.psikotes.interview.status_interview == 'lolos') {
                         tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap interview siap untuk test mengaji</span>" + "</td>"
                     } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
-                    if (item.time_test == null) {
+                    if (item.psikotes.status_psikotes == 'lolos') {
+                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap psikotes siap untuk test mengaji</span>" + "</td>"
+                    } else {
+                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                    }
+
+                    if (item.time_ngaji == null) {
                         tableBody += "<td>" + "-" + "</td>";
                     } else {
-                        tableBody += "<td>" + item.time_test + "</td>";
+                        tableBody += "<td>" + item.time_ngaji + "</td>";
                     }
 
                     if (item.status_ngaji == 'pending') {
-                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap interview</span>" + "</td>"
+                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap test mengaji</span>" + "</td>"
                     } else if (item.status_ngaji == 'lolos') {
                         tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
                     } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
 
-                    if (item.time_test == null) {
+                    if (item.time_ngaji == null) {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-ngaji mr-1' data-toggle='modal' data-target='#jadwalNgajiModal' data-id='" +
@@ -63,14 +69,12 @@ class NgajiService {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-wa mr-1' data-phone='" +
-                            item.interview.file.pelamar.phone + "'><i class='icon-phone'></i></button>" +
-                            "<button class='btn btn-sm btn-reject mr-1' data-toggle='modal' data-target='#rejectModal' data-id='" +
-                            item.id + "'>Tidak Lolos</button>"
+                            item.psikotes.interview.file.pelamar.phone + "'><i class='icon-phone'></i></button>" 
                     } else if (item.status_ngaji == 'pending') {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
                             "<button class='btn btn-sm btn-approve mr-1'  data-id='" +
-                            item.id + "' data-id_file='" + item.interview.file.id + "'>Lolos</button>" +
+                            item.id + "' data-id_file='" + item.psikotes.interview.file.id + "'>Lolos</button>" +
                             "<button class='btn btn-sm btn-reject mr-1' data-toggle='modal' data-target='#rejectModal' data-id='" +
                             item.id + "'>Tidak Lolos</button>"
                     } else {
@@ -194,7 +198,7 @@ class NgajiService {
     }
 
     async penilaianModal() {
-        const response = await axios.get('/v1/penilaian/get-kriteria-for-interview-review');
+        const response = await axios.get('/v1/penilaian/get-kriteria-for-ngaji');
         const responseData = await response.data;
         console.log('ini response', responseData)
         if (responseData.status === 'success') {
@@ -245,7 +249,7 @@ class NgajiService {
 
         try {
             const formData = new FormData(e.target);
-            const penilaianResponse = await axios.post(`${appUrl}/v1/penilaian/create`, formData);
+            const penilaianResponse = await axios.post(`${appUrl}/v1/penilaian/create-penilaian-ngaji`, formData);
             const penilaianData = penilaianResponse.data;
             console.log('penilaianData', penilaianResponse)
 
@@ -253,7 +257,7 @@ class NgajiService {
                 throw new Error('Gagal menyimpan penilaian.');
             }
 
-            const reviewResponse = await axios.post(`${appUrl}/v1/interview/approve/${id}`);
+            const reviewResponse = await axios.post(`${appUrl}/v1/ngaji/approve/${id}`);
 
             console.log('reviewResponse', reviewResponse)
 
