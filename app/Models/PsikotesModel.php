@@ -10,12 +10,13 @@ class PsikotesModel extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $table = 'rb_psikotes';
+    protected $table = 'tb_psikotes';
     protected $fillable = [
         'id',
         'id_interview',
         'status_psikotes',
-        'time_test',
+        'time_psikotes',
+        'reason_reject_psikotes',
     ];
 
     public function interview()
