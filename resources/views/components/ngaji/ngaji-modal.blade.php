@@ -15,7 +15,7 @@
                             <input type="hidden" name="id" id="id" value="">
                             <div class="form-group fill form-show-validation">
                                 <label>Waktu test</label>
-                                <input type="datetime-local" id="time_test" name="time_test" class="form-control"
+                                <input type="datetime-local" id="time_ngaji" name="time_ngaji" class="form-control"
                                     placeholder="Tanggal dan waktu">
                             </div>
                         </div>
