@@ -7,6 +7,7 @@ use App\Interfaces\InterviewInterfaces;
 use App\Jobs\EmailHandlerJob;
 use App\Models\ArchiveModel;
 use App\Models\InterviewModel;
+use App\Models\NgajiModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -17,11 +18,13 @@ class InterviewRepositories implements InterviewInterfaces
 {
     protected $interviewModel;
     protected $archiveModel;
+    protected $ngajiModel;
 
-    public function __construct(InterviewModel $interviewModel, ArchiveModel $archiveModel)
+    public function __construct(InterviewModel $interviewModel, ArchiveModel $archiveModel, NgajiModel $ngajiModel)
     {
         $this->archiveModel = $archiveModel;
         $this->interviewModel = $interviewModel;
+        $this->ngajiModel = $ngajiModel;
     }
 
     public function getAllData(Request $request)
@@ -138,6 +141,12 @@ class InterviewRepositories implements InterviewInterfaces
             }
 
             EmailHandlerJob::dispatch('Selamat anda lolos seleksi wawancara, tunggu secepatnya kami akan menghubungi anda', $data->file->pelamar->email);
+
+            if ($archive->status_interview == 'lolos') {
+                $this->ngajiModel->create([
+                    'id_interview' => $data->id,
+                ]);
+            }
             return ApiResponse::success($data, 'Success update data job', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
@@ -173,12 +182,14 @@ class InterviewRepositories implements InterviewInterfaces
                 $archive->status_interview = 'gagal';
                 $archive->save();
             }
-            Log::info('email', [
-                'email' => $data->file->pelamar->email,
-                'reason' => $data->reason_reject_interview
-            ]);
 
             EmailHandlerJob::dispatch('Maaf anda tidak lolos seleksi wawancara ' . $data->reason_reject_interview, $data->file->pelamar->email);
+            if ($archive->status_interview == 'gagal') {
+                $ngaji = $this->ngajiModel->where('id_interview', $data->id)->first();
+                if ($ngaji) {
+                    $ngaji->delete();
+                }
+            }
             return ApiResponse::success($data, 'Success update data job', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
