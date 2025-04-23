@@ -15,7 +15,8 @@ class NgajiModel extends Model
         'id',
         'id_psikotes',
         'status_ngaji',
-        'time_test',
+        'time_ngaji',
+        'reason_reject_ngaji',
     ];
 
     public function psikotes()
