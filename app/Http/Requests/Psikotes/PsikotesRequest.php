@@ -24,7 +24,7 @@ class PsikotesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'time_test' => 'required',
+            'time_psikotes' => 'required',
         ];
     }
 
