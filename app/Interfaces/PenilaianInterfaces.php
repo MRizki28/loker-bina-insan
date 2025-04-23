@@ -11,4 +11,6 @@ interface PenilaianInterfaces {
     public function createPenilaianInterview(Request $request);
     public function getKriteriaForNgaji();
     public function createPenilaianNgaji(Request $request);
+    public function getKriteriaForPsikotes();
+    public function createPenilaianPsikotes(Request $request);
 }
