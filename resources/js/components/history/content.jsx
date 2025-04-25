@@ -22,6 +22,10 @@ export default function Content() {
         apiUrl = `${appUrl}/v1/archive/get-history-by-user?page=${page}&status=approved`;
       } else if (tab === 'pending') {
         apiUrl = `${appUrl}/v1/archive/get-history-by-user?page=${page}`;
+      }else if(tab === 'psikotes'){
+        apiUrl = `${appUrl}/v1/archive/get-history-by-user?page=${page}&status_interview=lolos`;
+      }else if(tab === 'ngaji'){
+        apiUrl = `${appUrl}/v1/archive/get-history-by-user?page=${page}&status_psikotes=lolos`;
       }
 
       const response = await axios.get(apiUrl);
@@ -123,6 +127,56 @@ export default function Content() {
     }
   }
 
+  const getStatusBadgePsikotes = (status) => {
+    switch (status) {
+      case "pending":
+        return (
+          <span className="text-sm text-yellow-600 bg-yellow-100 rounded-full px-2">
+            Siap Psikotes
+          </span>
+        );
+      case "lolos":
+        return (
+          <span className="text-sm text-green-600 bg-green-100 rounded-full px-2">
+            Lolos
+          </span>
+        );
+      case "gagal":
+        return (
+          <span className="text-sm text-red-600 bg-red-100 rounded-full px-2">
+            Tidak Lolos
+          </span>
+        )
+      default:
+        return null;
+    }
+  }
+
+  const getStatusBadgeNgaji = (status) => {
+    switch (status) {
+      case "pending":
+        return (
+          <span className="text-sm text-yellow-600 bg-yellow-100 rounded-full px-2">
+            Siap Ngaji
+          </span>
+        );
+      case "lolos":
+        return (
+          <span className="text-sm text-green-600 bg-green-100 rounded-full px-2">
+            Lolos
+          </span>
+        );
+      case "gagal":
+        return (
+          <span className="text-sm text-red-600 bg-red-100 rounded-full px-2">
+            Tidak Lolos
+          </span>
+        )
+      default:
+        return null;
+    }
+  }
+
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -150,6 +204,24 @@ export default function Content() {
                 }`}
             >
               Interview
+            </button>
+            <button
+              onClick={() => handleTabChange("psikotes")}
+              className={`px-4 py-2 rounded-md transition-colors ${activeTab === "psikotes"
+                ? "bg-yellow-500 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+            >
+              Psikotes
+            </button>
+            <button
+              onClick={() => handleTabChange("ngaji")}
+              className={`px-4 py-2 rounded-md transition-colors ${activeTab === "ngaji"
+                ? "bg-yellow-500 text-white"
+                : "bg-white text-gray-700 hover:bg-gray-100"
+                }`}
+            >
+              Alquran
             </button>
           </div>
         </div>
@@ -185,6 +257,8 @@ export default function Content() {
                 <div className="ml-4 flex flex-col items-end space-y-2">
                   {activeTab === "pending" && getStatusBadge(application.status)}
                   {activeTab === "interview" && getStatusBadgeInterview(application.status_interview)}
+                  {activeTab === "psikotes" && getStatusBadgePsikotes(application.status_psikotes)}
+                  {activeTab === "ngaji" && getStatusBadgeNgaji(application.status_ngaji)}
                   <button onClick={() => setIsModalOpen({
                     open: true, data: {
                       id: application.id,
