@@ -9,6 +9,16 @@ $(document).ready(function () {
         ngajiService.getReview(id)
     })
 
+    $(document).on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            ngajiService.getAllData();
+        }
+    })
+
+    $(document).on('click', '#form-search', function () {
+        ngajiService.getAllData();
+    })
+
     function validation() {
         $('#formTambah').validate({
             rules: {
