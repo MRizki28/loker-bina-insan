@@ -39,7 +39,10 @@ class FileApplyRepositories implements FileApplyInterfaces
             $query = $this->fileApplyModel->query();
 
             if($search){
-                $query->where('status', 'like', '%'.$search.'%');
+                $query->where('status', 'like', '%'.$search.'%')
+                ->orWhereHas('pelamar', function($q) use ($search) {
+                    $q->where('name', 'like', '%'.$search.'%');
+                });
             }
 
             $data = $query->with('job','pelamar')->paginate($limit, ['*'], 'page', $page);
