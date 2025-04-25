@@ -11,6 +11,16 @@ $(document).ready(function () {
         archiveService.getAllData(fullUrl);
     });
 
+    $(document).on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            archiveService.getAllData();
+        }
+    })
+
+    $(document).on('click', '#search-pengguna', function () {
+        archiveService.getAllData();
+    })
+
     $('#data-pengguna').off('click', '.btn-user').on('click', '.btn-user', function () {
         const name = $(this).data('name');
         const id = $(this).data('id');
