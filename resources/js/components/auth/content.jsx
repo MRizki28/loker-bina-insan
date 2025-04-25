@@ -93,6 +93,14 @@ export function Content() {
                         <div className="mt-4 text-sm text-gray-600 text-center">
                             <p>Belum punya akun? <Link to='/register' className="text-black hover:underline">Register</Link></p>
                         </div>
+                        <div className="mt-2 text-sm text-gray-600 text-center">
+                            <p>
+                                <a href="/" className="text-black hover:underline hover:text-gray-800 transition duration-300">
+                                    ⬅️ Kembali ke Beranda
+                                </a>
+                            </p>
+                        </div>
+
                     </div>
                 </div>
             </div>
