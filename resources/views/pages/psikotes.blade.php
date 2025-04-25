@@ -1,7 +1,7 @@
 @extends('Layouts.Base')
 @section('content')
     <div class="page-inner">
-        <x-base-header headerName="Data ngaji" headerIcon="fas fa-file-image"></x-base-header>
+        <x-base-header headerName="Data psikolog" headerIcon="fas fa-file-image"></x-base-header>
         <x-base-body>
             <x-base-sorting addSearching="true" addNotificationAll="false" addUpdateStatus="false"
                 modalUpdateStatus="#updateStatusModal" buttonAdd="false" headerAddButton="Tambah Data"
