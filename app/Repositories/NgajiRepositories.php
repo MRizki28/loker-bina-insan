@@ -32,7 +32,7 @@ class NgajiRepositories implements NgajiInterfaces
             $query = $this->ngajiModel->query();
 
             if ($search) {
-                $query->whereHas('pelamar', function ($q) use ($search) {
+                $query->whereHas('psikotes.interview.file.pelamar', function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%');
                 });
             }
