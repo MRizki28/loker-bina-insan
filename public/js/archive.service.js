@@ -1,10 +1,9 @@
 class ArchiveService {
     async getAllData(url) {
-        const pagination = $('.pagination');
         const container = $('#data-pengguna');
         const totalData = $('#data-total');
 
-        let search = $('#form-search').val();
+        let search = $('#form-search-pengguna').val();
         let endpoint = paramsUrl(url || '/v1/user', { search });
 
         try {
@@ -15,7 +14,7 @@ class ArchiveService {
             console.log(result);
             container.empty();
             totalData.text(total);
-            pagination.empty();
+
 
             if (users.length === 0) {
                 container.html('<div class="col-12 text-center"><em>Data tidak ditemukan</em></div>');
@@ -34,8 +33,6 @@ class ArchiveService {
                 `;
                 container.append(item);
             });
-
-            paginationLink(pagination, result);
 
         } catch (error) {
             console.error('Gagal ambil data pengguna:', error);
@@ -83,6 +80,21 @@ class ArchiveService {
                     if (item.status_interview == 'pending') {
                         tableBody += "<td>" + "<span class='badge badge-warning'>Siap interview</span>" + "</td>"
                     }else if(item.status_interview == 'lolos') {
+                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                    }else{
+                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                    }
+                    if (item.status_psikotes == 'pending') {
+                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap test psikolog</span>" + "</td>"
+                    }else if(item.status_psikotes == 'lolos') {
+                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                    }else{
+                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                    }
+
+                    if (item.status_ngaji == 'pending') {
+                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap test ngaji</span>" + "</td>"
+                    }else if(item.status_ngaji == 'lolos') {
                         tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
                     }else{
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
