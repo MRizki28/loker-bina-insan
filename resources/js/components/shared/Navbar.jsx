@@ -4,15 +4,12 @@ import { useEffect } from 'react';
 import { checkTokenValidity, setLogout } from '../../redux/slices/checkLogin';
 import axios from 'axios';
 import SweetAlertService from '../../utils/sweetalert';
-import { FaHome, FaInfoCircle } from 'react-icons/fa';
-import { FaShop } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
-import { IoIosExit } from 'react-icons/io';
 
 export default function Navbar() {
     const dispatch = useDispatch();
     const selector = useSelector((state) => state.checkLogin);
     const login = selector.isLoggedIn;
+    console.log('here', login)
 
     useEffect(() => {
         checkTokenValidity();
@@ -26,105 +23,71 @@ export default function Navbar() {
             }
 
             const response = await axios.post(`${appUrl}/v1/auth/logout`, {});
-            const responseData = await response.data;
 
+            const responseData = await response.data;
             if (responseData.message === 'Logout successful') {
                 dispatch(setLogout());
-                window.location.href = '/';
+                window.location.href = '/'
             }
         } catch (error) {
             console.log(error);
         }
     };
 
+
     const checkRole = () => {
-        if (!login.isLoggedIn) {
+        if (login.isLoggedIn === false) {
             return (
                 <>
-                    <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
-                    <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
-                    <li><a href="/login" className="block py-2 px-3 text-black hover:text-blue-500">Login</a></li>
+                    <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
+
+                    <li>
+                        <a href="/login" className="block py-2 px-3 text-black hover:text-blue-500 ">Login</a>
+                    </li>
                 </>
+
             );
         }
 
         if (login.role === 'admin' || login.role === 'superadmin') {
             return (
                 <>
-                    <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
-                    <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
-                    <li><a href="/cms/admin/dashboard" className="block py-2 px-3 text-black hover:text-blue-500">Ke Halaman Admin</a></li>
-                    <li><a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</a></li>
+                    <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
+
+                    <li>
+                        <a href="/cms/admin/dashboard" className="block py-2 px-3 text-black hover:text-blue-500 ">Ke Halaman Admin</a>
+                    </li>
+                    <li>
+                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>
+                    </li>
                 </>
             );
-        }
-
-        if (login.role === 'user') {
+        } else if (login.role === 'user') {
             return (
                 <>
-                    <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
-                    <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
-                    <li><a href="/history" className="block py-2 px-3 text-black hover:text-blue-500">History Apply</a></li>
-                    <li><a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</a></li>
-                </>
-            );
-        }
-    };
+                    <li>
+                        <a href="/" className="block py-2 px-3 text-black hover:text-blue-500 ">Beranda</a>
+                    </li>
+                    <li>
+                        <a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a>
+                    </li>
 
-    const checkMobileNav = () => {
-        if (!login.isLoggedIn) {
-            return (
-                <>
-                    <Link to='/' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaHome className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Home</span>
-                    </Link>
-                    <Link to='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaInfoCircle className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Lowongan</span>
-                    </Link>
-                    <Link to='/login' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaShop className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Login</span>
-                    </Link>
-                </>
-            );
-        }
-
-        if (login.role === 'admin' || login.role === 'superadmin') {
-            return (
-                <>
-                    <Link to='/' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaHome className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Home</span>
-                    </Link>
-                    <a href='/cms/admin/dashboard' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaShop className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Admin</span>
-                    </a>
-                    <button onClick={handleLogout} className="inline-flex flex-col items-center justify-center px-5 group">
-                        <IoIosExit className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Logout</span>
-                    </button>
-                </>
-            );
-        }
-
-        if (login.role === 'user') {
-            return (
-                <>
-                    <Link to='/' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaHome className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Home</span>
-                    </Link>
-                    <Link to='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
-                        <FaInfoCircle className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Lowongan</span>
-                    </Link>
-                    <button onClick={handleLogout} className="inline-flex flex-col items-center justify-center px-5 group">
-                        <IoIosExit className="text-2xl mb-2 text-black group-hover:text-red-600" />
-                        <span className="text-sm text-black group-hover:text-red-600">Logout</span>
-                    </button>
+                    <li>
+                        <a href={`${appUrl}/history`} className="block py-2 px-3 text-black hover:text-blue-500 ">History Apply</a>
+                    </li>
+                    <li>
+                        <a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500 ">Logout</a>
+                    </li>
                 </>
             );
         }
@@ -140,24 +103,23 @@ export default function Navbar() {
         }
     }, []);
 
+
     return (
         <nav className="bg-white border-gray-200 dark:white">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src={logo} className="h-8" alt="Logo" />
+                    <img src={logo} className="h-8" alt="Flowbite Logo" />
                 </a>
-
+                <button data-collapse-toggle="navbar-default" type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
+                    <span className="sr-only">Open main menu</span>
+                    <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+                    </svg>
+                </button>
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white">
+                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white ">
                         {checkRole()}
                     </ul>
-                </div>
-            </div>
-
-            {/* Mobile navbar (bottom) */}
-            <div className="lg:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t">
-                <div className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
-                    {checkMobileNav()}
                 </div>
             </div>
         </nav>

@@ -33,27 +33,14 @@ class ArchiveRepositories implements ArchiveInterfaces {
             $limit = $request->input('limit') ? $request->input('limit') : 10;
             $page = $search ? 1 : (int) $request->input('page', 1);
             $status = $request->input('status');    
-            $statusInterview = $request->input('status_interview');
-            $statusPsikotes = $request->input('status_psikotes');
             $query = $this->archiveModel->query();
 
             if($search){
-                $query->where('status', 'like', '%'.$search.'%')
-                ->orWhere('status_interview', 'like', '%'.$search.'%')
-                ->orWhere('status_psikotes', 'like', '%'.$search.'%')
-                ->orWhere('status_ngaji', 'like', '%'.$search.'%');
-
+                $query->where('status', 'like', '%'.$search.'%');
             }
 
             if($status){
                 $query->where('status', $status);
-            }
-
-            if($statusInterview){
-                $query->where('status_interview', $statusInterview);
-            }
-            if($statusPsikotes){
-                $query->where('status_psikotes', $statusPsikotes);
             }
 
             $data = $query->where('id_pelamar', Auth::user()->id)->with('pelamar')->paginate($limit, ['*'], 'page', $page);
