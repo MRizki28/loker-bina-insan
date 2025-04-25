@@ -4,6 +4,16 @@ $(document).ready(function () {
     const fileApplyService = new FileApplyService()
     fileApplyService.getAllData()
 
+    $(document).on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            fileApplyService.getAllData();
+        }
+    })
+
+    $(document).on('click', '#form-search', function () {
+        fileApplyService.getAllData();
+    })
+
     $(document).on('click', '.review-modal', function () {
         const id = $(this).data('id')
         fileApplyService.getReview(id)
