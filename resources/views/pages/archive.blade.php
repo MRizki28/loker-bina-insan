@@ -26,7 +26,6 @@
                             <span class="mb-3 text-muted">
                                 Total <span id="data-total"></span> data
                             </span>
-                            <ul class="pagination pg-info"></ul>
                         </div>
                     </div>
                 </div>
@@ -51,20 +50,39 @@
                 <div class="card">
                     <div class="m-0 p-0">
                         <div class="p-3">
-                            <x-base-sorting addSearching="true" addNotificationAll="false" addUpdateStatus="false"
+                            <x-base-sorting addSearching="false" addNotificationAll="false" addUpdateStatus="false"
                                 modalUpdateStatus="#updateStatusModal" buttonAdd="false" headerAddButton="Tambah Data"
                                 modalId="#lokerModal"></x-base-sorting>
-                            <x-base-table initId="table">
-                                <x-slot name="thead">
-                                    <tr class="text-center">
-                                        <th>Lowongan</th>
-                                        <th>Waktu lowongan</th>
-                                        <th>Type</th>
-                                        <th>Status review berkas</th>
-                                        <th>Status wawancara</th>
-                                    </tr>
-                                </x-slot>
-                            </x-base-table>
+                            <div class="table-responsive">
+                                <table class="table" id="table">
+                                    <thead style="background-color: #f7f8fa;">
+                                        <tr class="text-center">
+                                            <th>Lowongan</th>
+                                            <th>Waktu lowongan</th>
+                                            <th>Type</th>
+                                            <th>Status review berkas</th>
+                                            <th>Status wawancara</th>
+                                            <th>Status psikotes</th>
+                                            <th>Status test mengaji</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                            
+                                    </tbody>
+                                    <tfoot id="dataNotFound">
+                                        <tr class="text-center text-muted" id="template-empty-info">
+                                            <td colspan="9" class=" ">
+                                                <i class="fas fa-folder-open mr-1"></i> Data tidak ditemukan ...
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div class="d-flex justify-content-between align-items-center px-4">
+                                    <span class="mb-3 text-muted">
+                                        Total <span id="data-total"></span> data
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
