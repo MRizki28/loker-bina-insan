@@ -65,7 +65,7 @@ class ArchiveRepositories implements ArchiveInterfaces {
     {
         $search = $request->input('search');
         $page = $search ? 1 : (int) $request->input('page', 1);
-        $limit = $request->input('limit') ? $request->input('limit') : 10;
+        $limit = $request->input('limit') ? $request->input('limit') : 1;
         $query = $this->archiveModel->query();
 
         if ($search) {
