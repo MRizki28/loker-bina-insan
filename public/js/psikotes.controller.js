@@ -9,6 +9,16 @@ $(document).ready(function () {
         psikotesService.getReview(id)
     })
 
+    $(document).on('keyup', function (e) {
+        if (e.keyCode === 13) {
+            psikotesService.getAllData();
+        }
+    })
+
+    $(document).on('click', '#form-search', function () {
+        psikotesService.getAllData();
+    })
+
     function validation() {
         $('#formTambah').validate({
             rules: {
