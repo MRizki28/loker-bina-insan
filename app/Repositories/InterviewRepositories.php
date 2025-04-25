@@ -36,7 +36,7 @@ class InterviewRepositories implements InterviewInterfaces
             $query = $this->interviewModel->query();
 
             if ($search) {
-                $query->whereHas('pelamar', function ($q) use ($search) {
+                $query->whereHas('file.pelamar', function ($q) use ($search) {
                     $q->where('name', 'like', '%' . $search . '%');
                 });
             }
