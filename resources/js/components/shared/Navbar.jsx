@@ -120,10 +120,10 @@ export default function Navbar() {
                         <FaHome className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Home</span>
                     </Link>
-                    <Link to='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
+                    <a href='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
                         <FaInfoCircle className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Lowongan</span>
-                    </Link>
+                    </a>
                     <button onClick={handleLogout} className="inline-flex flex-col items-center justify-center px-5 group">
                         <IoIosExit className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Logout</span>
