@@ -1,35 +1,38 @@
-import { useSelector, useDispatch } from 'react-redux';
 import logo from '../../../../public/static/img/logo.png';
-import { useEffect } from 'react';
-import { checkTokenValidity, setLogout } from '../../redux/slices/checkLogin';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import SweetAlertService from '../../utils/sweetalert';
+import { Link } from 'react-router-dom';
 import { FaHome, FaInfoCircle } from 'react-icons/fa';
 import { FaShop } from 'react-icons/fa6';
-import { Link } from 'react-router-dom';
 import { IoIosExit } from 'react-icons/io';
+import SweetAlertService from '../../utils/sweetalert';
 
 export default function Navbar() {
-    const dispatch = useDispatch();
-    const selector = useSelector((state) => state.checkLogin);
-    const login = selector.isLoggedIn;
+    const [login, setLogin] = useState(null);
 
     useEffect(() => {
-        checkTokenValidity();
+        const backup = JSON.parse(localStorage.getItem('backup'));
+        setLogin(backup);
+
+        const hash = window.location.hash;
+        if (hash) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }, []);
 
     const handleLogout = async () => {
         try {
             const confirmed = await SweetAlertService.logoutAlert();
-            if (!confirmed) {
-                return;
-            }
+            if (!confirmed) return;
 
             const response = await axios.post(`${appUrl}/v1/auth/logout`, {});
             const responseData = await response.data;
 
             if (responseData.message === 'Logout successful') {
-                dispatch(setLogout());
+                localStorage.removeItem('backup');
                 window.location.href = '/';
             }
         } catch (error) {
@@ -38,7 +41,7 @@ export default function Navbar() {
     };
 
     const checkRole = () => {
-        if (!login.isLoggedIn) {
+        if (!login || !login.isLoggedIn) {
             return (
                 <>
                     <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
@@ -54,7 +57,7 @@ export default function Navbar() {
                     <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
                     <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
                     <li><a href="/cms/admin/dashboard" className="block py-2 px-3 text-black hover:text-blue-500">Ke Halaman Admin</a></li>
-                    <li><a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</a></li>
+                    <li><button onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</button></li>
                 </>
             );
         }
@@ -65,14 +68,14 @@ export default function Navbar() {
                     <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
                     <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
                     <li><a href="/history" className="block py-2 px-3 text-black hover:text-blue-500">History Apply</a></li>
-                    <li><a href="#" onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</a></li>
+                    <li><button onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</button></li>
                 </>
             );
         }
     };
 
     const checkMobileNav = () => {
-        if (!login.isLoggedIn) {
+        if (!login || !login.isLoggedIn) {
             return (
                 <>
                     <Link to='/' className="inline-flex flex-col items-center justify-center px-5 group">
@@ -130,18 +133,8 @@ export default function Navbar() {
         }
     };
 
-    useEffect(() => {
-        const hash = window.location.hash;
-        if (hash) {
-            const target = document.querySelector(hash);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }, []);
-
     return (
-        <nav className="bg-white border-gray-200 dark:white">
+        <nav className="bg-white border-gray-200">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
                     <img src={logo} className="h-8" alt="Logo" />

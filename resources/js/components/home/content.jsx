@@ -129,9 +129,9 @@ export default function Content() {
                                     </div>
                                 </div>
                                 <div className="mt-6">
-                                    <Link to={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
+                                    <a href={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
                                         Read More
-                                    </Link>
+                                    </a>
                                 </div>
                             </motion.div>
                         ))}

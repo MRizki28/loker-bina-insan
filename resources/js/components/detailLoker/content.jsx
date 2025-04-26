@@ -2,39 +2,30 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import ModalApply from "./modal";
-import { useDispatch, useSelector } from "react-redux";
 import BreadCrumb from "../shared/Breadcrumb";
-
-
 
 export default function Content() {
     const [data, setData] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const dispatch = useDispatch();
-    const selector = useSelector((state) => state.checkLogin);
 
-    const isLoggedIn = useSelector((state) => state.checkLogin.isLoggedIn);
-    const role = useSelector((state) => state.checkLogin.role);
+    // Ambil data dari localStorage backup
+    const backup = localStorage.getItem('backup');
+    const parsedBackup = backup ? JSON.parse(backup) : { isLoggedIn: false, role: null };
+
+    const { isLoggedIn, role } = parsedBackup;
 
     const breadCrumbItems = [
-
-        {
-            label: "Detail Lowongan"
-        }
-    ]
+        { label: "Detail Lowongan" }
+    ];
 
     const { id } = useParams();
-    console.log(id)
 
     const getData = async () => {
         try {
             const response = await axios.get(`/v1/job/get-for-frontend/get/${id}`);
-            console.log(response.data);
-            if (response.data.message == 'Success get data job by id') {
-                const responseData = await response.data;
-                setData(responseData.data);
+            if (response.data.message === 'Success get data job by id') {
+                setData(response.data.data);
             }
-
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -51,7 +42,7 @@ export default function Content() {
     return (
         <div className="mt-10">
             <div className="max-w-screen-2xl mx-auto pb-60 p-5 lg:p-16 -mt-40 md:-mt-20">
-                <BreadCrumb items={breadCrumbItems}></BreadCrumb>
+                <BreadCrumb items={breadCrumbItems} />
                 <h2 className="text-xl font-bold text-center mb-11">DETAIL LOWONGAN</h2>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2 bg-gray-100 p-6 rounded-lg shadow-md">
@@ -69,7 +60,7 @@ export default function Content() {
                         <div className="bg-gray-100 p-6 rounded-lg shadow-md">
                             <h3 className="text-lg font-bold text-blue-700 mb-2">Tanggal Pendaftaran</h3>
                             <p className="text-gray-700">
-                                {data.start_date ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(data.start_date)) : "Tidak tersedia"} -
+                                {data.start_date ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(data.start_date)) : "Tidak tersedia"} -{" "}
                                 {data.end_date ? new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(data.end_date)) : "Tidak tersedia"}
                             </p>
                         </div>
@@ -86,7 +77,7 @@ export default function Content() {
                         <h2 className="text-2xl font-bold text-blue-700 mb-4">Cara Melamar</h2>
                         <p className="text-gray-700 mb-4">Apply berkas anda dengan menekan tombol di bawah:</p>
 
-                        {!isLoggedIn.isLoggedIn ? (
+                        {!isLoggedIn ? (
                             <Link
                                 to="/login"
                                 className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition-colors inline-block mb-4"
@@ -108,14 +99,11 @@ export default function Content() {
                                 Apply now
                             </button>
                         )}
-
                     </div>
                 </div>
             </div>
+
             {isModalOpen && <ModalApply isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />}
-
         </div>
-
-
     );
 }
