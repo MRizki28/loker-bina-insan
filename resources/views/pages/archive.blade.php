@@ -64,6 +64,8 @@
                                             <th>Status wawancara</th>
                                             <th>Status psikotes</th>
                                             <th>Status test mengaji</th>
+                                            <th>Nomor Hp</th>
+                                            <th>Ranking</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
