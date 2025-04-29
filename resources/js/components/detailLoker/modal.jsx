@@ -26,7 +26,7 @@ export default function ModalApply({ isOpen, onClose }) {
             formData.append("file", data.file[0]);
             formData.append("reason", data.reason);
             formData.append("id_job", id);
-            formData.append("_token", csrfToken); 
+            formData.append("_token", csrfToken);
 
             const response = await axios.post(`${appUrl}/v1/file-apply/create`, formData, {
                 headers: {
@@ -104,8 +104,15 @@ export default function ModalApply({ isOpen, onClose }) {
                                     {...register("file", {
                                         validate: (value) => {
                                             if (value.length > 0) {
-                                                const allowedFormats = ["application/pdf", "application/zip", "application/x-rar-compressed"];
-                                                if (!allowedFormats.includes(value[0].type)) {
+                                                const allowedTypes = ["application/pdf", "application/zip", "application/x-rar-compressed", "application/x-zip-compressed"];
+                                                const allowedExtensions = ["pdf", "zip", "rar"];
+
+                                                const file = value[0];
+                                                const fileType = file.type;
+                                                const fileName = file.name.toLowerCase();
+                                                const fileExtension = fileName.split('.').pop();
+
+                                                if (!allowedTypes.includes(fileType) && !allowedExtensions.includes(fileExtension)) {
                                                     return "File harus dalam format PDF, RAR, atau ZIP";
                                                 }
                                             }

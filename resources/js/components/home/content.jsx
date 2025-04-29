@@ -9,10 +9,11 @@ import { Link } from 'react-router-dom';
 export default function Content() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState('');
 
-    const getData = async () => {
+    const getData = async (searchQuery = '') => {
         try {
-            const response = await axios.get('/v1/job/get-for-frontend?limit=100');
+            const response = await axios.get(`/v1/job/get-for-frontend?limit=100&search=${searchQuery}`);
             const responseData = response.data;
             const rentanWaktu = responseData.data.data.map((item) => {
                 return {
@@ -21,13 +22,21 @@ export default function Content() {
                 };
             })
 
+            setLoading(false);
             setData(rentanWaktu);
             setLoading(false);
         } catch (error) {
+            setData([]);
             console.log(error);
             setLoading(false);
         }
     };
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value);
+        getData(e.target.value);
+    }
+
 
     useEffect(() => {
         getData();
@@ -52,6 +61,7 @@ export default function Content() {
                     <div className="relative mb-4">
                         <label htmlFor="default-search" className="sr-only">Search</label>
                         <input
+                            onChange={handleSearch}
                             type="search"
                             id="default-search"
                             className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:placeholder-gray-400 dark:text-black dark:focus:ring-blue-500"
@@ -65,37 +75,13 @@ export default function Content() {
                         </div>
                     </div>
 
-                    {/* Filter & Button (Di Bawah, Sejajar) */}
-                    <div className="flex items-center gap-2">
-                        {/* Dropdown Mata Pelajaran */}
-                        <select className="w-full p-3 text-sm border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:text-gray-900 dark:focus:ring-blue-500">
-                            <option selected>Kategory</option>
-                            <option value="Matematika">Matematika</option>
-                            <option value="IPA">IPA</option>
-                            <option value="Bahasa Inggris">Bahasa Inggris</option>
-                            <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-                            <option value="IPS">IPS</option>
-                            <option value="TIK">TIK</option>
-                        </select>
 
-                        {/* Dropdown Jenis Pekerjaan */}
-                        <select className="w-full p-3 text-sm border border-gray-300 rounded-lg bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-white dark:border-gray-600 dark:text-gray-900 dark:focus:ring-blue-500">
-                            <option selected>Jenis Pekerjaan</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Part-time">Part-time</option>
-                            <option value="Honorer">Honorer</option>
-                        </select>
 
-                        {/* Search Button */}
-                        {/* <button className="w-full px-5 py-3 text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700">
-                        Search
-                    </button> */}
-                    </div>
                 </div>
             </div>
 
             {/* Card */}
-            <div className="flex justify-center mt-5 p-1"  id="lowongan">
+            <div className="flex justify-center mt-5 p-1 mb-4" id="lowongan">
                 {loading ? (
                     <p className="text-gray-600">Memuat data...</p>
                 ) : data.length === 0 ? (
@@ -129,9 +115,9 @@ export default function Content() {
                                     </div>
                                 </div>
                                 <div className="mt-6">
-                                    <Link to={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
+                                    <a href={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
                                         Read More
-                                    </Link>
+                                    </a>
                                 </div>
                             </motion.div>
                         ))}

@@ -36,50 +36,52 @@
 
 						<li class="nav-item {{ request()->is('cms/admin/loker*') ? 'active' : '' }}">
 							<a href="{{ url('/cms/admin/loker') }}">
-								<i class="fas fa-book"></i>
+								<i class="fas fa-keyboard"></i>
 								<p>Lowongan kerja</p>
 							</a>
 						</li>  
-						<li class="nav-item {{ request()->is('cms/admin/file-apply*') ? 'active' : '' }}">
-							<a href="{{ url('/cms/admin/file-apply') }}">
-								<i class="fas fa-book"></i>
-								<p>Data seleksi berkas</p>
-							</a>
-						</li> 
-						<li class="nav-item {{ request()->is('cms/admin/interview*') ? 'active' : '' }}">
-							<a href="{{ url('/cms/admin/interview') }}">
-								<i class="fas fa-book"></i>
-								<p>Data interview</p>
-							</a>
-						</li> 
-						<li class="nav-item {{ request()->is('cms/admin/psikotes*') ? 'active' : '' }}">
-							<a href="{{ url('/cms/admin/psikotes') }}">
-								<i class="fas fa-book"></i>
-								<p>Data psikotes</p>
-							</a>
-						</li>
-						<li class="nav-item {{ request()->is('cms/admin/ngaji*') ? 'active' : '' }}">
-							<a href="{{ url('/cms/admin/ngaji') }}">
-								<i class="fas fa-book"></i>
-								<p>Data ngaji</p>
-							</a>
-						</li> 
+						<li
+					class="nav-item {{ request()->is('cms/admin/file-apply*') || request()->is('cms/admin/interview*') || request()->is('cms/admin/psikotes*') || request()->is('cms/admin/ngaji') ? 'active' : '' }}">
+					<a data-toggle="collapse" href="#sidebarLayouts2" class="collapsed" aria-expanded="false">
+						<i class="fas fa-book"></i>
+						<p>Seleksi</p>
+						<span class="caret"></span>
+					</a>
+					<div class="collapse" id="sidebarLayouts2" style="">
+						<ul class="nav nav-collapse">
+							<li class="nav-item {{ request()->is('cms/admin/file-apply*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/file-apply') }}">
+									<span class="sub-item">Data seleksi berkas</span>
+								</a>
+							</li>
+							<li class="nav-item {{ request()->is('cms/admin/interview*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/interview') }}">
+									<span class="sub-item">Data interview</span>
+								</a>
+							</li>
+							<li class="nav-item {{ request()->is('cms/admin/psikotes*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/psikotes') }}">
+									<span class="sub-item">Data psikotes</span>
+								</a>
+							</li>
+							<li class="nav-item {{ request()->is('cms/admin/ngaji*') ? 'active' : '' }}">
+								<a href="{{ url('/cms/admin/ngaji') }}">
+									<span class="sub-item">Data tes mengaji</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</li>
 						<li class="nav-item {{ request()->is('cms/admin/ranking*') ? 'active' : '' }}">
 							<a href="{{ url('/cms/admin/ranking') }}">
-								<i class="fas fa-book"></i>
+								<i class="fas fa-chart-bar"></i>
 								<p>Ranking</p>
 							</a>
 						</li> 
 						<li class="nav-item {{ request()->is('cms/admin/archive*') ? 'active' : '' }}">
 							<a href="{{ url('/cms/admin/archive') }}">
-								<i class="fas fa-book"></i>
+								<i class="fas fa-archive"></i>
 								<p>Data archive</p>
-							</a>
-						</li> 
-						<li class="nav-item {{ request()->is('/cms/admin/ahp*') ? 'active' : '' }}">
-							<a href="{{ url('/cms/admin/ahp') }}">
-								<i class="fas fa-book"></i>
-								<p>Bobot kriteria & alternatif</p>
 							</a>
 						</li> 
 						<ul>

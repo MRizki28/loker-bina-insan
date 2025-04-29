@@ -118,9 +118,9 @@ class PenilaianDetailController extends Controller
                     $kodeK = $kriteriaMap[$kriteriaNama] ?? null;
     
                     if ($kodeK) {
-                        $score = bcmul((string)$item->bobot_prioriti_kriteria, (string)$item->bobot_prioriti_alternatif, 20);
+                        $score = bcmul((string)$item->bobot_prioriti_kriteria, (string)$item->bobot_prioriti_alternatif, 5);
                         $kategori[$kodeK] = $score;
-                        $total = bcadd($total, $score, 20);
+                        $total = bcadd($total, $score, 5);
                     }
                 }
     

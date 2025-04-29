@@ -37,6 +37,15 @@ export const checkTokenValidity = () => async (dispatch) => {
             role: response.data.user?.role || null
         }));
 
+        console.log(response)
+
+        if (response.data.authenticated === true) {
+            localStorage.setItem('backup', JSON.stringify({
+                isLoggedIn: true,
+                role: response.data.user?.role || null
+            }));
+        }
+
     } catch (error) {
         if (error.response && error.response.status === 401) {
             dispatch(setLogout())

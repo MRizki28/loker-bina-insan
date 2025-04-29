@@ -25,7 +25,10 @@ class BobotAlternatifRepositories implements BobotAlternatifInterfaces{
         $query = $this->bobotAlternatifModel->query();
 
         if($search){
-            $query->where('name_alternatif' , 'like', '%'.$search.'%');
+            $query->where('name_alternatif' , 'like', '%'.$search.'%')
+            ->orWhereHas('kriteria', function($query) use ($search){
+                $query->where('name_kriteria', 'like', '%'.$search.'%');
+            });
         }
 
         $query->orderBy('id_kriteria', 'desc');
