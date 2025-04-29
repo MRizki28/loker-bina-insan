@@ -38,6 +38,7 @@ return new class extends Migration
             $table->enum('status_ngaji', ['lolos', 'gagal', 'pending'])->nullable();
             $table->text('reason_reject_ngaji')->nullable();
             $table->timestamp('time_ngaji')->nullable();
+            $table->string('rank')->nullable();
             $table->timestamps();
         });
     }
