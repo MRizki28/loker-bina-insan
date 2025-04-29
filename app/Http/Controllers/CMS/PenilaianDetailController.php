@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CMS;
 
 use App\Http\Controllers\Controller;
+use App\Models\ArchiveModel;
 use App\Models\PenilanDetailModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -75,14 +76,14 @@ class PenilaianDetailController extends Controller
     {
         try {
             $lowongan = $request->query('lowongan');
-
-            $details = PenilanDetailModel::with(['bobotKriteria', 'penilaian'])
+    
+            $details = PenilanDetailModel::with(['bobotKriteria', 'penilaian.file.job', 'penilaian.file.pelamar'])
                 ->when($lowongan, function ($query) use ($lowongan) {
                     $query->whereHas('penilaian.file.job', function ($q) use ($lowongan) {
                         $q->where('name', 'like', "%$lowongan%");
                     });
                 })->get();
-
+    
             $kriteriaMap = [
                 'USIA' => 'K1',
                 'PENGALAMAN KERJA' => 'K2',
@@ -91,7 +92,7 @@ class PenilaianDetailController extends Controller
                 'TES PSIKOLOGI' => 'K5',
                 'TES MENGAJI' => 'K6',
             ];
-
+    
             $ranking = $details->groupBy('id_penilaian')->map(function ($items, $id) use ($kriteriaMap) {
                 $total = '0';
                 $kategori = [
@@ -102,45 +103,63 @@ class PenilaianDetailController extends Controller
                     'K5' => null,
                     'K6' => null,
                 ];
-
-                $job = $items->first()->penilaian->file->job->name ;
-                $name_pelamar = $items->first()->penilaian->file->pelamar->name;
-
+    
+                $firstItem = $items->first();
+                $file = $firstItem->penilaian->file;
+                $pelamar = $file->pelamar;
+    
+                $job = $file->job->name ?? null;
+                $name_pelamar = $pelamar->name ?? null;
+                $id_file = $file->id ?? null;
+                $id_pelamar = $pelamar->id ?? null;
+    
                 foreach ($items as $item) {
                     $kriteriaNama = strtoupper($item->bobotKriteria->name_kriteria ?? '');
                     $kodeK = $kriteriaMap[$kriteriaNama] ?? null;
-
+    
                     if ($kodeK) {
                         $score = bcmul((string)$item->bobot_prioriti_kriteria, (string)$item->bobot_prioriti_alternatif, 20);
                         $kategori[$kodeK] = $score;
                         $total = bcadd($total, $score, 20);
                     }
                 }
-
+    
                 if (in_array(null, $kategori, true)) {
                     return null;
                 }
-
+    
                 return array_merge([
                     'id_penilaian' => $id,
+                    'id_file' => $id_file,
+                    'id_pelamar' => $id_pelamar,
                     'total_score' => $total,
                     'job' => $job,
                     'name_pelamar' => $name_pelamar,
                 ], $kategori);
             })->filter();
-
+    
             $sorted = $ranking->values()->sortByDesc('total_score')->values();
-
+    
             $final = $sorted->map(function ($item, $index) {
                 return array_merge($item, [
                     'ranking' => $index + 1,
                 ]);
             });
-
+    
             if ($final->isEmpty()) {
                 return ApiResponse::notFound();
             }
-
+    
+            // Save ranking to archive
+            foreach ($final as $item) {
+                ArchiveModel::where('id_file', $item['id_file'])
+                    ->where('id_pelamar', $item['id_pelamar'])
+                    ->update([
+                        'rank' => $item['ranking'],
+                        'updated_at' => now(), 
+                    ]);
+            }
+    
             return response()->json([
                 'status' => 'success',
                 'message' => 'Ranking per penilaian berhasil dihitung',
@@ -154,4 +173,5 @@ class PenilaianDetailController extends Controller
             ], 500);
         }
     }
+    
 }
