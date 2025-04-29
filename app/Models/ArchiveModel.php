@@ -31,6 +31,7 @@ class ArchiveModel extends Model
         'link',
         'status_interview',
         'reason_reject_interview',
+        'rank',
     ];
     
     protected $casts = [
