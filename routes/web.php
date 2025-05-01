@@ -124,6 +124,7 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::get('/download/{filename}', 'downloadFile');
             Route::post('/review/{id}', 'reviewFile');
             Route::get('/get-data-interview', 'getDataInterview');
+            Route::delete('/delete/{id}', 'deleteData');
         });
 
         Route::prefix('archive')->controller(ArchiveController::class)->group(function () {
