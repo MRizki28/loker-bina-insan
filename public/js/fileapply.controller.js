@@ -1,4 +1,4 @@
-import FileApplyService from "./fileapply.service.js?v=1.0.0";
+import FileApplyService from "./fileapply.service.js?v=1.0.1";
 
 $(document).ready(function () {
     const fileApplyService = new FileApplyService()
@@ -62,6 +62,11 @@ $(document).ready(function () {
         fileApplyService.submitPenilaian(e, id_file);
     })
     
+    $(document).on('click', '.delete-confirm', function () {
+        const id = $(this).data('id')
+        fileApplyService.deleteData(id)
+    })
+
     function resetField() {
         $('#reviewModal').on('hidden.bs.modal', function () {
             $('#description').text('');
