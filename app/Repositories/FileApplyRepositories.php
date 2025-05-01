@@ -113,7 +113,27 @@ class FileApplyRepositories implements FileApplyInterfaces
 
     public function updateData(FileApplyRequest $request, $id) {}
 
-    public function deleteData($id) {}
+    public function deleteData($id) {
+        try {
+            $data = $this->fileApplyModel->find($id);
+            if(!$data){
+                return ApiResponse::notFound();
+            }
+
+            if($data->file){
+                $file_path = public_path('uploads/fileapply/' . $data->file);
+                if(file_exists($file_path)){
+                    unlink($file_path);
+                }
+            }
+
+            $data->delete();
+
+            return ApiResponse::success($data, 'Success delete data job', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
+    }
 
     public function getHistoryByUser(Request $request)
     {
