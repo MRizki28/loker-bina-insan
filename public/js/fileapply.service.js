@@ -183,17 +183,17 @@ class FileApplyService {
         if (responseData.status === 'success') {
             const container = $('#form-penilaian-dinamis');
             container.empty();
-    
+
             $.each(responseData.data, function (index, kriteria) {
                 let selectAlternatif = `<select class="form-control" name="id_bobot_alternatif[${kriteria.id}]">`;
                 selectAlternatif += `<option value="" selected disabled hidden>Choose here</option>`;  // Opsi default
-    
+
                 $.each(kriteria.alternatif, function (i, alt) {
                     selectAlternatif += `<option value="${alt.id}">${alt.name_alternatif}</option>`;
                 });
-    
+
                 selectAlternatif += `</select>`;
-    
+
                 const html = `
                     <div class="form-group mb-3">
                         <label class="font-weight-bold">${kriteria.name_kriteria}</label>
@@ -212,7 +212,7 @@ class FileApplyService {
         e.preventDefault();
         let submitButton = $(e.target).find(':submit');
         const originalContent = submitButton.html();
-    
+
         const setButtonLoading = (isLoading) => {
             if (isLoading) {
                 submitButton.prop('disabled', true).html(`
@@ -223,30 +223,30 @@ class FileApplyService {
                 submitButton.prop('disabled', false).html(originalContent);
             }
         };
-    
+
         setButtonLoading(true);
-    
+
         try {
             const formData = new FormData(e.target);
-    
+
             const penilaianResponse = await axios.post(`${appUrl}/v1/penilaian/create`, formData);
             const penilaianData = penilaianResponse.data;
             console.log('penilaianData', penilaianResponse)
-    
+
             if (penilaianData.status !== 'success') {
                 throw new Error('Gagal menyimpan penilaian.');
             }
-    
+
             const reviewResponse = await axios.post(`${appUrl}/v1/file-apply/review/${id}`, {
                 status: 'approved',
             });
 
             console.log('reviewResponse', reviewResponse)
-    
+
             if (reviewResponse.status !== 200) {
                 throw new Error('Gagal menyimpan review.');
             }
-    
+
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -254,7 +254,7 @@ class FileApplyService {
             }).then(() => {
                 window.location.reload();
             });
-    
+
         } catch (error) {
             console.log(error);
             warningAlert('Terjadi kesalahan saat menyimpan data.');
@@ -262,8 +262,31 @@ class FileApplyService {
             setButtonLoading(false);
         }
     }
-    
-    
+
+
+    async deleteData(id) {
+        deleteAlert().then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await axios.delete(`/v1/file-apply/delete/${id}`)
+                    const responseData = await response.data
+                    console.log(response)
+                    if (responseData.status === 'success') {
+                        successDeleteAlert().then(() => {
+                            window.location.reload()
+                        })
+                    } else {
+                        errorAlert()
+                    }
+                } catch (error) {
+                    warningAlert()
+                }
+
+            }
+        })
+
+    }
+
 }
 
 export default FileApplyService;
