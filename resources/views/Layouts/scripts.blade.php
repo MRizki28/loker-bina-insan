@@ -111,6 +111,7 @@
                         },
                         success: function(response) {
                             console.log(response);
+                            localStorage.removeItem('backup');
                             window.location.href = '{{ url("/login") }}';
                         },
                         error: function(xhr, status, error) {

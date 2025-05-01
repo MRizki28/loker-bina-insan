@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import SweetAlertService from "../../utils/sweetalert";
@@ -15,11 +15,11 @@ export default function ModalApply({ isOpen, onClose }) {
     } = useForm();
 
     const { id } = useParams();
-
-
     const watchedFields = watch();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const onSubmit = async (data) => {
+        setIsSubmitting(true);
         try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const formData = new FormData();
@@ -34,19 +34,17 @@ export default function ModalApply({ isOpen, onClose }) {
                 },
             });
 
-            console.log(response);
             const responseData = await response.data;
-            console.log('here', responseData);
             if (responseData.status === 'success') {
                 SweetAlertService.successApply();
                 reset();
                 clearErrors();
                 onClose();
-                // window.location.href = '/history'
             }
         } catch (error) {
-            console.log('eeee', error)
-
+            console.log('eeee', error);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -63,7 +61,6 @@ export default function ModalApply({ isOpen, onClose }) {
             document.body.style.overflow = "auto";
         };
     }, [isOpen]);
-
 
     return (
         <AnimatePresence>
@@ -87,15 +84,10 @@ export default function ModalApply({ isOpen, onClose }) {
                         }}
                         className="bg-white p-6 rounded-lg shadow-lg w-96"
                     >
-                        <h2 className="text-xl font-bold mb-4">
-                            Apply sekarang
-                        </h2>
+                        <h2 className="text-xl font-bold mb-4">Apply sekarang</h2>
                         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
                             <div className="col-span-2">
-                                <label
-                                    htmlFor="file"
-                                    className="block text-sm font-medium mb-2"
-                                >
+                                <label htmlFor="file" className="block text-sm font-medium mb-2">
                                     Berkas Lamaran (PDF, RAR, atau ZIP)
                                 </label>
                                 <input
@@ -104,7 +96,12 @@ export default function ModalApply({ isOpen, onClose }) {
                                     {...register("file", {
                                         validate: (value) => {
                                             if (value.length > 0) {
-                                                const allowedTypes = ["application/pdf", "application/zip", "application/x-rar-compressed", "application/x-zip-compressed"];
+                                                const allowedTypes = [
+                                                    "application/pdf",
+                                                    "application/zip",
+                                                    "application/x-rar-compressed",
+                                                    "application/x-zip-compressed"
+                                                ];
                                                 const allowedExtensions = ["pdf", "zip", "rar"];
 
                                                 const file = value[0];
@@ -119,24 +116,20 @@ export default function ModalApply({ isOpen, onClose }) {
                                             return true;
                                         }
                                     })}
-                                    className={`mt-1 p-2 w-full border rounded-md transition-colors duration-300 focus:ring-0 ${watchedFields.file ? "border-green-400" : "border-gray-300"
-                                        }`}
+                                    className={`mt-1 p-2 w-full border rounded-md transition-colors duration-300 focus:ring-0 ${
+                                        watchedFields.file ? "border-green-400" : "border-gray-300"
+                                    }`}
                                 />
                                 <p className="text-xs text-gray-500 mt-1">
                                     Harap unggah berkas dalam format <b>PDF, RAR, atau ZIP</b>.
                                 </p>
                                 {errors.file && (
-                                    <p className="text-red-500 text-sm mt-1">
-                                        {errors.file.message}
-                                    </p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.file.message}</p>
                                 )}
                             </div>
 
                             <div className="col-span-2">
-                                <label
-                                    htmlFor="reason"
-                                    className="block text-sm font-medium mb-2"
-                                >
+                                <label htmlFor="reason" className="block text-sm font-medium mb-2">
                                     Jelaskan secara singkat diri anda <span className="text-red-500">*</span>
                                 </label>
                                 <textarea
@@ -145,20 +138,20 @@ export default function ModalApply({ isOpen, onClose }) {
                                         required: "Pesan wajib diisi",
                                     })}
                                     rows={4}
-                                    className={`w-full border rounded-md p-2 transition-colors duration-300 focus:ring-0 ${errors.reason
-                                        ? "border-red-500 focus:border-red-500"
-                                        : watchedFields.reason
-                                            ? "border-green-400"
-                                            : "border-gray-300"
-                                        }`}
+                                    className={`w-full border rounded-md p-2 transition-colors duration-300 focus:ring-0 ${
+                                        errors.reason
+                                            ? "border-red-500 focus:border-red-500"
+                                            : watchedFields.reason
+                                                ? "border-green-400"
+                                                : "border-gray-300"
+                                    }`}
                                     placeholder="Jelaskan secara singkat diri anda"
                                 ></textarea>
                                 {errors.reason && (
-                                    <p className="text-red-500 text-sm mt-1">
-                                        {errors.reason.message && typeof errors.reason.message === 'string' && errors.reason.message}
-                                    </p>
+                                    <p className="text-red-500 text-sm mt-1">{errors.reason.message}</p>
                                 )}
                             </div>
+
                             <motion.div
                                 className="col-span-2 flex justify-end gap-2"
                                 initial={{ opacity: 0, y: 20 }}
@@ -174,16 +167,17 @@ export default function ModalApply({ isOpen, onClose }) {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-bprYellow text-bprDarkBlue px-4 py-2 rounded-md hover:bg-yellow-400 transition-colors focus:ring-0"
+                                    disabled={isSubmitting}
+                                    className={`bg-bprYellow text-bprDarkBlue px-4 py-2 rounded-md transition-colors focus:ring-0 
+                                        ${isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:bg-yellow-400"}`}
                                 >
-                                    Kirim
+                                    {isSubmitting ? "Mengirim..." : "Kirim"}
                                 </button>
                             </motion.div>
                         </form>
                     </motion.div>
-
                 </motion.div>
             )}
         </AnimatePresence>
-    )
+    );
 }
