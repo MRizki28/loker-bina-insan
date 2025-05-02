@@ -25,7 +25,7 @@ class FileApplyRequest extends FormRequest
     {
         return [
             'id_job' => 'required|uuid|exists:tb_job,id',
-            'file' => 'required|file|mimes:pdf,zip,rar',
+            'file' => 'required|file|mimes:pdf,zip,rar|max:2048',
             'reason' => 'required|string',
         ];
     }
