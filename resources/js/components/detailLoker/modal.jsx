@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import SweetAlertService from "../../utils/sweetalert";
+import Swal from "sweetalert2";
 
 export default function ModalApply({ isOpen, onClose }) {
     const {
@@ -35,6 +36,7 @@ export default function ModalApply({ isOpen, onClose }) {
             });
 
             const responseData = await response.data;
+            console.log(responseData)
             if (responseData.status === 'success') {
                 SweetAlertService.successApply();
                 reset();
@@ -43,6 +45,14 @@ export default function ModalApply({ isOpen, onClose }) {
             }
         } catch (error) {
             console.log('eeee', error);
+            if(error.response.status === 422){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Maximal ukuran file 2MB',
+                    confirmButtonText: 'Tutup'
+                })
+            }
         } finally {
             setIsSubmitting(false);
         }
