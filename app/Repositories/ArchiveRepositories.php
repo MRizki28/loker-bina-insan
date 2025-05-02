@@ -63,19 +63,8 @@ class ArchiveRepositories implements ArchiveInterfaces {
 
     public function getDataByPelamar(Request $request , $id)
     {
-        $search = $request->input('search');
-        $page = $search ? 1 : (int) $request->input('page', 1);
-        $limit = $request->input('limit') ? $request->input('limit') : 1;
-        $query = $this->archiveModel->query();
 
-        if ($search) {
-            $query->whereHas('pelamar', function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%');
-            });
-        }
-        
-        $data = $query->where('id_pelamar', $id)->with('pelamar')
-            ->paginate($limit, ['*'], 'page', $page);
+        $data = $this->archiveModel->where('id_pelamar', $id)->with('pelamar')->get();
 
         if ($data->isEmpty()) {
             return ApiResponse::notFound();
