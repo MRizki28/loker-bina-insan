@@ -42,7 +42,6 @@ class ArchiveService {
 
     async getDataByPelamar(id, url) {
         console.log(id);
-        const pagination = $('.pagination')
         const table = $('#table tbody')
         const dataNotFound = $('#dataNotFound')
         const totalData = $('#data-total')
@@ -51,7 +50,6 @@ class ArchiveService {
         let endpoint = paramsUrl(url || `/v1/archive/get-data-by-pelamar/${id}`, { search: params });
 
         table.empty();
-        pagination.empty();
 
         try {
             const response = await axios.get(endpoint);
@@ -60,7 +58,7 @@ class ArchiveService {
 
             let tableBody = '';
             if (responseData.message === 'Success get data job') {
-                $.each(responseData.data.data, function (index, item) {
+                $.each(responseData.data, function (index, item) {
                     let badgeHtml = '';
 
                     if (item.status == 'pending') {
@@ -111,7 +109,6 @@ class ArchiveService {
 
                 table.append(tableBody);
                 dataNotFound.hide();
-                paginationLink(pagination, responseData);
                 totalData.text(responseData.data.total);
             } else {
                 table.empty();
