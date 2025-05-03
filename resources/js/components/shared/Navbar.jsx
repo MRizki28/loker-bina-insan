@@ -2,7 +2,7 @@ import logo from '../../../../public/static/img/logo.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { FaHome, FaInfoCircle } from 'react-icons/fa';
+import { FaHistory, FaHome, FaInfoCircle } from 'react-icons/fa';
 import { FaShop } from 'react-icons/fa6';
 import { IoIosExit } from 'react-icons/io';
 import SweetAlertService from '../../utils/sweetalert';
@@ -101,6 +101,10 @@ export default function Navbar() {
                         <FaHome className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Home</span>
                     </Link>
+                    <a href='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
+                        <FaInfoCircle className="text-2xl mb-2 text-black group-hover:text-red-600" />
+                        <span className="text-sm text-black group-hover:text-red-600">Lowongan</span>
+                    </a>
                     <a href='/cms/admin/dashboard' className="inline-flex flex-col items-center justify-center px-5 group">
                         <FaShop className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Admin</span>
@@ -123,6 +127,10 @@ export default function Navbar() {
                     <a href='/#lowongan' className="inline-flex flex-col items-center justify-center px-5 group">
                         <FaInfoCircle className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Lowongan</span>
+                    </a>
+                    <a href='/history' className="inline-flex flex-col items-center justify-center px-5 group">
+                        <FaHistory className="text-2xl mb-2 text-black group-hover:text-red-600" />
+                        <span className="text-sm text-black group-hover:text-red-600">History</span>
                     </a>
                     <button onClick={handleLogout} className="inline-flex flex-col items-center justify-center px-5 group">
                         <IoIosExit className="text-2xl mb-2 text-black group-hover:text-red-600" />
@@ -149,7 +157,7 @@ export default function Navbar() {
 
             {/* Mobile navbar (bottom) */}
             <div className="lg:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t">
-                <div className="grid h-full max-w-lg grid-cols-3 mx-auto font-medium">
+                <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
                     {checkMobileNav()}
                 </div>
             </div>
