@@ -54,6 +54,7 @@ class AuthRequest extends FormRequest
                 ],
                 'phone' => 'required|string',
                 'role' => 'required|in:superadmin,admin,user',
+                'password' => 'nullable',
             ];
 
         }

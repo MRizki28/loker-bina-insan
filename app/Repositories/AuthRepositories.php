@@ -154,7 +154,7 @@ class AuthRepositories implements AuthInterfaces
             $data->name = $request->input('name');
             $data->email = $request->input('email');
             $data->phone = $request->input('phone');
-            $data->password = Hash::make('123456');
+            $data->password = $request->input('password') ? Hash::make($request->input('password')) : $data->password;
             $data->role = $request->input('role');
             $data->save();
 

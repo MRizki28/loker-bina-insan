@@ -130,6 +130,7 @@ class UserManagementService {
             $('#email').val(responseData.data.email);
             $('#phone').val(responseData.data.phone);
             $('#role').val(responseData.data.role).trigger('change');
+            $('#password').prop('disabled', false);
             checkingEdit();
         } catch (error) {
             console.error(error);

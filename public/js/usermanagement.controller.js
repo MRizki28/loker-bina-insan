@@ -1,4 +1,4 @@
-import UserManagementService from "./usermanagement.service.js?v=1.0.0";
+import UserManagementService from "./usermanagement.service.js?v=1.0.1";
 
 $(document).ready(function () {
     const userManagementService = new UserManagementService();
@@ -97,6 +97,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.edit-modal', function () {
         const id = $(this).data('id')
+        $('#password').prop('disabled', false);
         userManagementService.getDataById(id, checkingEdit)
     })
 
@@ -113,6 +114,7 @@ $(document).ready(function () {
             $('#email').val('');
             $('#role').val('').trigger('change');
             $('#phone').val('');
+            $('#password').prop('disabled', true);
             $('#modal-title').text('Tambah Data');
             $('.form-control').removeClass('has-error').removeClass('has-success');
             $('.form-group').removeClass('has-error').removeClass('has-success');
