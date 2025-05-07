@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tb_archive', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_pelamar')->constrained('users');
+            $table->foreignUuid('id_pelamar')->constrained('users')->onDelete('cascade');
             $table->uuid('id_file');
             $table->string('file');
             $table->text('reason');
