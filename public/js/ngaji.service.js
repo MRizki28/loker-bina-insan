@@ -20,31 +20,11 @@ class NgajiService {
 
             if (responseData.message === 'Success get ngaji') {
                 $.each(responseData.data.data, function (index, item) {
-                    let badgeHtml = '';
-
-                    if (item.psikotes.interview.file.status == 'pending') {
-                        badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
-                    } else if (item.psikotes.interview.file.status == 'rejected') {
-                        badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
-                    } else {
-                        badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
-                    }
 
                     tableBody += "<tr>";
                     tableBody += "<td>" + item.psikotes.interview.file.pelamar.name + "</td>"
                     tableBody += "<td>" + item.psikotes.interview.file.job.name + "</td>"
 
-                    tableBody += "<td>" + badgeHtml + "</td>"
-                    if (item.psikotes.interview.status_interview == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap interview siap untuk test mengaji</span>" + "</td>"
-                    } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
-                    }
-                    if (item.psikotes.status_psikotes == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap psikotes siap untuk test mengaji</span>" + "</td>"
-                    } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
-                    }
 
                     if (item.time_ngaji == null) {
                         tableBody += "<td>" + "-" + "</td>";
@@ -59,6 +39,8 @@ class NgajiService {
                     } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
+
+                    tableBody += "<td>" + (item.reason_reject_ngaji ? item.reason_reject_ngaji : "-") + "</td>";
 
                     if (item.time_ngaji == null) {
                         tableBody +=
@@ -169,7 +151,7 @@ class NgajiService {
             const id_berkas = id
             formData.append('id_berkas', id_berkas)
             submitButton.attr('disabled', true);
-            const response = await axios.post(`/v1/interview/reject/${id_berkas}`, formData);
+            const response = await axios.post(`/v1/ngaji/reject/${id_berkas}`, formData);
             const responseData = await response.data;
             console.log('disni', responseData);
             if (responseData.status === 'success') {
