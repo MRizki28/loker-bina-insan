@@ -11,11 +11,9 @@
                     <tr class="text-center">
                         <th>Nama pelamar</th>
                         <th>Job yang dilamar</th>
-                        <th>Status review berkas</th>
-                        <th>Status interview</th>
-                        <th>Status psikotes</th>
                         <th>Waktu test</th>
                         <th>Status tes ngaji</th>
+                        <th>Alasan Penolakan</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
