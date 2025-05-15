@@ -1,4 +1,4 @@
-import InterviewService from "./interview.service.js?v=1.0.0";
+import InterviewService from "./interview.service.js?v=1.0.1";
 
 $(document).ready(function () {
     const interviewService = new InterviewService()
