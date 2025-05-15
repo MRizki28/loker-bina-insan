@@ -14,6 +14,7 @@
                         <th>Status review</th>
                         <th>Alasan Penolakan</th>
                         <th>Nomor handphone</th>
+                        <th>File</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
