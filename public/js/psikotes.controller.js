@@ -1,4 +1,4 @@
-import PsikotesService from "./psikotes.service.js?v=1.0.0";
+import PsikotesService from "./psikotes.service.js?v=1.0.1";
 
 $(document).ready(function () {
     const psikotesService = new PsikotesService()
