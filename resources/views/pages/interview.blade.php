@@ -11,10 +11,10 @@
                     <tr class="text-center">
                         <th>Nama pelamar</th>
                         <th>Job yang dilamar</th>
-                        <th>Status review berkas</th>
                         <th>Waktu interview</th>
                         <th>Link</th>
                         <th>Status interview</th>
+                        <th>Alasan Penolakan</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
