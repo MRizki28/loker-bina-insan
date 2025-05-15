@@ -11,10 +11,9 @@
                     <tr class="text-center">
                         <th>Nama pelamar</th>
                         <th>Job yang dilamar</th>
-                        <th>Status review berkas</th>
-                        <th>Status interview</th>
                         <th>Waktu test</th>
                         <th>Status psikotes</th>
+                        <th>Alasan Penolakan</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
@@ -38,7 +37,7 @@
                                 <input type="hidden" name="id" id="id" value="">
                                 <div class="form-group form-ckeditor fill form-show-validation">
                                     <label class="form-ckeditor">Alasan Penolakan</label>
-                                    <textarea class="form-control" id="reason_reject_psikotes" name="reason_reject_psikotes"></textarea>
+                                    <textarea class="form-control" id="reason_reject" name="reason_reject"></textarea>
                                 </div>
                             </div>
                         </div>
