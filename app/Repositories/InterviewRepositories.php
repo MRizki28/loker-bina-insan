@@ -179,6 +179,7 @@ class InterviewRepositories implements InterviewInterfaces
             $archive = $this->archiveModel->where('id_file', $data->id_berkas)->first();
             if ($archive) {
                 $archive->status_interview = 'gagal';
+                $archive->reason_reject_interview = $data->reason_reject_interview;
                 $archive->save();
             }
 
