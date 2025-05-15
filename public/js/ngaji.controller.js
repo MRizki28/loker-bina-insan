@@ -1,4 +1,4 @@
-import NgajiService from "./ngaji.service.js?v=1.0.0";
+import NgajiService from "./ngaji.service.js?v=1.0.1";
 
 $(document).ready(function () {
     const ngajiService = new NgajiService()
