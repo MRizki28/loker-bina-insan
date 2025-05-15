@@ -1,4 +1,4 @@
-import ArchiveService from "./archive.service.js?v=1.0.1";
+import ArchiveService from "./archive.service.js?v=1.0.2";
 
 $(document).ready(function () {
     const archiveService = new ArchiveService()
