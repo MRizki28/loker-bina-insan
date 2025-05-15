@@ -109,6 +109,7 @@ class NgajiRepositories implements NgajiInterfaces
             $archive = $this->archiveModel->where('id_file', $data->psikotes->interview->id_berkas)->first();
             if ($archive) {
                 $archive->status_ngaji = 'gagal';
+                $archive->reason_reject_ngaji = $data->reason_reject_ngaji;
                 $archive->save();
             }
 
