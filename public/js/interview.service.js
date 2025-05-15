@@ -22,19 +22,18 @@ class InterviewService {
                 $.each(responseData.data.data, function (index, item) {
                     let badgeHtml = '';
 
-                    if (item.status == 'pending') {
-                        badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
-                    } else if (item.status == 'rejected') {
-                        badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
-                    } else {
-                        badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
-                    }
+                    // if (item.status == 'pending') {
+                    //     badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
+                    // } else if (item.status == 'rejected') {
+                    //     badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
+                    // } else {
+                    //     badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
+                    // }
 
                     tableBody += "<tr>";
                     tableBody += "<td>" + item.file.pelamar.name + "</td>"
                     tableBody += "<td>" + item.file.job.name + "</td>"
 
-                    tableBody += "<td>" + badgeHtml + "</td>"
                     if (item.time_interview == null) {
                         tableBody += "<td>" + "-" + "</td>";
                     } else {
@@ -50,10 +49,11 @@ class InterviewService {
                     if (item.status_interview == 'pending') {
                         tableBody += "<td>" + "<span class='badge badge-warning'>Siap interview</span>" + "</td>"
                     } else if (item.status_interview == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap interview siap untuk psikotes</span>" + "</td>"
                     } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
+                    tableBody += "<td>" + (item.reason_reject_interview ?? "-") + "</td>";
 
                     if (item.time_interview == null) {
                         tableBody +=
