@@ -66,39 +66,49 @@ class ArchiveService {
                     } else if (item.status == 'rejected') {
                         badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
                     } else {
-                        badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
+                        badgeHtml = '<span class="badge badge-success">Lolos</span>';
                     }
 
                     tableBody += "<tr>";
-                    tableBody += "<td>" + item.name + "</td>"
+                    tableBody += `<td>
+                    <div><strong>Nama Loker:</strong> ${item.name}</div>
+                    <div><strong>Waktu:</strong> ${item.start_date} - ${item.end_date}</div>
+                    <div><strong>Type:</strong> ${item.job_type}</div>
+                </td>`;
 
-                    tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>"
-                    tableBody += "<td>" + item.job_type + "</td>";
-                    tableBody += "<td>" + badgeHtml + "</td>";
+
+                    tableBody += `<td>${badgeHtml}</td>`;
+
                     if (item.status_interview == 'pending') {
-                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap interview</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-warning'>Siap interview</span></td>";
                     } else if (item.status_interview == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-success'>Lolos</span></td>";
                     } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-danger'>Tidak Lolos</span></td>";
                     }
+
                     if (item.status_psikotes == 'pending') {
-                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap test psikolog</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-warning'>Siap test psikolog</span></td>";
                     } else if (item.status_psikotes == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-success'>Lolos</span></td>";
                     } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-danger'>Tidak Lolos</span></td>";
                     }
 
                     if (item.status_ngaji == 'pending') {
-                        tableBody += "<td>" + "<span class='badge badge-warning'>Siap test ngaji</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-warning'>Siap test ngaji</span></td>";
                     } else if (item.status_ngaji == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-success'>Lolos</span></td>";
                     } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
+                        tableBody += "<td><span class='badge badge-danger'>Tidak Lolos</span></td>";
                     }
 
-                    tableBody += "<td>" + item.pelamar.phone + "</td>";
+                    tableBody += `<td>${item.pelamar.phone}</td>`;
+                    tableBody += `<td>${item.reason_reject || '-'}</td>`;
+                    tableBody += `<td>${item.reason_reject_interview || '-'}</td>`;
+                    tableBody += `<td>${item.reason_reject_psikotes || '-'}</td>`;
+                    tableBody += `<td>${item.reason_reject_ngaji || '-'}</td>`;
+
                     if (item.rank == null) {
                         tableBody += "<td>" + "Belum ada data" + "</td>"
                     } else {
