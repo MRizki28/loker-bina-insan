@@ -118,6 +118,7 @@ class PsikotesRepositories implements PsikotesInterfaces
             $archive = $this->archiveModel->where('id_file', $data->interview->id_berkas)->first();
             if ($archive) {
                 $archive->status_psikotes = 'gagal';
+                $archive->reason_reject_psikotes = $data->reason_reject_psikotes;
                 $archive->save();
             }
 
