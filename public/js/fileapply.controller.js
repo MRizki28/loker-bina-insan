@@ -1,4 +1,4 @@
-import FileApplyService from "./fileapply.service.js?v=1.0.1";
+import FileApplyService from "./fileapply.service.js?v=1.0.2";
 
 $(document).ready(function () {
     const fileApplyService = new FileApplyService()
