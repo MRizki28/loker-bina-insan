@@ -57,14 +57,16 @@
                                 <table class="table" id="table">
                                     <thead style="background-color: #f7f8fa;">
                                         <tr class="text-center">
-                                            <th>Lowongan</th>
-                                            <th>Waktu lowongan</th>
-                                            <th>Type</th>
+                                            <th>Data lowongan</th>
                                             <th>Status review berkas</th>
                                             <th>Status wawancara</th>
                                             <th>Status psikotes</th>
                                             <th>Status test mengaji</th>
                                             <th>Nomor Hp</th>
+                                            <th>AP review berkas</th>
+                                            <th>AP wawancara</th>
+                                            <th>AP psikotes</th>
+                                            <th>AP test mengaji</th>
                                             <th>Ranking</th>
                                         </tr>
                                     </thead>
