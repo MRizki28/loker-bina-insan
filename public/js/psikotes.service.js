@@ -20,39 +20,26 @@ class PsikotesService {
 
             if (responseData.message === 'Success get psikotes') {
                 $.each(responseData.data.data, function (index, item) {
-                    let badgeHtml = '';
-
-                    if (item.interview.file.status == 'pending') {
-                        badgeHtml = '<span class="badge badge-warning">Sedang di review</span>';
-                    } else if (item.interview.file.status == 'rejected') {
-                        badgeHtml = '<span class="badge badge-danger">Ditolak</span>';
-                    } else {
-                        badgeHtml = '<span class="badge badge-success">Approve lanjut ke tahap wawancara</span>';
-                    }
 
                     tableBody += "<tr>";
                     tableBody += "<td>" + item.interview.file.pelamar.name + "</td>"
                     tableBody += "<td>" + item.interview.file.job.name + "</td>"
-
-                    tableBody += "<td>" + badgeHtml + "</td>"
-                    if (item.interview.status_interview == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap interview siap untuk psikotes</span>" + "</td>"
-                    } else {
-                        tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
-                    }
                     if (item.time_psikotes == null) {
                         tableBody += "<td>" + "-" + "</td>";
                     } else {
                         tableBody += "<td>" + item.time_psikotes + "</td>";
                     }
 
+        
                     if (item.status_psikotes == 'pending') {
                         tableBody += "<td>" + "<span class='badge badge-warning'>Siap psikotes</span>" + "</td>"
                     } else if (item.status_psikotes == 'lolos') {
-                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos</span>" + "</td>"
+                        tableBody += "<td>" + "<span class='badge badge-success'>Lolos tahap psikotes siap untuk test mengaji</span>" + "</td>"
                     } else {
                         tableBody += "<td>" + "<span class='badge badge-danger'>Tidak Lolos</span>" + "</td>"
                     }
+
+                    tableBody += "<td>" + (item.reason_reject_psikotes ? item.reason_reject_psikotes : "-") + "</td>";
 
                     if (item.time_psikotes == null) {
                         tableBody +=
