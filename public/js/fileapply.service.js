@@ -32,14 +32,15 @@ class FileApplyService {
                     tableBody += "<tr>";
                     tableBody += "<td>" + item.pelamar.name + "</td>"
                     tableBody += "<td>" + item.job.name + "</td>"
-                    // tableBody +=
-                    //     "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                    //     "<button class='btn btn-sm qualification-modal mr-1' data-toggle='modal' data-target='#qualificationModal' data-id='" +
-                    //     item.id + "'><i class='fas fa-eye'></i></button>"
+
                     // tableBody += "<td>" + item.reason + "</td>"
                     tableBody += "<td>" + badgeHtml + "</td>"
                     tableBody += "<td>" + (item.reason_reject ?? "-") + "</td>";
                     tableBody += "<td>" + item.pelamar.phone + "</td>";
+                    tableBody +=
+                    "<td style='padding: 0 10px !important;' class='text-center'>" +
+                    "<a class='btn btn-sm btn-primary mr-1' href='/v1/file-apply/download/" + item.file + "'>" +
+                    "<i class='fas fa-download'></i></a></td>";
                     if (item.status === 'pending') {
                         tableBody +=
                             "<td style='padding: 0 10px !important;'  class='text-center '>" +
