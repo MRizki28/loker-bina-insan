@@ -54,27 +54,13 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group fill form-show-validation" id="input-group-container">
-                                <label>Kualifikasi</label>
-                                <div class="d-flex align-items-center mb-2">
-                                    <input id="qualification" name="qualification[]" type="text" class="form-control me-2"
-                                        placeholder="Kualifikasi">
-                                    <button type="button" class="btn btn-primary"
-                                        id="addQualification">Tambah</button>
-                                </div>
-                            </div>
+                            <label>Kriteria Lowongan</label>
+                            <div id="criteria-container"></div>
+                            <button type="button" class="btn btn-sm btn-outline-success mt-2" id="add-criteria-btn">
+                                Tambah Kriteria
+                            </button>
                         </div>
-                        <div class="col-md-12">
-                            <div class="form-group fill form-show-validation" id="input-group-container2">
-                                <label>Persyaratan</label>
-                                <div class="d-flex align-items-center mb-2">
-                                    <input id="requirement" name="requirement[]" type="text" class="form-control me-2"
-                                        placeholder="Persyaratan">
-                                    <button type="button" class="btn btn-primary"
-                                        id="addRequirement">Tambah</button>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-12">
                             <div class="form-group form-ckeditor fill form-show-validation">
                                 <label class="form-ckeditor">Deskripsi</label>
