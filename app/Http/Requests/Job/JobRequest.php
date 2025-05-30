@@ -26,14 +26,14 @@ class JobRequest extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'required|string',
-            'requirement' => 'required',
-            'requirement.*' => 'required',
-            'qualification' => 'required',
-            'qualification.*' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'job_type' => 'required',
             'category' => 'required',
+            'criteria' => 'required|array',
+            'criteria.*.field' => 'required',
+            'criteria.*.operator' => 'required',
+            'criteria.*.value' => 'required',
         ];
     }
 
