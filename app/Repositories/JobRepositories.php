@@ -4,16 +4,20 @@ namespace App\Repositories;
 
 use App\Http\Requests\Job\JobRequest;
 use App\Interfaces\JobInterfaces;
+use App\Models\CriteriaJobModel;
 use App\Models\JobModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use MRizki28\ApiResponse\ApiResponse;
 
 class JobRepositories implements JobInterfaces
 {
     protected $jobModel;
-    public function __construct(JobModel $jobModel)
+    protected $jobCriteriaModel;
+    public function __construct(JobModel $jobModel, CriteriaJobModel $jobCriteriaModel)
     {
         $this->jobModel = $jobModel;
+        $this->jobCriteriaModel = $jobCriteriaModel;
     }
     
 
@@ -42,20 +46,34 @@ class JobRepositories implements JobInterfaces
 
     public function createData(JobRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = new $this->jobModel;
             $data->name = $request->input('name');
             $data->description = $request->input('description');
-            $data->qualification = $request->input('qualification');
-            $data->requirement = $request->input('requirement');
             $data->start_date = $request->input('start_date');
             $data->end_date = $request->input('end_date');
             $data->job_type = $request->input('job_type');
             $data->category = $request->input('category');
             $data->save();
 
+            //save data to job criteria
+            $criteriaList = $request->input('criteria');
+            foreach ($criteriaList as $item) {
+                $this->jobCriteriaModel::create([
+                    'id_job' => $data->id,
+                    'field' => $item['field'],
+                    'operator' => $item['operator'],
+                    'value' => $item['value']
+                ]);
+            }
+
+            DB::commit();
+            
+
             return ApiResponse::success($data, 'Success create data job', 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return ApiResponse::error($th, 500);
         }
     }
