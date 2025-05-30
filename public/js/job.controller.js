@@ -36,35 +36,41 @@ $(document).ready(function () {
         jobService.getAllData();
     })
 
-    $('#addQualification').on('click', function () {
+    let index = 0
 
-        const newInputGroup = $(
-            ` <div class="d-flex align-items-center mb-2">
-                    <input name="qualification[]" type="text" class="form-control me-2" placeholder="Kualifikasi">
-                    <button type="button" class="btn btn-danger remove">Hapus</button>
-                </div>`
-        )
+    $('#add-criteria-btn').on('click', function () {
 
-        $('#input-group-container').append(newInputGroup)
+      const criteriaRow = `
+                <div class="row mb-2 criteria-row">
+                    <div class="col-md-4">
+                        <input type="text" name="criteria[${index}][field]" class="form-control" placeholder="Field (misal: education)">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="criteria[${index}][operator]" class="form-control">
+                            <option value="">Operator</option>
+                            <option value="=">=</option>
+                            <option value="!=">!=</option>
+                            <option value=">">></option>
+                            <option value=">=">>=</option>
+                            <option value="<"><</option>
+                            <option value="<="><=</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="criteria[${index}][value]" class="form-control" placeholder="Nilai">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger remove-criteria">&times;</button>
+                    </div>
+                </div>
+            `;
+
+            $('#criteria-container').append(criteriaRow);
+            index++;
     })
 
-    $('#input-group-container').on('click', '.remove', function () {
-        $(this).parent().remove();
-    });
-
-    $('#addRequirement').on('click', function () {
-        const newInputGroup = $(
-            ` <div class="d-flex align-items-center mb-2">
-                    <input name="requirement[]" type="text" class="form-control me-2" placeholder="Pesyaratan">
-                    <button type="button" class="btn btn-danger remove">Hapus</button>
-                </div>`
-        )
-
-        $('#input-group-container2').append(newInputGroup)
-    })
-
-    $('#input-group-container2').on('click', '.remove', function () {
-        $(this).parent().remove();
+    $('#criteria-container').on('click', '.remove-criteria', function () {
+        $(this).closest('.criteria-row').remove();
     });
 
     function validation() {
@@ -78,12 +84,6 @@ $(document).ready(function () {
                 },
                 "department": {
                     required: true,
-                },
-                "qualification[]": {
-                    required: true
-                },
-                "requirement[]": {
-                    required: true
                 },
                 "start_date": {
                     required: true
@@ -108,12 +108,6 @@ $(document).ready(function () {
                 },
                 "department": {
                     required: 'Department wajib diisi',
-                },
-                "qualification[]": {
-                    required: 'Setiap kualifikasi wajib diisi'
-                },
-                "requirement[]": {
-                    required: 'Setiap persyaratan wajib diisi'
                 },
                 "start_date": {
                     required: 'Start date wajib diisi'
@@ -186,58 +180,10 @@ $(document).ready(function () {
             $('#job_type').val('');
             $('#category').val('');
             $('#modal-title').text('Tambah Data');
-    
-            $('#input-group-container').empty();
-            const initialInputGroup = `
-                <label for="qualification" class="me-2">Kualifikasi</label>
-                <div class="d-flex align-items-center mb-2">
-                    <input id="qualification" name="qualification[]" type="text" class="form-control me-2" placeholder="Kualifikasi">
-                    <button type="button" class="btn btn-primary" id="addQualification">Tambah</button>
-                </div>
-            `;
-            $('#input-group-container').append(initialInputGroup);
-    
-            $('#input-group-container2').empty();
-            const initialInputGroup2 = `
-                <label for="requirement" class="me-2">Persyaratan</label>
-                <div class="d-flex align-items-center mb-2">
-                    <input id="requirement" name="requirement[]" type="text" class="form-control me-2" placeholder="Persyaratan">
-                    <button type="button" class="btn btn-primary" id="addRequirement">Tambah</button>
-                </div>
-            `;
-            $('#input-group-container2').append(initialInputGroup2);
-    
-            $('.form-control').removeClass('has-error').removeClass('has-success');
-            $('.form-group').removeClass('has-error').removeClass('has-success');
-            $('#formTambah').find('.form-group').find('.error').remove()
-            $('.has-error').remove();
+            $('#formTambah')[0].reset();
+            $('#criteria-container').empty(); 
+            index = 0; 
 
-            $('#input-group-container').off('click', '#addQualification').on('click', '#addQualification', function () {
-                const newInputGroup = $(
-                    `<div class="d-flex align-items-center mb-2">
-                        <input name="qualification[]" type="text" class="form-control me-2" placeholder="Kualifikasi">
-                        <button type="button" class="btn btn-danger remove">Hapus</button>
-                    </div>`
-                );
-                $('#input-group-container').append(newInputGroup);
-            });
-    
-            $('#input-group-container2').off('click', '#addRequirement').on('click', '#addRequirement', function () {
-                const newInputGroup = $(
-                    `<div class="d-flex align-items-center mb-2">
-                        <input name="requirement[]" type="text" class="form-control me-2" placeholder="Persyaratan">
-                        <button type="button" class="btn btn-danger remove">Hapus</button>
-                    </div>`
-                );
-                $('#input-group-container2').append(newInputGroup);
-            });
-    
-            $('#input-group-container').on('click', '.remove', function () {
-                $(this).parent().remove();
-            });
-            $('#input-group-container2').on('click', '.remove', function () {
-                $(this).parent().remove();
-            });
         });
     }
     
