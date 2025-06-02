@@ -16,16 +16,14 @@ class JobModel extends Model
         'id',
         'name',
         'description',
-        'qualification',
-        'requirement',
         'start_date',
         'end_date',
         'job_type',
         'category',
     ];
 
-    protected $casts = [
-        'qualification' => 'array',
-        'requirement' => 'array',
-    ];
+    public function criteria()
+    {
+        return $this->hasMany(CriteriaJobModel::class, 'id_job', 'id');
+    }
 }
