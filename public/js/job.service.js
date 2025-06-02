@@ -4,64 +4,89 @@ class JobService {
         const table = $('#table tbody')
         const dataNotFound = $('#dataNotFound')
         const totalData = $('#data-total')
-
+    
         let params = $('#form-search').val();
         let endpoint = paramsUrl(url || '/v1/job', { search: params });
-
+    
         table.empty();
         pagination.empty();
-
+    
         try {
-            let tableBody
-            
+            let tableBody = '';
+    
             const response = await axios.get(endpoint);
             const responseData = await response.data;
             console.log('ini response', responseData)
-
+    
             if (responseData.message === 'Success get data job') {
                 $.each(responseData.data.data, function (index, item) {
+                    // Render kriteria sebagai <ul><li>
+                    let criteriaHtml = '<ul class="mb-0 pl-3">';
+                    if (Array.isArray(item.criteria)) {
+                        item.criteria.forEach(crit => {
+                            let label = '';
+                            switch (crit.field) {
+                                case 'experience':
+                                    label = 'Pengalaman Kerja';
+                                    break;
+                                case 'education':
+                                    label = 'Pendidikan';
+                                    break;
+                                case 'age':
+                                    label = 'Umur';
+                                    break;
+                                case 'graduation_year':
+                                    label = 'Lulusan Tahun';
+                                    break;
+                                case 'major':
+                                    label = 'Jurusan';
+                                    break;
+                                default:
+                                    label = crit.field;
+                            }
+    
+                            criteriaHtml += `<li><strong>${label}</strong> ${crit.operator} ${crit.value}</li>`;
+                        });
+                    } else {
+                        criteriaHtml += `<li>Tidak ada</li>`;
+                    }
+                    criteriaHtml += '</ul>';
+    
                     tableBody += "<tr>";
-                    tableBody += "<td>" + item.name + "</td>"
-                    tableBody += "<td>" + item.description + "</td>"
-                    tableBody +=
-                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                        "<button class='btn btn-sm qualification-modal mr-1' data-toggle='modal' data-target='#qualificationModal' data-id='" +
-                        item.id + "'><i class='fas fa-eye'></i></button>"
-                    tableBody +=
-                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
-                        "<button class='btn btn-sm requirement-modal mr-1' data-toggle='modal' data-target='#requirementModal' data-id='" +
-                        item.id + "'><i class='fas fa-eye'></i></button>"
-                    tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>"
+                    tableBody += "<td>" + item.name + "</td>";
+                    tableBody += "<td>" + item.description + "</td>";
+                    tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>";
                     tableBody += "<td>" + item.job_type + "</td>";
                     tableBody += "<td>" + item.category + "</td>";
+                    tableBody += "<td>" + criteriaHtml + "</td>"; // Kolom kriteria
                     tableBody +=
-                        "<td style='padding: 0 10px !important;'  class='text-center '>" +
+                        "<td style='padding: 0 10px !important;'  class='text-center'>" +
                         "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#lokerModal' data-id='" +
                         item.id + "'><i class='fas fa-edit'></i></button>" +
                         "<button type='submit' class='delete-confirm btn btn-sm' data-id='" +
                         item.id + "'><i class='fas fa-trash-alt'></i></button>" +
                         "</td>";
                     tableBody += "</tr>";
-                    dataNotFound.hide()
+                    dataNotFound.hide();
                 });
-
+    
                 table.append(tableBody);
                 paginationLink(pagination, responseData);
                 totalData.text(responseData.data.total);
             } else {
-                table.empty()
-                dataNotFound.show()
-                pagination.empty()
-                totalData.text('0')
+                table.empty();
+                dataNotFound.show();
+                pagination.empty();
+                totalData.text('0');
             }
         } catch (error) {
-            table.empty()
-            dataNotFound.show()
-            pagination.empty()
-            totalData.text('0')
+            table.empty();
+            dataNotFound.show();
+            pagination.empty();
+            totalData.text('0');
         }
-
     }
+    
 
     async createData(e, checkingEdit, resetField) {
         let submitButton = $(e.target).find(':submit')
@@ -133,56 +158,46 @@ class JobService {
     async getDataById(id, checkingEdit) {
         try {
             const response = await axios.get(`/v1/job/get/${id}`);
-            const responseData = response.data;
-            console.log('description', responseData);
+            const responseData = response.data.data;
+    
             $('#modal-title').text("Edit Data");
-            $('#id').val(responseData.data.id);
-            $('#name').val($('<div>').html(responseData.data.name).text());
-            $('#experience').val(responseData.data.experience);
-            $('#department').val(responseData.data.department);
-
-            $('#qualification').val(responseData.data.qualification[0]);
-            $('#requirement').val(responseData.data.requirement[0]);
-            $('#start_date').val(responseData.data.start_date);
-            $('#end_date').val(responseData.data.end_date);
-            $('#job_type').val(responseData.data.job_type);
-            $('#category').val(responseData.data.category);
-            $('#description').val(responseData.data.description);
-
-
-            responseData.data.qualification.slice(1).forEach((qualification) => {
-                const newInputGroup = `
-                    <div class="d-flex align-items-center mb-2">
-                        <input name="qualification[]" type="text" class="form-control me-2" value="${qualification}">
-                        <button type="button" class="btn btn-danger remove">Hapus</button>
-                    </div>
-                `;
-                $('#input-group-container').append(newInputGroup);
+            $('#id').val(responseData.id);
+            $('#name').val($('<div>').html(responseData.name).text());
+            $('#start_date').val(responseData.start_date);
+            $('#end_date').val(responseData.end_date);
+            $('#job_type').val(responseData.job_type);
+            $('#category').val(responseData.category);
+            $('#description').val(responseData.description);
+    
+            responseData.criteria.forEach((c, index) => {
+                const $valueInput = $(`[name="criteria[${index}][value]"]`);
+            
+                if ($valueInput.is('select')) {
+                    $valueInput.val(c.value);  
+                } else {
+                    $valueInput.val(c.value);  
+                }
+            
+                const $operatorInput = $(`[name="criteria[${index}][operator]"]`);
+                if ($operatorInput.length) {
+                    $operatorInput.val(c.operator);
+                }
             });
-
-            responseData.data.requirement.slice(1).forEach((requirement) => {
-                const newInputGroup = `
-                    <div class="d-flex align-items-center mb-2">
-                        <input name="requirement[]" type="text" class="form-control me-2" value="${requirement}">
-                        <button type="button" class="btn btn-danger remove">Hapus</button>
-                    </div>
-                `;
-                $('#input-group-container2').append(newInputGroup);
-            });
-
+            
+    
             $('#input-group-container').on('click', '.remove', function () {
                 $(this).parent().remove();
             });
-
             $('#input-group-container2').on('click', '.remove', function () {
                 $(this).parent().remove();
             });
-
+    
             checkingEdit();
         } catch (error) {
             console.error(error);
         }
     }
+    
 
     async deleteData(id) {
         try {
