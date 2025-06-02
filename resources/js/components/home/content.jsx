@@ -4,12 +4,12 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 export default function Content() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const getData = async (searchQuery = '') => {
         try {
