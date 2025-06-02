@@ -32,7 +32,7 @@ class JobRepositories implements JobInterfaces
                 $query->where('name', 'like', '%'.$search.'%');
             }
 
-            $data = $query->paginate($limit, ['*'], 'page', $page);
+            $data = $query->with('criteria')->paginate($limit, ['*'], 'page', $page);
 
             if($data->isEmpty()){
                 return ApiResponse::notFound();
@@ -57,17 +57,20 @@ class JobRepositories implements JobInterfaces
             $data->category = $request->input('category');
             $data->save();
 
-            //save data to job criteria
             $criteriaList = $request->input('criteria');
-            foreach ($criteriaList as $item) {
-                $this->jobCriteriaModel::create([
-                    'id_job' => $data->id,
-                    'field' => $item['field'],
-                    'operator' => $item['operator'],
-                    'value' => $item['value']
-                ]);
+            if (is_array($criteriaList)) {
+                foreach ($criteriaList as $item) {
+                    if (isset($item['value']) && trim($item['value']) !== '') {
+                        $this->jobCriteriaModel::create([
+                            'id_job' => $data->id,
+                            'field' => $item['field'],
+                            'operator' => $item['operator'],
+                            'value' => $item['value']
+                        ]);
+                    }
+                }
             }
-
+        
             DB::commit();
             
 
@@ -81,7 +84,7 @@ class JobRepositories implements JobInterfaces
     public function getDataById($id)
     {
         try {
-            $data = $this->jobModel->find($id);
+            $data = $this->jobModel->with('criteria')->find($id);
             if(!$data){
                 return ApiResponse::notFound();
             }
@@ -93,28 +96,49 @@ class JobRepositories implements JobInterfaces
     }
 
     public function updateData(JobRequest $request, $id)
-    {
-        try {
-            $data = $this->jobModel->find($id);
-            if(!$data){
-                return ApiResponse::notFound();
-            }
+{
+    DB::beginTransaction();
 
-            $data->name = $request->input('name');
-            $data->description = $request->input('description');
-            $data->qualification = $request->input('qualification');
-            $data->requirement = $request->input('requirement');
-            $data->start_date = $request->input('start_date');
-            $data->end_date = $request->input('end_date');
-            $data->job_type = $request->input('job_type');
-            $data->category = $request->input('category');
-            $data->save();
-
-            return ApiResponse::success($data, 'Success update data job', 200);
-        } catch (\Throwable $th) {
-            return ApiResponse::error($th, 500);
+    try {
+        $data = $this->jobModel->find($id);
+        if (!$data) {
+            return ApiResponse::notFound();
         }
+
+        // Update data job
+        $data->name = $request->input('name');
+        $data->description = $request->input('description');
+        $data->start_date = $request->input('start_date');
+        $data->end_date = $request->input('end_date');
+        $data->job_type = $request->input('job_type');
+        $data->category = $request->input('category');
+        $data->save();
+
+        // Hapus semua kriteria lama untuk job ini
+        $this->jobCriteriaModel::where('id_job', $id)->delete();
+
+        // Insert ulang kriteria baru dari request
+        $criteriaList = $request->input('criteria');
+        if (is_array($criteriaList)) {
+            foreach ($criteriaList as $item) {
+                $this->jobCriteriaModel::create([
+                    'id_job' => $data->id,
+                    'field' => $item['field'],
+                    'operator' => $item['operator'],
+                    'value' => $item['value']
+                ]);
+            }
+        }
+
+        DB::commit();
+
+        return ApiResponse::success($data, 'Success update data job', 200);
+    } catch (\Throwable $th) {
+        DB::rollBack();
+        return ApiResponse::error($th, 500);
     }
+}
+
 
     public function deleteData($id)
     {
