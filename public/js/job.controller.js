@@ -1,4 +1,4 @@
-import JobService from "./job.service.js?v=1.0.1";
+import JobService from "./job.service.js?v=1.0.2";
 
 $(document).ready(function () {
 
