@@ -18,4 +18,9 @@ class CriteriaJobModel extends Model
         'operator',
         'value'
     ];
+
+    public function job()
+    {
+        return $this->belongsTo(JobModel::class, 'id_job', 'id');
+    }
 }
