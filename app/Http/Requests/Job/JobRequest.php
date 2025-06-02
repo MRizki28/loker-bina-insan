@@ -30,10 +30,6 @@ class JobRequest extends FormRequest
             'end_date' => 'required|date|after_or_equal:start_date',
             'job_type' => 'required',
             'category' => 'required',
-            'criteria' => 'required|array',
-            'criteria.*.field' => 'required',
-            'criteria.*.operator' => 'required',
-            'criteria.*.value' => 'required',
         ];
     }
 
