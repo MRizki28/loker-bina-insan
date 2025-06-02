@@ -55,16 +55,111 @@
                         </div>
                         <div class="col-md-12">
                             <label>Kriteria Lowongan</label>
-                            <div id="criteria-container"></div>
-                            <button type="button" class="btn btn-sm btn-outline-success mt-2" id="add-criteria-btn">
-                                Tambah Kriteria
-                            </button>
+
+                            <!-- Kriteria Lowongan -->
+                            <div class="col-md-12">
+                                <!-- Kriteria 1: Pengalaman Kerja -->
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="criteria[0][field]" value="experience">
+                                        <input type="hidden" name="criteria[0][operator]" value=">=">
+                                        <label>Pengalaman Kerja Minimal (tahun)</label>
+                                        <input type="number" name="criteria[0][value]" class="form-control"
+                                            placeholder="Misal: 3">
+                                    </div>
+                                    <div class="col-md-8 align-self-center" style="padding-top: 30px;">
+                                        Masukkan jumlah tahun minimal pengalaman kerja
+                                    </div>
+                                </div>
+
+                                <!-- Kriteria 2: Pendidikan Terakhir -->
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="criteria[1][field]" value="education">
+                                        <input type="hidden" name="criteria[1][operator]" value="=">
+                                        <label>Pendidikan Terakhir Minimal</label>
+                                        <select name="criteria[1][value]" class="form-control">
+                                            <option value="" selected disabled hidden>Choose here</option>
+                                            <option value="SMA">SMA</option>
+                                            <option value="D3">D3</option>
+                                            <option value="S1">S1</option>
+                                            <option value="S2">S2</option>
+                                            <option value="S3">S3</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Kriteria 3: Umur Maksimal -->
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="criteria[2][field]" value="age">
+                                        <label>Umur (tahun)</label>
+                                        <input type="number" name="criteria[2][value]" class="form-control"
+                                            placeholder="Misal: 30">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Operator</label>
+                                        <select name="criteria[2][operator]" class="form-control">
+                                            <option value="" selected disabled hidden>Choose here</option>
+                                            <option value="<" > < </option>
+                                            <option value=">" > > </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 align-self-center" style="padding-top: 30px;">
+                                        Masukkan umur pelamar yang diharapkan
+                                    </div>
+                                </div>
+
+                                <!-- Kriteria 4: Tahun Lulus -->
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="criteria[3][field]" value="graduation_year">
+                                        <label>Lulusan Tahun</label>
+                                        <input type="number" name="criteria[3][value]" class="form-control"
+                                            placeholder="Misal: 2020">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Operator</label>
+                                        <select name="criteria[3][operator]" class="form-control">
+                                            <option value="" selected disabled hidden>Choose here</option>
+                                            <option value="=" >=</option>
+                                            <option value="<="><=</option>
+                                            <option value=">=">>=</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 align-self-center" style="padding-top: 30px;">
+                                        Tahun lulusan yang disyaratkan
+                                    </div>
+                                </div>
+
+                                <!-- Kriteria 5: Jurusan Pendidikan -->
+                                <div class="row mb-2">
+                                    <div class="col-md-4">
+                                        <input type="hidden" name="criteria[4][field]" value="major">
+                                        <label>Jurusan Pendidikan</label>
+                                        <input type="text" name="criteria[4][value]" class="form-control"
+                                            placeholder="Misal: Teknik Informatika">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Operator</label>
+                                        <select name="criteria[4][operator]" class="form-control">
+                                            <option value="" selected disabled hidden>Choose here</option>
+                                            <option value="=" >=</option>
+                                            <option value="!=">!=</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-5 align-self-center" style="padding-top: 30px;">
+                                        Nama jurusan pendidikan yang diharapkan
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                        
+
                         <div class="col-md-12">
                             <div class="form-group form-ckeditor fill form-show-validation">
                                 <label class="form-ckeditor">Deskripsi</label>
-                                <textarea class="form-control"  id="description" name="description"></textarea>
+                                <textarea class="form-control" id="description" name="description"></textarea>
                             </div>
                         </div>
                     </div>
