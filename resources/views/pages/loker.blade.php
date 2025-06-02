@@ -11,11 +11,10 @@
                     <tr class="text-center">
                         <th>Lowongan</th>
                         <th>Deskripsi</th>
-                        <th>Kualifikasi</th>
-                        <th>Requirement</th>
                         <th>Waktu lowongan</th>
                         <th>Type</th>
                         <th>Kategory</th>
+                        <th>Kualifikasi</th>
                         <th>Aksi</th>
                     </tr>
                 </x-slot>
