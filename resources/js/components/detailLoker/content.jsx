@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import ModalApply from "./modal";
 import BreadCrumb from "../shared/Breadcrumb";
 
 export default function Content() {
