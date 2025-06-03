@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Http\Requests\Auth\AuthRequest;
 use App\Interfaces\AuthInterfaces;
+use App\Models\BiodataModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use MRizki28\ApiResponse\ApiResponse;
@@ -14,10 +16,12 @@ use MRizki28\ApiResponse\ApiResponse;
 class AuthRepositories implements AuthInterfaces
 {
     protected $userModel;
+    protected $biodataModel;
 
-    public function __construct(User $userModel)
+    public function __construct(User $userModel, BiodataModel $biodataModel)
     {
         $this->userModel = $userModel;
+        $this->biodataModel = $biodataModel;
     }
 
     public function login(AuthRequest $request)
@@ -41,6 +45,7 @@ class AuthRepositories implements AuthInterfaces
 
     public function register(AuthRequest $request)
     {
+        DB::beginTransaction();
         try {
             $user = $this->userModel->create([
                 'name' => $request->name,
@@ -49,6 +54,19 @@ class AuthRepositories implements AuthInterfaces
                 'password' => Hash::make($request->password),
                 'role' => 'user',
             ]);
+
+            $this->biodataModel->create([
+                'id_user' => $user->id,
+                'address' => $request->address,
+                'birth_place_date' => $request->birth_place_date,
+                'mother_name' => $request->mother_name,
+                'father_name' => $request->father_name,
+                'child_order' => $request->child_order,
+                'sibling_count' => $request->sibling_count,
+            ]);
+
+            DB::commit();
+
             $token = $user->createToken('token')->plainTextToken;
             return ApiResponse::success($token, 'Register Success', 200);
         } catch (\Throwable $th) {
