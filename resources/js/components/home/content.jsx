@@ -4,12 +4,20 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import ModalApply from "./modal";
+import { Link } from 'react-router-dom';
 
 export default function Content() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const backup = localStorage.getItem('backup');
+    const parsedBackup = backup ? JSON.parse(backup) : { isLoggedIn: false, role: null };
+    const [selectedJobId, setSelectedJobId] = useState(null);
+
+
+    const { isLoggedIn, role } = parsedBackup;
 
     const getData = async (searchQuery = '') => {
         try {
@@ -115,10 +123,42 @@ export default function Content() {
                                     </div>
                                 </div>
                                 <div className="mt-6">
-                                    <a href={`/detail/${item.id}`} className="border w-full bg-blue-600 text-white hover:bg-blue-900 p-2 rounded-lg">
-                                        Read More
-                                    </a>
+                                    {!isLoggedIn ? (
+                                        <Link
+                                            to="/login"
+                                            className="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-gray-600 transition-colors inline-block mb-4"
+                                        >
+                                            Silahkan login untuk melamar
+                                        </Link>
+                                    ) : role === "admin" ? (
+                                        <button
+                                            className="bg-gray-400 text-white font-bold py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
+                                            disabled
+                                        >
+                                            Admin tidak bisa melamar
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className="bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors inline-block mb-4"
+                                            onClick={() => {
+
+                                                setSelectedJobId(item.id)
+                                                setIsModalOpen(true)
+                                            }
+                                            }
+                                        >
+                                            Apply now
+                                        </button>
+                                    )}
                                 </div>
+                                {isModalOpen && (
+                                    <ModalApply
+                                        isOpen={isModalOpen}
+                                        onClose={() => setIsModalOpen(false)}
+                                        jobId={selectedJobId}
+                                    />
+                                )}
+
                             </motion.div>
                         ))}
                     </div>
