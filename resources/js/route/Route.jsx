@@ -13,7 +13,7 @@ export default function AppRoute() {
             <Route path="/login" element={<ProtectedLoginRoutes><Login></Login></ProtectedLoginRoutes>}></Route>
             <Route path="/register" element={<Register></Register>}></Route>
             <Route path="*" element={<h1>404 Not Found</h1>}></Route>
-            <Route path="/detail/:id" element={<DetailLoker></DetailLoker>}></Route>
+            {/* <Route path="/detail/:id" element={<DetailLoker></DetailLoker>}></Route> */}
             <Route path="/history" element={<History></History>}></Route>
         </Routes>
     )
