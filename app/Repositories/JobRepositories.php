@@ -73,7 +73,6 @@ class JobRepositories implements JobInterfaces
         
             DB::commit();
             
-
             return ApiResponse::success($data, 'Success create data job', 200);
         } catch (\Throwable $th) {
             DB::rollBack();
