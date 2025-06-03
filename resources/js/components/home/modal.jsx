@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import SweetAlertService from "../../utils/sweetalert";
 import Swal from "sweetalert2";
+import SweetAlertService from "../../utils/sweetalert";
 
-export default function ModalApply({ isOpen, onClose }) {
+export default function ModalApply({ isOpen, onClose, jobId }) {
     const {
         register,
         handleSubmit,
@@ -15,9 +14,9 @@ export default function ModalApply({ isOpen, onClose }) {
         watch,
     } = useForm();
 
-    const { id } = useParams();
     const watchedFields = watch();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [criteria, setCriteria] = useState([]);
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
@@ -26,8 +25,15 @@ export default function ModalApply({ isOpen, onClose }) {
             const formData = new FormData();
             formData.append("file", data.file[0]);
             formData.append("reason", data.reason);
-            formData.append("id_job", id);
+            formData.append("id_job", jobId);
             formData.append("_token", csrfToken);
+
+            // Kirim field dari kriteria jika ada
+            Object.entries(data).forEach(([key, value]) => {
+                if (key.startsWith("criteria_")) {
+                    formData.append(key, value);
+                }
+            });
 
             const response = await axios.post(`${appUrl}/v1/file-apply/create`, formData, {
                 headers: {
@@ -36,7 +42,6 @@ export default function ModalApply({ isOpen, onClose }) {
             });
 
             const responseData = await response.data;
-            console.log(responseData)
             if (responseData.status === 'success') {
                 SweetAlertService.successApply();
                 reset();
@@ -44,23 +49,47 @@ export default function ModalApply({ isOpen, onClose }) {
                 onClose();
             }
         } catch (error) {
-            console.log('eeee', error);
-            if(error.response.status === 422){
+            if (error.response?.status === 422) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
                     text: 'Maximal ukuran file 2MB',
                     confirmButtonText: 'Tutup'
-                })
+                });
             }
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const getDataById = async (id) => {
+        try {
+            const response = await axios.get(`${appUrl}/v1/job/get/${id}`);
+            const responseData = response.data;
+            if (responseData.status === 'success') {
+                setCriteria(responseData.data.criteria || []);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const formatFieldLabel = (field) => {
+        const map = {
+            education: "Pendidikan",
+            age: "Usia",
+            experience: "Pengalaman",
+            graduation_year: "Tahun Lulus",
+            major: "Jurusan",
+        };
+        return map[field] || field.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+    };
+    
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
+            getDataById(jobId);
         } else {
             document.body.style.overflow = "auto";
             reset();
@@ -71,6 +100,11 @@ export default function ModalApply({ isOpen, onClose }) {
             document.body.style.overflow = "auto";
         };
     }, [isOpen]);
+
+    const getInputType = (field) => {
+        const numericFields = ["age", "experience", "graduation_year"];
+        return numericFields.includes(field) ? "number" : "text";
+    };
 
     return (
         <AnimatePresence>
@@ -92,99 +126,53 @@ export default function ModalApply({ isOpen, onClose }) {
                             damping: 25,
                             duration: 0.3,
                         }}
-                        className="bg-white p-6 rounded-lg shadow-lg w-96"
+                        className="bg-white p-6 rounded-lg shadow-lg w-3/4 max-h-[90vh] overflow-y-auto"
                     >
-                        <h2 className="text-xl font-bold mb-4">Apply sekarang</h2>
-                        <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
-                            <div className="col-span-2">
-                                <label htmlFor="file" className="block text-sm font-medium mb-2">
-                                    Berkas Lamaran (PDF, RAR, atau ZIP)
-                                </label>
-                                <input
-                                    type="file"
-                                    id="file"
-                                    {...register("file", {
-                                        validate: (value) => {
-                                            if (value.length > 0) {
-                                                const allowedTypes = [
-                                                    "application/pdf",
-                                                    "application/zip",
-                                                    "application/x-rar-compressed",
-                                                    "application/x-zip-compressed"
-                                                ];
-                                                const allowedExtensions = ["pdf", "zip", "rar"];
+                        <h2 className="text-xl font-bold mb-4">Apply Sekarang</h2>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                            <div className="space-y-2 max-h-[65vh] overflow-y-auto pr-2">
+                                {/* File Upload */}
+                                <div>
+                                    <label htmlFor="file" className="block text-sm font-medium mb-1">Berkas Lamaran (PDF, RAR, ZIP)</label>
+                                    <input type="file" id="file" {...register("file")} className="w-full border rounded-md p-2" />
+                                    <p className="text-xs text-gray-500 mt-1">Harap unggah berkas dalam format PDF, RAR, atau ZIP</p>
+                                </div>
 
-                                                const file = value[0];
-                                                const fileType = file.type;
-                                                const fileName = file.name.toLowerCase();
-                                                const fileExtension = fileName.split('.').pop();
+                                {/* Reason */}
+                                <div>
+                                    <label htmlFor="reason" className="block text-sm font-medium mb-1">Jelaskan secara singkat diri anda</label>
+                                    <textarea id="reason" {...register("reason")} rows={3} className="w-full border rounded-md p-2" placeholder="Tuliskan di sini..." />
+                                </div>
 
-                                                if (!allowedTypes.includes(fileType) && !allowedExtensions.includes(fileExtension)) {
-                                                    return "File harus dalam format PDF, RAR, atau ZIP";
-                                                }
-                                            }
-                                            return true;
-                                        }
-                                    })}
-                                    className={`mt-1 p-2 w-full border rounded-md transition-colors duration-300 focus:ring-0 ${
-                                        watchedFields.file ? "border-green-400" : "border-gray-300"
-                                    }`}
-                                />
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Harap unggah berkas dalam format <b>PDF, RAR, atau ZIP</b>.
-                                </p>
-                                {errors.file && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.file.message}</p>
-                                )}
+                                {/* Kriteria dari backend */}
+                                {criteria.map((item, index) => (
+                                    <div key={index}>
+                                        <label className="block text-sm font-medium mb-1 capitalize">
+                                        {formatFieldLabel(item.field)}
+                                        </label>
+                                        <input
+                                            type={getInputType(item.field)}
+                                            {...register(`criteria_${item.field}`)}
+                                            className="w-full border rounded-md p-2"
+                                            placeholder={`Masukkan ${item.field}`}
+                                        />
+                                    </div>
+                                ))}
                             </div>
 
-                            <div className="col-span-2">
-                                <label htmlFor="reason" className="block text-sm font-medium mb-2">
-                                    Jelaskan secara singkat diri anda <span className="text-red-500">*</span>
-                                </label>
-                                <textarea
-                                    id="reason"
-                                    {...register("reason", {
-                                        required: "Pesan wajib diisi",
-                                    })}
-                                    rows={4}
-                                    className={`w-full border rounded-md p-2 transition-colors duration-300 focus:ring-0 ${
-                                        errors.reason
-                                            ? "border-red-500 focus:border-red-500"
-                                            : watchedFields.reason
-                                                ? "border-green-400"
-                                                : "border-gray-300"
-                                    }`}
-                                    placeholder="Jelaskan secara singkat diri anda"
-                                ></textarea>
-                                {errors.reason && (
-                                    <p className="text-red-500 text-sm mt-1">{errors.reason.message}</p>
-                                )}
-                            </div>
-
-                            <motion.div
-                                className="col-span-2 flex justify-end gap-2"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                            >
-                                <button
-                                    type="button"
-                                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400 transition-colors focus:ring-0"
-                                    onClick={onClose}
-                                >
-                                    Batal
-                                </button>
+                            {/* Action Buttons */}
+                            <div className="flex justify-end gap-2 pt-2">
+                                <button type="button" onClick={onClose} className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400 text-sm">Batal</button>
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className={`bg-bprYellow text-bprDarkBlue px-4 py-2 rounded-md transition-colors focus:ring-0 
-                                        ${isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:bg-yellow-400"}`}
+                                    className={`bg-bprYellow text-bprDarkBlue px-4 py-2 rounded text-sm ${isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:bg-yellow-400"}`}
                                 >
                                     {isSubmitting ? "Mengirim..." : "Kirim"}
                                 </button>
-                            </motion.div>
+                            </div>
                         </form>
+
                     </motion.div>
                 </motion.div>
             )}
