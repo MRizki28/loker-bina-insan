@@ -17,4 +17,6 @@ interface AuthInterfaces
     public function updateDataUser(AuthRequest $request, $id);
     public function deleteData($id);
     public function setting(Request $request);
+    public function getBiodata(Request $request);
+    public function updateBiodata(AuthRequest $request);
 }
