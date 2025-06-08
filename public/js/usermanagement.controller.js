@@ -1,9 +1,50 @@
-import UserManagementService from "./usermanagement.service.js?v=1.0.1";
+import UserManagementService from "./usermanagement.service.js?v=1.0.2";
 
 $(document).ready(function () {
     const userManagementService = new UserManagementService();
 
+    $('#role').on('change', function () {
+        const selectedRole = $(this).val();
+        const container = $('#user-container');
+    
+        container.html(''); // Kosongkan dulu
+    
+        if (selectedRole === 'user') {
+            container.html(`
+    
+                <div class="form-group fill form-show-validation">
+                    <label for="birth_place_date">Tempat, Tanggal Lahir</label>
+                    <input id="birth_place_date" name="birth_place_date" type="text" class="form-control" placeholder="Contoh: Jakarta, 01 Januari 2000">
+                </div>
+    
+                <div class="form-group fill form-show-validation">
+                    <label for="mother_name">Nama Ibu</label>
+                    <input id="mother_name" name="mother_name" type="text" class="form-control" placeholder="Masukkan nama ibu">
+                </div>
+    
+                <div class="form-group fill form-show-validation">
+                    <label for="father_name">Nama Ayah</label>
+                    <input id="father_name" name="father_name" type="text" class="form-control" placeholder="Masukkan nama ayah">
+                </div>
+    
+                <div class="form-group fill form-show-validation">
+                    <label for="child_order">Anak ke-</label>
+                    <input id="child_order" name="child_order" type="number" class="form-control" placeholder="Contoh: 1">
+                </div>
+    
+                <div class="form-group fill form-show-validation">
+                    <label for="sibling_count">Jumlah Saudara Kandung</label>
+                    <input id="sibling_count" name="sibling_count" type="number" class="form-control" placeholder="Contoh: 3">
+                </div>
 
+                  <div class="form-group fill form-show-validation">
+                    <label for="address">Alamat</label>
+                    <textarea id="address" name="address" class="form-control" rows="3" placeholder="Masukkan alamat lengkap"></textarea>
+                </div>
+            `);
+        }
+    });
+    
     $(document).on('click', '.page-link', function (e) {
         e.preventDefault();
         const url = new URL($(this).attr('href'));
@@ -50,7 +91,28 @@ $(document).ready(function () {
                 },
                 "phone": {
                     required: true,
-
+                    minlength: 12,
+                    maxlength: 12,
+                },
+                "address": {
+                    required: true,
+                },
+                "birth_place_date": {
+                    required: true,
+                },
+                "mother_name": {
+                    required: true,
+                },
+                "father_name": {
+                    required: true,
+                },
+                "child_order": {
+                    required: true,
+                    number: true
+                },
+                "sibling_count": {
+                    required: true,
+                    number: true
                 }
             },
             messages: {
@@ -70,6 +132,28 @@ $(document).ready(function () {
                 },
                 "phone": {
                     required: 'No HP wajib diisi',
+                    minlength: 'No HP minimal 12 digit',
+                    maxlength: 'No HP maksimal 12 digit'
+                },
+                "address": {
+                    required: 'Alamat wajib diisi',
+                },
+                "birth_place_date": {
+                    required: 'Tempat, Tanggal Lahir wajib diisi',
+                },
+                "mother_name": {
+                    required: 'Nama ibu wajib diisi',
+                },
+                "father_name": {
+                    required: 'Nama ayah wajib diisi',
+                },
+                "child_order": {
+                    required: 'Urutan anak wajib diisi',
+                    number: 'Harus berupa angka'
+                },
+                "sibling_count": {
+                    required: 'Jumlah saudara kandung wajib diisi',
+                    number: 'Harus berupa angka'
                 }
             },
             highlight: function (element) {
@@ -83,6 +167,7 @@ $(document).ready(function () {
             }
         });
     }
+    
 
     validation();
 
