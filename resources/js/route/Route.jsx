@@ -5,6 +5,7 @@ import Login from "../pages/auth/login";
 import Register from "../pages/auth/register";
 import DetailLoker from "../pages/detailLoker/detailLoker";
 import History from "../pages/history/history";
+import Profile from "../pages/profile/profile";
 
 export default function AppRoute() {
     return (
@@ -15,6 +16,7 @@ export default function AppRoute() {
             <Route path="*" element={<h1>404 Not Found</h1>}></Route>
             {/* <Route path="/detail/:id" element={<DetailLoker></DetailLoker>}></Route> */}
             <Route path="/history" element={<History></History>}></Route>
+            <Route path="/profile" element={<Profile></Profile>}></Route>
         </Routes>
     )
 }
