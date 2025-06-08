@@ -24,5 +24,10 @@ class User extends Authenticatable
         'role',
     ];
 
+    public function biodata()
+    {
+        return $this->hasOne(BiodataModel::class, 'id_user', 'id');
+    }
+
 
 }
