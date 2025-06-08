@@ -64,4 +64,14 @@ class AuthController extends Controller
     {
         return $this->authRepositories->setting($request);
     }
+
+    public function getBiodata(Request $request)
+    {
+        return $this->authRepositories->getBiodata($request);
+    }
+
+    public function updateBiodata(AuthRequest $request)
+    {
+        return $this->authRepositories->updateBiodata($request);
+    }
 }
