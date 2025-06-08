@@ -131,6 +131,12 @@ class UserManagementService {
             $('#phone').val(responseData.data.phone);
             $('#role').val(responseData.data.role).trigger('change');
             $('#password').prop('disabled', false);
+            $('#birth_place_date').val(responseData.data.biodata.birth_place_date || '');
+            $('#address').val(responseData.data.biodata.address || '');
+            $('#mother_name').val(responseData.data.biodata.mother_name || '');
+            $('#father_name').val(responseData.data.biodata.father_name || '');
+            $('#child_order').val(responseData.data.biodata.child_order || '');
+            $('#sibling_count').val(responseData.data.biodata.sibling_count || '');
             checkingEdit();
         } catch (error) {
             console.error(error);
