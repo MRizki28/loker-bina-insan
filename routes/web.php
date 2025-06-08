@@ -183,6 +183,12 @@ Route::middleware(['auth', 'web'])->group(function () {
             Route::post('reject/{id}', 'reject');
             Route::get('/get-history-by-user', 'getHistoryByUser');
         });
+
+        Route::prefix('biodata')->controller(AuthController::class)->group(function () {
+            Route::get('/', 'getBiodata');
+            Route::post('/update', 'updateBiodata');
+            Route::post('/update-password', 'setting');
+        });
     });
 });
 
