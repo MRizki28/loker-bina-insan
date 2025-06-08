@@ -130,7 +130,7 @@ export default function Content() {
                                         >
                                             Silahkan login untuk melamar
                                         </Link>
-                                    ) : role === "admin" ? (
+                                    ) : role === "admin" || role === "superadmin" ? (
                                         <button
                                             className="bg-gray-400 text-white font-bold py-2 px-4 rounded-lg shadow-md cursor-not-allowed"
                                             disabled
