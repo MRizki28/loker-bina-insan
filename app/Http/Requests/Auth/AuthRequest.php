@@ -36,7 +36,7 @@ class AuthRequest extends FormRequest
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|confirmed',
                 'password_confirmation' => 'required',
-                'phone' => 'required|string',
+                'phone' => 'required|string|min:12|max:12',
                 'address' => 'required',
                 'birth_place_date' => 'required|string',
                 'mother_name' => 'required|string',
@@ -48,14 +48,14 @@ class AuthRequest extends FormRequest
             $rules = [
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
-                'phone' => 'required|string',
+                'phone' => 'required|string|min:12|max:12',
                 'role' => 'required|in:superadmin,admin,user',
-                'address' => 'required',
-                'birth_place_date' => 'required|string',
-                'mother_name' => 'required|string',
-                'father_name' => 'required|string',
-                'child_order' => 'required|integer',
-                'sibling_count' => 'required|integer',
+                'address' => 'required_if:role,user',
+                'birth_place_date' => 'required_if:role,user|string',
+                'mother_name' => 'required_if:role,user|string',
+                'father_name' => 'required_if:role,user|string',
+                'child_order' => 'required_if:role,user|integer',
+                'sibling_count' => 'required_if:role,user|integer',
             ];
         }elseif($this->is('v1/auth/update-data-user/*')) {
             $rules = [
@@ -64,9 +64,19 @@ class AuthRequest extends FormRequest
                     'required',
                     Rule::unique('users', 'email')->ignore($this->route('id')),
                 ],
-                'phone' => 'required|string',
+                'phone' => 'required|string|min:12|max:12',
                 'role' => 'required|in:superadmin,admin,user',
                 'password' => 'nullable',
+                'address' => 'required_if:role,user',
+                'birth_place_date' => 'required_if:role,user|string',
+                'mother_name' => 'required_if:role,user|string',
+                'father_name' => 'required_if:role,user|string',
+                'child_order' => 'required_if:role,user|integer',
+                'sibling_count' => 'required_if:role,user|integer',
+            ];
+
+        }elseif($this->is('v1/biodata/update')){
+            $rules = [
                 'address' => 'required',
                 'birth_place_date' => 'required|string',
                 'mother_name' => 'required|string',
@@ -74,7 +84,6 @@ class AuthRequest extends FormRequest
                 'child_order' => 'required|integer',
                 'sibling_count' => 'required|integer',
             ];
-
         }
         return $rules;
     }
