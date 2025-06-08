@@ -37,6 +37,15 @@ class SweetAlertService {
         });
     }
 
+    static async successUpdateProfile() {
+        return MySwal.fire({
+            title: 'Update Profile Berhasil',
+            text: 'Profile anda berhasil diupdate',
+            icon: 'success',
+            confirmButtonText: 'OK',
+        });
+    }
+
     static async successApply() {
         return MySwal.fire({
             title: 'Apply Berhasil',
