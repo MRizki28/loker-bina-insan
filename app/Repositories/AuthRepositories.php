@@ -118,6 +118,7 @@ class AuthRepositories implements AuthInterfaces
 
     public function createDataUser(AuthRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $this->userModel->create([
                 'name' => $request->name,
@@ -126,8 +127,22 @@ class AuthRepositories implements AuthInterfaces
                 'password' => Hash::make('123456'),
                 'role' => $request->role,
             ]);
+
+            if($request->role === 'user') {
+                $this->biodataModel->create([
+                    'id_user' => $data->id,
+                    'address' => $request->address,
+                    'birth_place_date' => $request->birth_place_date,
+                    'mother_name' => $request->mother_name,
+                    'father_name' => $request->father_name,
+                    'child_order' => $request->child_order,
+                    'sibling_count' => $request->sibling_count,
+                ]);
+            }
+            DB::commit();
             return ApiResponse::success($data, 'Success create data user', 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return ApiResponse::error($th, 500);
         }
     }
@@ -153,7 +168,7 @@ class AuthRepositories implements AuthInterfaces
 
     public function getDataById($id)
     {
-        $data = $this->userModel->find($id);
+        $data = $this->userModel->with('biodata')->find($id);
         if(!$data){
             return ApiResponse::notFound();
         }
@@ -163,6 +178,7 @@ class AuthRepositories implements AuthInterfaces
 
     public function updateDataUser(AuthRequest $request, $id)
     {
+        DB::beginTransaction();
         try {
             $data = $this->userModel->find($id);
             if (!$data) {
@@ -176,8 +192,30 @@ class AuthRepositories implements AuthInterfaces
             $data->role = $request->input('role');
             $data->save();
 
+            if($request->role === 'user') {
+                $biodata = $this->biodataModel->where('id_user', $data->id)->first();
+                if (!$biodata) {
+                    return ApiResponse::notFound();
+                }
+                $biodata->address = $request->input('address');
+                $biodata->birth_place_date = $request->input('birth_place_date');
+                $biodata->mother_name = $request->input('mother_name');
+                $biodata->father_name = $request->input('father_name');
+                $biodata->child_order = $request->input('child_order');
+                $biodata->sibling_count = $request->input('sibling_count');
+                $biodata->save();
+            }
+            if ($data->role === 'admin' || $data->role === 'superadmin') {
+                $biodata = $this->biodataModel->where('id_user', $data->id)->first();
+                if ($biodata) {
+                    $biodata->delete();
+                }
+            }
+            DB::commit();
+
             return ApiResponse::success($data, 'Success update data user', 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
             return ApiResponse::error($th, 500);
         }
     }
@@ -232,17 +270,77 @@ class AuthRepositories implements AuthInterfaces
                 ]);
             }
 
+            if (Hash::check($request->password, $data->password)) {
+                return response()->json([
+                    'code' => 200,
+                    'message' => 'New password must be different from old password'
+                ]);
+            }
+
             $data->password = Hash::make($request->input('password'));
             $data->save();
             if ($data) {
-                return ApiResponse::success($data, 'Success update password', 200);
                 Auth::guard('web')->logout();
+            
+                if ($request->user()) {
+                    // Hapus semua token user
+                    $request->user()->tokens()->delete();
+                    // atau kalau cuma token request saat ini
+                    // $request->user()->currentAccessToken()->delete();
+                }
+            
+                // Bersihkan session
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+            
+                return ApiResponse::success($data, 'Success update password', 200);
             } else {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Failed update password'
                 ], 422);
             }
+            
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
+    }
+
+    public function getBiodata(Request $request)
+    {
+        try {
+            $id = Auth::user()->id;
+            $data = $this->biodataModel->where('id_user', $id)->first();
+
+            if (!$data) {
+                return ApiResponse::notFound();
+            }
+
+            return ApiResponse::success($data, 'Success get biodata', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th, 500);
+        }
+    }
+
+    public function updateBiodata(AuthRequest $request)
+    {
+        try {
+            $id = Auth::user()->id;
+            $data = $this->biodataModel->where('id_user', $id)->first();
+
+            if (!$data) {
+                return ApiResponse::notFound();
+            }
+
+            $data->address = $request->input('address');
+            $data->birth_place_date = $request->input('birth_place_date');
+            $data->mother_name = $request->input('mother_name');
+            $data->father_name = $request->input('father_name');
+            $data->child_order = $request->input('child_order');
+            $data->sibling_count = $request->input('sibling_count');
+            $data->save();
+
+            return ApiResponse::success($data, 'Success update biodata', 200);
         } catch (\Throwable $th) {
             return ApiResponse::error($th, 500);
         }
