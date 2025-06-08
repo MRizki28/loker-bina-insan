@@ -14,8 +14,18 @@
                         @csrf
                         <div class="row py-2">
                             <div class="col-md-12">
+                                <input type="hidden" name="id" id="id" value="">
                                 <div class="form-group fill form-show-validation">
-                                    <input type="hidden" name="id" id="id" value="">
+                                    <label for="role">Role</label>
+                                    <select name="role" id="role" class="form-control">
+                                        <option value="" selected disabled hidden>Choose here</option>
+                                        <option value="superadmin">Super Admin</option>
+                                        <option value="admin">Admin</option>
+                                        <option value="user">User</option>
+                                    </select>
+                                </div>
+                                <div id="user-container"></div> 
+                                <div class="form-group fill form-show-validation">
                                     <label for="name">Nama pengguna</label>
                                     <input id="name" name="name" type="text" class="form-control"
                                         placeholder="name anda" autocomplete="off">
@@ -29,15 +39,6 @@
                                     <label for="phone">Nomor handphone</label>
                                     <input id="phone" name="phone" type="text" class="form-control"
                                         placeholder="phone anda" autocomplete="off">
-                                </div>
-                                <div class="form-group fill form-show-validation">
-                                    <label for="role">Role</label>
-                                    <select name="role" id="role" class="form-control">
-                                        <option value="" selected disabled hidden>Choose here</option>
-                                        <option value="superadmin">Super Admin</option>
-                                        <option value="admin">Admin</option>
-                                        <option value="user">User</option>
-                                    </select>
                                 </div>
                                 <div class="form-group form-show-validation">
                                     <label for="password">Password</label>
