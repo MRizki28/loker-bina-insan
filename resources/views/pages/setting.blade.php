@@ -199,6 +199,12 @@
                             text: "Password lama tidak sesuai",
                         });
                         submitButton.attr('disabled', false);
+                    }else if(responseData.message == 'New password must be different from old password'){
+                        Swal.fire({
+                            icon: "error",
+                            title: "Gagal",
+                            text: "Password baru tidak boleh sama dengan password lama",
+                        });
                     } else {
                         errorAlert();
                         submitButton.attr('disabled', false);
