@@ -2,7 +2,7 @@ import logo from '../../../../public/static/img/logo.png';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { FaHistory, FaHome, FaInfoCircle } from 'react-icons/fa';
+import { FaHistory, FaHome, FaInfoCircle, FaUser } from 'react-icons/fa';
 import { FaShop } from 'react-icons/fa6';
 import { IoIosExit } from 'react-icons/io';
 import SweetAlertService from '../../utils/sweetalert';
@@ -68,6 +68,7 @@ export default function Navbar() {
                     <li><a href="/" className="block py-2 px-3 text-black hover:text-blue-500">Beranda</a></li>
                     <li><a href="/#lowongan" className="block py-2 px-3 text-black hover:text-blue-500">Lowongan pekerjaan</a></li>
                     <li><a href="/history" className="block py-2 px-3 text-black hover:text-blue-500">History Apply</a></li>
+                    <li><a href="/profile" className="block py-2 px-3 text-black hover:text-blue-500">Profile</a></li>
                     <li><button onClick={handleLogout} className="block py-2 px-3 text-black hover:text-blue-500">Logout</button></li>
                 </>
             );
@@ -132,6 +133,10 @@ export default function Navbar() {
                         <FaHistory className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">History</span>
                     </a>
+                    <a href='/profile' className="inline-flex flex-col items-center justify-center px-5 group">
+                        <FaUser className="text-2xl mb-2 text-black group-hover:text-red-600" />
+                        <span className="text-sm text-black group-hover:text-red-600">Profile</span>
+                    </a>
                     <button onClick={handleLogout} className="inline-flex flex-col items-center justify-center px-5 group">
                         <IoIosExit className="text-2xl mb-2 text-black group-hover:text-red-600" />
                         <span className="text-sm text-black group-hover:text-red-600">Logout</span>
@@ -140,6 +145,17 @@ export default function Navbar() {
             );
         }
     };
+
+    let gridCols = "grid-cols-3";
+    if (login && login.isLoggedIn) {
+        if (login.role === 'admin' || login.role === 'superadmin') {
+            gridCols = "grid-cols-4";
+        }else if(login.role === 'user') {
+            gridCols = "grid-cols-5";
+        } else {
+            gridCols = "grid-cols-3";
+        }
+    }
 
     return (
         <nav className="bg-white border-gray-200">
@@ -157,7 +173,7 @@ export default function Navbar() {
 
             {/* Mobile navbar (bottom) */}
             <div className="lg:hidden fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t">
-                <div className="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
+                <div className={`grid h-full max-w-lg ${gridCols} mx-auto font-medium`}>
                     {checkMobileNav()}
                 </div>
             </div>
