@@ -73,7 +73,7 @@ export function Content() {
                                     {...register("phone", {
                                         required: "Nomor telepon wajib diisi",
                                         minLength: { value: 12, message: "Nomor telepon minimal 12 digit" },
-                                        maxLength: { value: 12, message: "Nomor telepon maksimal 15 digit" },
+                                        maxLength: { value: 12, message: "Nomor telepon maksimal 12 digit" },
                                         pattern: { value: /^[0-9]+$/, message: "Hanya boleh menggunakan angka" }
                                     })}
                                     onInput={(e) => {
