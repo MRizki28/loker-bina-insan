@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ModalApply from "./modal";
 import { Link } from 'react-router-dom';
+import { FaRupiahSign } from 'react-icons/fa6';
 
 export default function Content() {
     const [data, setData] = useState([]);
@@ -120,6 +121,9 @@ export default function Content() {
                                     <div className="flex items-center space-x-2 text-blue-600">
                                         <IoPeopleSharp />
                                         <span>Kategori: {item.category}</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-blue-600">
+                                        <span>Gaji: {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(item.salary_min)} s/d {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(item.salary_max)} </span>
                                     </div>
                                 </div>
                                 <div className="mt-6">
