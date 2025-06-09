@@ -30,6 +30,14 @@ class JobRequest extends FormRequest
             'end_date' => 'required|date|after_or_equal:start_date',
             'job_type' => 'required',
             'category' => 'required',
+            'salary_min' => 'required|numeric|min:0',
+            'salary_max' => 'required|numeric|min:0|gte:salary_min',
+        ];
+    }
+
+    public function messages(): array{
+        return [
+            'salary_max.gte' => 'The maximum salary must be greater than or equal to the minimum salary.',
         ];
     }
 
