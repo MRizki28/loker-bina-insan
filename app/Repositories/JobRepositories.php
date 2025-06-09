@@ -19,22 +19,23 @@ class JobRepositories implements JobInterfaces
         $this->jobModel = $jobModel;
         $this->jobCriteriaModel = $jobCriteriaModel;
     }
-    
 
-    public function getAllData(Request $request){
+
+    public function getAllData(Request $request)
+    {
         try {
             $search = $request->input('search');
             $limit = $request->input('limit') ? $request->input('limit') : 10;
             $page = $search ? 1 : (int) $request->input('page', 1);
 
             $query = $this->jobModel->query();
-            if($search){
-                $query->where('name', 'like', '%'.$search.'%');
+            if ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
             }
 
             $data = $query->with('criteria')->paginate($limit, ['*'], 'page', $page);
 
-            if($data->isEmpty()){
+            if ($data->isEmpty()) {
                 return ApiResponse::notFound();
             }
 
@@ -55,6 +56,8 @@ class JobRepositories implements JobInterfaces
             $data->end_date = $request->input('end_date');
             $data->job_type = $request->input('job_type');
             $data->category = $request->input('category');
+            $data->salary_min = $request->input('salary_min');
+            $data->salary_max = $request->input('salary_max');
             $data->save();
 
             $criteriaList = $request->input('criteria');
@@ -70,9 +73,9 @@ class JobRepositories implements JobInterfaces
                     }
                 }
             }
-        
+
             DB::commit();
-            
+
             return ApiResponse::success($data, 'Success create data job', 200);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -84,7 +87,7 @@ class JobRepositories implements JobInterfaces
     {
         try {
             $data = $this->jobModel->with('criteria')->find($id);
-            if(!$data){
+            if (!$data) {
                 return ApiResponse::notFound();
             }
 
@@ -95,55 +98,57 @@ class JobRepositories implements JobInterfaces
     }
 
     public function updateData(JobRequest $request, $id)
-{
-    DB::beginTransaction();
+    {
+        DB::beginTransaction();
 
-    try {
-        $data = $this->jobModel->find($id);
-        if (!$data) {
-            return ApiResponse::notFound();
-        }
-
-        // Update data job
-        $data->name = $request->input('name');
-        $data->description = $request->input('description');
-        $data->start_date = $request->input('start_date');
-        $data->end_date = $request->input('end_date');
-        $data->job_type = $request->input('job_type');
-        $data->category = $request->input('category');
-        $data->save();
-
-        // Hapus semua kriteria lama untuk job ini
-        $this->jobCriteriaModel::where('id_job', $id)->delete();
-
-        // Insert ulang kriteria baru dari request
-        $criteriaList = $request->input('criteria');
-        if (is_array($criteriaList)) {
-            foreach ($criteriaList as $item) {
-                $this->jobCriteriaModel::create([
-                    'id_job' => $data->id,
-                    'field' => $item['field'],
-                    'operator' => $item['operator'],
-                    'value' => $item['value']
-                ]);
+        try {
+            $data = $this->jobModel->find($id);
+            if (!$data) {
+                return ApiResponse::notFound();
             }
+
+            // Update data job
+            $data->name = $request->input('name');
+            $data->description = $request->input('description');
+            $data->start_date = $request->input('start_date');
+            $data->end_date = $request->input('end_date');
+            $data->job_type = $request->input('job_type');
+            $data->category = $request->input('category');
+            $data->salary_min = $request->input('salary_min');
+            $data->salary_max = $request->input('salary_max');
+            $data->save();
+
+            // Hapus semua kriteria lama untuk job ini
+            $this->jobCriteriaModel::where('id_job', $id)->delete();
+
+            // Insert ulang kriteria baru dari request
+            $criteriaList = $request->input('criteria');
+            if (is_array($criteriaList)) {
+                foreach ($criteriaList as $item) {
+                    $this->jobCriteriaModel::create([
+                        'id_job' => $data->id,
+                        'field' => $item['field'],
+                        'operator' => $item['operator'],
+                        'value' => $item['value']
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return ApiResponse::success($data, 'Success update data job', 200);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return ApiResponse::error($th, 500);
         }
-
-        DB::commit();
-
-        return ApiResponse::success($data, 'Success update data job', 200);
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        return ApiResponse::error($th, 500);
     }
-}
 
 
     public function deleteData($id)
     {
         try {
             $data = $this->jobModel->find($id);
-            if(!$data){
+            if (!$data) {
                 return ApiResponse::notFound();
             }
 
@@ -163,13 +168,13 @@ class JobRepositories implements JobInterfaces
 
         $query = $this->jobModel->query();
 
-        if($search){
-            $query->where('name', 'like', '%'.$search.'%');
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         $data = $query->paginate($limit, ['*'], 'page', $page);
 
-        if($data->isEmpty()){
+        if ($data->isEmpty()) {
             return ApiResponse::notFound();
         }
 
