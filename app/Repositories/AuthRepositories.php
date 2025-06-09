@@ -195,7 +195,8 @@ class AuthRepositories implements AuthInterfaces
             if($request->role === 'user') {
                 $biodata = $this->biodataModel->where('id_user', $data->id)->first();
                 if (!$biodata) {
-                    return ApiResponse::notFound();
+                    $biodata = new BiodataModel();
+                    $biodata->id_user = $data->id;
                 }
                 $biodata->address = $request->input('address');
                 $biodata->birth_place_date = $request->input('birth_place_date');
