@@ -1,4 +1,4 @@
-import JobService from "./job.service.js?v=1.0.2";
+import JobService from "./job.service.js?v=1.0.3";
 
 $(document).ready(function () {
 
@@ -179,6 +179,8 @@ $(document).ready(function () {
             $('#end_date').val('');
             $('#job_type').val('');
             $('#category').val('');
+            $('#salary_min').val('');
+            $('#salary_max').val('');
             $('#modal-title').text('Tambah Data');
             $('#formTambah')[0].reset();
             $('#criteria-container').empty(); 
