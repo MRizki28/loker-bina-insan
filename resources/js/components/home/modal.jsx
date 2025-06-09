@@ -20,6 +20,7 @@ export default function ModalApply({ isOpen, onClose, jobId }) {
 
     const onSubmit = async (data) => {
         setIsSubmitting(true);
+    
         try {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
             const formData = new FormData();
@@ -27,40 +28,91 @@ export default function ModalApply({ isOpen, onClose, jobId }) {
             formData.append("reason", data.reason);
             formData.append("id_job", jobId);
             formData.append("_token", csrfToken);
-
-            // Kirim field dari kriteria jika ada
+    
             Object.entries(data).forEach(([key, value]) => {
                 if (key.startsWith("criteria_")) {
                     formData.append(key, value);
                 }
             });
-
+    
+            // Tampilkan loading selama 5 detik
+            await Swal.fire({
+                title: 'Tunggu sebentar',
+                text: 'Sistem sedang memverifikasi lamaran Anda...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+                timer: 5000,
+                timerProgressBar: true,
+            });
+    
             const response = await axios.post(`${appUrl}/v1/file-apply/create`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
-
-            const responseData = await response.data;
+    
+            const responseData = response.data;
+            console.log(responseData);
+    
             if (responseData.status === 'success') {
-                SweetAlertService.successApply();
+                // Tampilkan status lamaran dari backend
+                const message = responseData.data.message_to_applicant || 'Lamaran berhasil dikirim.';
+    
+                await Swal.fire({
+                    icon: responseData.data.status === 'rejected' ? 'error' : 'success',
+                    title: responseData.data.status === 'rejected' ? 'Lamaran Ditolak' : 'Lamaran Diterima',
+                    text: message,
+                    confirmButtonText: 'Tutup',
+                });
+    
                 reset();
                 clearErrors();
                 onClose();
             }
         } catch (error) {
+            console.error(error);
+    
             if (error.response?.status === 422) {
-                Swal.fire({
+                let message = '';
+    
+                const validationErrors = error.response.data.data;
+                if (typeof validationErrors === 'object' && !Array.isArray(validationErrors)) {
+                    let messages = [];
+                    for (const key in validationErrors) {
+                        if (Array.isArray(validationErrors[key])) {
+                            messages.push(...validationErrors[key]);
+                        }
+                    }
+                    message = messages.join('\n');
+                }
+    
+                if (!message && error.response.data.message) {
+                    message = error.response.data.message;
+                }
+    
+                await Swal.fire({
                     icon: 'error',
                     title: 'Gagal',
-                    text: 'Maximal ukuran file 2MB',
+                    text: message || 'Terjadi kesalahan',
+                    confirmButtonText: 'Tutup'
+                });
+            } else {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Kesalahan Server',
+                    text: 'Terjadi kesalahan pada server. Coba lagi nanti.',
                     confirmButtonText: 'Tutup'
                 });
             }
+    
         } finally {
             setIsSubmitting(false);
         }
     };
+    
 
     const getDataById = async (id) => {
         try {
@@ -84,7 +136,7 @@ export default function ModalApply({ isOpen, onClose, jobId }) {
         };
         return map[field] || field.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
     };
-    
+
 
     useEffect(() => {
         if (isOpen) {
@@ -148,7 +200,7 @@ export default function ModalApply({ isOpen, onClose, jobId }) {
                                 {criteria.map((item, index) => (
                                     <div key={index}>
                                         <label className="block text-sm font-medium mb-1 capitalize">
-                                        {formatFieldLabel(item.field)}
+                                            {formatFieldLabel(item.field)}
                                         </label>
                                         <input
                                             type={getInputType(item.field)}
