@@ -54,6 +54,19 @@
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <div class="form-group fill form-show-validation">
+                                <label for="salary_min">Minimun salary</label>
+                                <input id="salary_min" name="salary_min" type="number" class="form-control" min="0">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group fill form-show-validation">
+                                <label for="salary_max">Maximum salary</label>
+                                <input id="salary_max" name="salary_max" type="number" class="form-control" min="0">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12">
                             <label>Kriteria Lowongan</label>
 
                             <!-- Kriteria Lowongan -->
