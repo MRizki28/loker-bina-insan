@@ -28,14 +28,7 @@
                     <div class="col-md-7">
                         <h5 class="font-weight-bold">Deskripsi Pekerjaan</h5>
                         <p id="description"></p>
-                        
-                        <h5 class="font-weight-bold mt-4">Persyaratan</h5>
-                        <ul id="requirement">
-                        </ul>
-                        
-                        <h5 class="font-weight-bold mt-4">Kualifikasi</h5>
-                        <ul id="qualification">
-                        </ul>
+                
                     
                     </div>
                     
