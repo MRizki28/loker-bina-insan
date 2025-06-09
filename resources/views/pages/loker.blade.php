@@ -14,6 +14,7 @@
                         <th>Waktu lowongan</th>
                         <th>Type</th>
                         <th>Kategory</th>
+                        <th>Salary</th>
                         <th>Kualifikasi</th>
                         <th>Aksi</th>
                     </tr>
