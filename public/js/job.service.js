@@ -58,7 +58,8 @@ class JobService {
                     tableBody += "<td>" + item.start_date + ' - ' + item.end_date + "</td>";
                     tableBody += "<td>" + item.job_type + "</td>";
                     tableBody += "<td>" + item.category + "</td>";
-                    tableBody += "<td>" + criteriaHtml + "</td>"; // Kolom kriteria
+                    tableBody += "<td>" + item.salary_min + " s/d " + item.salary_max + "</td>";
+                    tableBody += "<td>" + criteriaHtml + "</td>";
                     tableBody +=
                         "<td style='padding: 0 10px !important;'  class='text-center'>" +
                         "<button class='btn btn-sm edit-modal mr-1' data-toggle='modal' data-target='#lokerModal' data-id='" +
@@ -128,12 +129,25 @@ class JobService {
         } catch (error) {
             submitButton.attr('disabled', false);
             console.log(error);
-            if (error.response.status == 422) {
-                warningAlert();
-                $('.form-ckeditor').addClass('has-error');
-                $('.error-description').removeAttr('hidden');
+            if (error.response && error.response.data) {
+                if (
+                    error.response.data.data?.salary_max?.includes(
+                        "The maximum salary must be greater than or equal to the minimum salary."
+                    )
+                ) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Perhatian',
+                        text: 'Gaji Maksimal harus lebih besar dari Gaji Minimal',
+
+                    })
+                } else if (error.response.status === 422) {
+                    warningAlert();
+                } else {
+                    errorAlert()
+                }
             } else {
-                errorAlert();
+                errorAlert()
             }
         }
     }
@@ -168,6 +182,8 @@ class JobService {
             $('#job_type').val(responseData.job_type);
             $('#category').val(responseData.category);
             $('#description').val(responseData.description);
+            $('#salary_min').val(responseData.salary_min);
+            $('#salary_max').val(responseData.salary_max);
     
             responseData.criteria.forEach((c, index) => {
                 const $valueInput = $(`[name="criteria[${index}][value]"]`);
