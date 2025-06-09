@@ -20,6 +20,8 @@ class JobModel extends Model
         'end_date',
         'job_type',
         'category',
+        'salary_min',
+        'salary_max',
     ];
 
     public function criteria()
