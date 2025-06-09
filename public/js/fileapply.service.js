@@ -95,12 +95,6 @@ class FileApplyService {
             $('#nameJob').text(responseData.data.job.name);
             $('#status').html(badgeHtml);
             $('#description').text(responseData.data.job.description);
-            responseData.data.job.requirement.forEach(requirement => {
-                $('#requirement').append('<li>' + requirement + '</li>');
-            });
-            responseData.data.job.qualification.forEach(qualification => {
-                $('#qualification').append('<li>' + qualification + '</li>');
-            });
             $('#reason').text(responseData.data.reason);
 
             const filePath = `/uploads/fileapply/${responseData.data.file}`;
